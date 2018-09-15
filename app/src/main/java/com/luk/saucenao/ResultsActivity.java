@@ -146,6 +146,15 @@ public class ResultsActivity  extends AppCompatActivity {
                     ));
                     title.setText(result.mData.getTitle());
                     break;
+                case Results.DATABASE_ID_PAWOO:
+                    metadata.setText(String.format("%s: %s\n%s: @%s",
+                            getString(R.string.metadata_pawoo_id),
+                            result.mData.getPawooId(),
+                            getString(R.string.metadata_author),
+                            result.mData.getPawooUserUsername()
+                    ));
+                    title.setText(result.mData.getCreatedAt());
+                    break;
             }
 
             // Load global data

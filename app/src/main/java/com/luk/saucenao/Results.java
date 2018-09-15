@@ -178,6 +178,7 @@ public class Results {
             private static final String KEY_AUTHOR_URL = "author_url";
             private static final String KEY_BCY_ID = "bcy_id";
             private static final String KEY_BCY_TYPE =  "bcy_type";
+            private static final String KEY_CREATED_AT = "created_at";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
@@ -185,6 +186,10 @@ public class Results {
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
             private static final String KEY_PART = "part";
+            private static final String KEY_PAWOO_ID = "pawoo_id";
+            private static final String KEY_PAWOO_USER_ACCT = "pawoo_user_acct";
+            private static final String KEY_PAWOO_USER_DISPLAY_NAME = "pawoo_user_display_name";
+            private static final String KEY_PAWOO_USER_USERNAME = "pawoo_user_username";
             private static final String KEY_PIXIV_ID = "pixiv_id";
             private static final String KEY_SEIGA_ID = "seiga_id";
             private static final String KEY_SOURCE = "source";
@@ -211,6 +216,10 @@ public class Results {
 
             public String getBcyType() {
                 return getString(mJsonObject, KEY_BCY_TYPE, "");
+            }
+
+            public String getCreatedAt() {
+                return getString(mJsonObject, KEY_CREATED_AT, "");
             }
 
             public int getDaId() {
@@ -250,6 +259,22 @@ public class Results {
 
             public String getPart() {
                 return getString(mJsonObject, KEY_PART, "");
+            }
+
+            public int getPawooId() {
+                return getInt(mJsonObject, KEY_PAWOO_ID, -1);
+            }
+
+            public String getPawooUserAcct() {
+                return getString(mJsonObject, KEY_PAWOO_USER_ACCT, "");
+            }
+
+            public String getPawooUserUsername() {
+                return getString(mJsonObject, KEY_PAWOO_USER_USERNAME, "");
+            }
+
+            public String getPawooUserDisplayName() {
+                return getString(mJsonObject, KEY_PAWOO_USER_DISPLAY_NAME, "");
             }
 
             public int getPixivId() {
