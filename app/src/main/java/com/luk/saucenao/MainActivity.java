@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_DOCUMENTS = 0;
+    private static final int REQUEST_SHARE = 1;
 
     private Button mSelectImageButton;
     private ProgressDialog mProgressDialog;
@@ -43,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            onActivityResult(REQUEST_SHARE, RESULT_OK, intent);
+        }
 
         mSelectImageButton = findViewById(R.id.select_image);
         mSelectImageButton.setOnClickListener(this);
@@ -71,10 +78,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if (requestCode == REQUEST_DOCUMENTS) {
-            mProgressDialog = ProgressDialog.show(this, "Loading results",
-                    "Please wait...", true, false);
-            new GetResultsTask().execute(data.getData());
+        switch (requestCode) {
+            case REQUEST_DOCUMENTS:
+                mProgressDialog = ProgressDialog.show(this, "Loading results",
+                        "Please wait...", true, false);
+                new GetResultsTask().execute(data.getData());
+                break;
+            case REQUEST_SHARE:
+                mProgressDialog = ProgressDialog.show(this, "Loading results",
+                        "Please wait...", true, false);
+                new GetResultsTask().execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
+                break;
         }
     }
 
