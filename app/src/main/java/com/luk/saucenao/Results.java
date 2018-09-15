@@ -179,11 +179,13 @@ public class Results {
 
         class Data {
 
+            private static final String KEY_ANIDB_AID = "anidb_aid";
             private static final String KEY_AUTHOR_NAME = "author_name";
             private static final String KEY_AUTHOR_URL = "author_url";
             private static final String KEY_BCY_ID = "bcy_id";
             private static final String KEY_BCY_TYPE =  "bcy_type";
             private static final String KEY_CREATED_AT = "created_at";
+            private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
@@ -196,6 +198,7 @@ public class Results {
             private static final String KEY_PAWOO_USER_DISPLAY_NAME = "pawoo_user_display_name";
             private static final String KEY_PAWOO_USER_USERNAME = "pawoo_user_username";
             private static final String KEY_PIXIV_ID = "pixiv_id";
+            private static final String KEY_SANKAKU_ID = "sankaku_id";
             private static final String KEY_SEIGA_ID = "seiga_id";
             private static final String KEY_SOURCE = "source";
             private static final String KEY_TITLE = "title";
@@ -205,6 +208,10 @@ public class Results {
 
             Data(JSONObject jsonObject) {
                 mJsonObject = jsonObject;
+            }
+
+            public int getAnidbAid() {
+                return getInt(mJsonObject, KEY_ANIDB_AID, -1);
             }
 
             public String getAuthorName() {
@@ -225,6 +232,10 @@ public class Results {
 
             public String getCreatedAt() {
                 return getString(mJsonObject, KEY_CREATED_AT, "");
+            }
+
+            public String getCreator() {
+                return getString(mJsonObject, KEY_CREATOR, "");
             }
 
             public int getDaId() {
@@ -284,6 +295,10 @@ public class Results {
 
             public int getPixivId() {
                 return getInt(mJsonObject, KEY_PIXIV_ID, -1);
+            }
+
+            public int getSankakuId() {
+                return getInt(mJsonObject, KEY_SANKAKU_ID, -1);
             }
 
             public int getSeigaId() {
