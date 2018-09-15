@@ -97,7 +97,7 @@ public class Results {
         return mResults;
     }
 
-    public boolean parse() throws JSONException {
+    public void parse() throws JSONException {
         JSONArray results = mJsonObject.getJSONArray(KEY_RESULTS);
 
         for (int i = 0; i < results.length(); i++) {
@@ -107,8 +107,6 @@ public class Results {
 
             mResults.add(new Result(header, data));
         }
-
-        return true;
     }
 
     class Result {
