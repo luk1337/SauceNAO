@@ -97,71 +97,8 @@ public class ResultsActivity  extends AppCompatActivity {
                     .execute(result.mHeader.getThumbnail());
 
             // Load index specific data
-            switch (result.mHeader.getIndexId()) {
-                case Results.DATABASE_ID_PIXIV_IMAGES:
-                    metadata.setText(String.format("%s: %s\n%s: %s",
-                            getString(R.string.metadata_pixiv_id),
-                            result.mData.getPixivId(),
-                            getString(R.string.metadata_member),
-                            result.mData.getMemberName()
-                    ));
-                    title.setText(result.mData.getTitle());
-                    break;
-                case Results.DATABASE_ID_NICO_NICO_SEIGA:
-                    metadata.setText(String.format("%s: %s\n%s: %s",
-                            getString(R.string.metadata_seiga_id),
-                            result.mData.getSeigaId(),
-                            getString(R.string.metadata_member),
-                            result.mData.getMemberName()
-                    ));
-                    title.setText(result.mData.getTitle());
-                    break;
-                case Results.DATABASE_ID_ANIME:
-                case Results.DATABASE_ID_H_ANIME:
-                case Results.DATABASE_ID_SHOWS:
-                    metadata.setText(String.format("%s: %s\n%s: %s",
-                            getString(R.string.metadata_year),
-                            result.mData.getYear(),
-                            getString(R.string.metadata_est_time),
-                            result.mData.getEstTime()
-                    ));
-                    title.setText(String.format("%s 一 %s",
-                            result.mData.getSource(), result.mData.getPart()));
-                    break;
-                case Results.DATABASE_ID_SANKAKU_CHANNEL:
-                    metadata.setText(String.format("%s: %s",
-                            getString(R.string.metadata_creator),
-                            result.mData.getCreator()
-                    ));
-                    break;
-                case Results.DATABASE_ID_BCY_COSPLAY:
-                    metadata.setText(String.format("%s: %s\n%s: %s",
-                            getString(R.string.metadata_bcy_id),
-                            result.mData.getBcyId(),
-                            getString(R.string.metadata_member),
-                            result.mData.getMemberName()
-                    ));
-                    title.setText(result.mData.getTitle());
-                    break;
-                case Results.DATABASE_ID_DEVIANTART:
-                    metadata.setText(String.format("%s: %s\n%s: %s",
-                            getString(R.string.metadata_da_id),
-                            result.mData.getDaId(),
-                            getString(R.string.metadata_author),
-                            result.mData.getAuthorName()
-                    ));
-                    title.setText(result.mData.getTitle());
-                    break;
-                case Results.DATABASE_ID_PAWOO:
-                    metadata.setText(String.format("%s: %s\n%s: @%s",
-                            getString(R.string.metadata_pawoo_id),
-                            result.mData.getPawooId(),
-                            getString(R.string.metadata_author),
-                            result.mData.getPawooUserUsername()
-                    ));
-                    title.setText(result.mData.getCreatedAt());
-                    break;
-            }
+            metadata.setText(result.getMetadata(this));
+            title.setText(result.getTitle());
 
             // Load global data
             databaseName.setText(Results.DATABASE_NAMES.get(result.mHeader.getIndexId()));

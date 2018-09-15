@@ -1,5 +1,6 @@
 package com.luk.saucenao;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -118,6 +119,80 @@ public class Results {
         Result(JSONObject header, JSONObject data) {
             mHeader = new Header(header);
             mData = new Data(data);
+        }
+
+        public String getMetadata(Context context) {
+            switch (mHeader.getIndexId()) {
+                case Results.DATABASE_ID_PIXIV_IMAGES:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_pixiv_id),
+                            mData.getPixivId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
+                case Results.DATABASE_ID_NICO_NICO_SEIGA:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_seiga_id),
+                            mData.getSeigaId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
+                case Results.DATABASE_ID_ANIME:
+                case Results.DATABASE_ID_H_ANIME:
+                case Results.DATABASE_ID_SHOWS:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_year),
+                            mData.getYear(),
+                            context.getString(R.string.metadata_est_time),
+                            mData.getEstTime()
+                    );
+                case Results.DATABASE_ID_SANKAKU_CHANNEL:
+                    return String.format("%s: %s",
+                            context.getString(R.string.metadata_creator),
+                            mData.getCreator()
+                    );
+                case Results.DATABASE_ID_BCY_COSPLAY:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_bcy_id),
+                            mData.getBcyId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
+                case Results.DATABASE_ID_DEVIANTART:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_da_id),
+                            mData.getDaId(),
+                            context.getString(R.string.metadata_author),
+                            mData.getAuthorName()
+                    );
+                case DATABASE_ID_PAWOO:
+                    return String.format("%s: %s\n%s: @%s",
+                            context.getString(R.string.metadata_pawoo_id),
+                            mData.getPawooId(),
+                            context.getString(R.string.metadata_author),
+                            mData.getPawooUserUsername()
+                    );
+                default:
+                    return "";
+            }
+        }
+
+        public String getTitle() {
+            switch (mHeader.getIndexId()) {
+                case DATABASE_ID_PIXIV_IMAGES:
+                case DATABASE_ID_NICO_NICO_SEIGA:
+                case DATABASE_ID_BCY_COSPLAY:
+                case DATABASE_ID_DEVIANTART:
+                    return mData.getTitle();
+                case Results.DATABASE_ID_ANIME:
+                case Results.DATABASE_ID_H_ANIME:
+                case Results.DATABASE_ID_SHOWS:
+                    return String.format("%s 一 %s", mData.getSource(), mData.getPart());
+                case DATABASE_ID_PAWOO:
+                    return mData.getCreatedAt();
+                default:
+                    return "";
+            }
         }
 
         private JSONArray getArray(JSONObject jsonObject, String key, JSONArray def) {
