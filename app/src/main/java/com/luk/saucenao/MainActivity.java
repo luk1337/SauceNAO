@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", "someValue")
                     .addPart(
-                            Headers.of("Content-Disposition", "form-data; name=\"file\"; filename=\"image.png\""),
+                            Headers.of("Content-Disposition", "form-data; name=\"file\";" +
+                                    "filename=\"image.png\""),
                             RequestBody.create(MediaType.parse("image/*"), stream.toByteArray()))
                     .build();
             Request request = new Request.Builder()
