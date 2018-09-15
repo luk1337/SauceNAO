@@ -14,4 +14,6 @@
     <string name="metadata_pixiv_id">Pixiv ID</string>
     <string name="metadata_seiga_id">Seiga ID</string>
     <string name="metadata_year">Year</string>
+
+    <string name="title_copied_to_clipboard">Title copied to clipboard!</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.luk.saucenao;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +31,7 @@ public class ResultsActivity  extends AppCompatActivity {
 
     public static final String EXTRA_RESULTS = "extra_results";
 
+    private ClipboardManager mClipboardManager;
     private LayoutInflater mLayoutInflater;
     private TextView mNoResults;
     private Results mResults;
@@ -40,6 +43,7 @@ public class ResultsActivity  extends AppCompatActivity {
         setTitle(R.string.results);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mClipboardManager = getSystemService(ClipboardManager.class);
         mLayoutInflater = getSystemService(LayoutInflater.class);
         mNoResults = findViewById(R.id.no_results);
         Bundle bundle = getIntent().getExtras();
@@ -132,6 +136,14 @@ public class ResultsActivity  extends AppCompatActivity {
             template.findViewById(R.id.card_result).setOnClickListener(view ->
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse(result.mData.getExtUrls()[0]))));
+
+            // Set on long click listener
+            template.findViewById(R.id.card_result).setOnLongClickListener(view -> {
+                mClipboardManager.setPrimaryClip(ClipData.newPlainText("", title.getText()));
+                Toast.makeText(this, getString(R.string.title_copied_to_clipboard),
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            });
 
             results.addView(template);
         }
