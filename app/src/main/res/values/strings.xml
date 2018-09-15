@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SauceNAO</string>
+
+    <string name="select_image">Select image</string>
+
+    <string name="results">Results</string>
+
+    <string name="no_results">No results</string>
+
+    <string name="error_cannot_parse_results">Unable to load results!</string>
+
+    <string name="metadata_est_time">Estimated time</string>
+    <string name="metadata_member">Member</string>
+    <string name="metadata_pixiv_id">Pixiv ID</string>
+    <string name="metadata_seiga_id">Seiga ID</string>
+    <string name="metadata_year">Year</string>
 </resources>
