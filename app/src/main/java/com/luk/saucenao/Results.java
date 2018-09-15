@@ -173,6 +173,7 @@ public class Results {
                             mData.getPawooUserUsername()
                     );
                 default:
+                    Log.w(LOG_TAG, "Unhandled database id: " + mHeader.getIndexId() + " in getMetadata()");
                     return "";
             }
         }
@@ -191,6 +192,7 @@ public class Results {
                 case DATABASE_ID_PAWOO:
                     return mData.getCreatedAt();
                 default:
+                    Log.w(LOG_TAG, "Unhandled database id: " + mHeader.getIndexId() + " in getTitle()");
                     return "";
             }
         }
