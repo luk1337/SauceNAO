@@ -174,6 +174,9 @@ public class Results {
 
         class Data {
 
+            private static final String KEY_AUTHOR_NAME = "author_name";
+            private static final String KEY_AUTHOR_URL = "author_url";
+            private static final String KEY_DA_ID = "da_id";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_MEMBER_ID = "member_id";
@@ -189,6 +192,18 @@ public class Results {
 
             Data(JSONObject jsonObject) {
                 mJsonObject = jsonObject;
+            }
+
+            public String getAuthorName() {
+                return getString(mJsonObject, KEY_AUTHOR_NAME, "");
+            }
+
+            public String getAuthorUrl() {
+                return getString(mJsonObject, KEY_AUTHOR_URL, "");
+            }
+
+            public int getDaId() {
+                return getInt(mJsonObject, KEY_DA_ID, -1);
             }
 
             public String getEstTime() {

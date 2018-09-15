@@ -117,6 +117,8 @@ public class ResultsActivity  extends AppCompatActivity {
                     title.setText(result.mData.getTitle());
                     break;
                 case Results.DATABASE_ID_ANIME:
+                case Results.DATABASE_ID_H_ANIME:
+                case Results.DATABASE_ID_SHOWS:
                     metadata.setText(String.format("%s: %s\n%s: %s",
                             getString(R.string.metadata_year),
                             result.mData.getYear(),
@@ -125,6 +127,15 @@ public class ResultsActivity  extends AppCompatActivity {
                     ));
                     title.setText(String.format("%s 一 %s",
                             result.mData.getSource(), result.mData.getPart()));
+                    break;
+                case Results.DATABASE_ID_DEVIANTART:
+                    metadata.setText(String.format("%s: %s\n%s: %s",
+                            getString(R.string.metadata_da_id),
+                            result.mData.getDaId(),
+                            getString(R.string.metadata_author),
+                            result.mData.getAuthorName()
+                    ));
+                    title.setText(result.mData.getTitle());
                     break;
             }
 
