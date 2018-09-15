@@ -161,6 +161,12 @@ public class Results {
             }
 
             public int getIndexId() {
+                String[] indexName = getIndexName().split(":");
+
+                if (indexName.length >= 2 && indexName[0].startsWith("Index #")) {
+                    return Integer.valueOf(indexName[0].substring("Index #".length()));
+                }
+
                 return getInt(mJsonObject, KEY_INDEX_ID, -1);
             }
 
