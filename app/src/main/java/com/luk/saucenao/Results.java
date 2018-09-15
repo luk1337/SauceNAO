@@ -150,6 +150,7 @@ public class Results {
         class Header {
 
             private static final String KEY_INDEX_ID = "index_id";
+            private static final String KEY_INDEX_NAME = "index_name";
             private static final String KEY_SIMILARITY = "similarity";
             private static final String KEY_THUMBNAIL = "thumbnail";
 
@@ -161,6 +162,10 @@ public class Results {
 
             public int getIndexId() {
                 return getInt(mJsonObject, KEY_INDEX_ID, -1);
+            }
+
+            public String getIndexName() {
+                return getString(mJsonObject, KEY_INDEX_NAME, "");
             }
 
             public String getSimilarity() {
