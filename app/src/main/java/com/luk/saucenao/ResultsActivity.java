@@ -128,6 +128,12 @@ public class ResultsActivity  extends AppCompatActivity {
                     title.setText(String.format("%s 一 %s",
                             result.mData.getSource(), result.mData.getPart()));
                     break;
+                case Results.DATABASE_ID_SANKAKU_CHANNEL:
+                    metadata.setText(String.format("%s: %s",
+                            getString(R.string.metadata_creator),
+                            result.mData.getCreator()
+                    ));
+                    break;
                 case Results.DATABASE_ID_BCY_COSPLAY:
                     metadata.setText(String.format("%s: %s\n%s: %s",
                             getString(R.string.metadata_bcy_id),
