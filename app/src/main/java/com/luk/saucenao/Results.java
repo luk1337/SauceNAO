@@ -151,9 +151,16 @@ public class Results {
                             context.getString(R.string.metadata_creator),
                             mData.getCreator()
                     );
+                case Results.DATABASE_ID_BCY_ILLUST:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_bcy_id_illust),
+                            mData.getBcyId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
                 case Results.DATABASE_ID_BCY_COSPLAY:
                     return String.format("%s: %s\n%s: %s",
-                            context.getString(R.string.metadata_bcy_id),
+                            context.getString(R.string.metadata_bcy_id_cosplay),
                             mData.getBcyId(),
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
@@ -182,6 +189,7 @@ public class Results {
             switch (mHeader.getIndexId()) {
                 case DATABASE_ID_PIXIV_IMAGES:
                 case DATABASE_ID_NICO_NICO_SEIGA:
+                case DATABASE_ID_BCY_ILLUST:
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
