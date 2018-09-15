@@ -10,6 +10,7 @@
     <string name="error_cannot_parse_results">Unable to load results!</string>
 
     <string name="metadata_author">Author</string>
+    <string name="metadata_bcy_id">bcy Cosplay ID</string>
     <string name="metadata_da_id">dA ID</string>
     <string name="metadata_est_time">Estimated time</string>
     <string name="metadata_member">Member</string>

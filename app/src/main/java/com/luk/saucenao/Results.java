@@ -176,10 +176,13 @@ public class Results {
 
             private static final String KEY_AUTHOR_NAME = "author_name";
             private static final String KEY_AUTHOR_URL = "author_url";
+            private static final String KEY_BCY_ID = "bcy_id";
+            private static final String KEY_BCY_TYPE =  "bcy_type";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_MEMBER_ID = "member_id";
+            private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
             private static final String KEY_PART = "part";
             private static final String KEY_PIXIV_ID = "pixiv_id";
@@ -200,6 +203,14 @@ public class Results {
 
             public String getAuthorUrl() {
                 return getString(mJsonObject, KEY_AUTHOR_URL, "");
+            }
+
+            public int getBcyId() {
+                return getInt(mJsonObject, KEY_BCY_ID, -1);
+            }
+
+            public String getBcyType() {
+                return getString(mJsonObject, KEY_BCY_TYPE, "");
             }
 
             public int getDaId() {
@@ -223,6 +234,10 @@ public class Results {
                 }
 
                 return extUrls;
+            }
+
+            public int getMemberLinkId() {
+                return getInt(mJsonObject, KEY_MEMBER_LINK_ID, -1);
             }
 
             public int getMemberId() {
