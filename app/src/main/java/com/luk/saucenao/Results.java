@@ -218,8 +218,8 @@ public class Results {
                 return getString(mJsonObject, KEY_MEMBER_NAME, "");
             }
 
-            public int getPart() {
-                return getInt(mJsonObject, KEY_PART, -1);
+            public String getPart() {
+                return getString(mJsonObject, KEY_PART, "");
             }
 
             public int getPixivId() {
