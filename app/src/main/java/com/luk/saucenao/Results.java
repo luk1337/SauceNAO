@@ -135,36 +135,50 @@ public class Results {
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
-                case Results.DATABASE_ID_ANIME:
-                case Results.DATABASE_ID_H_ANIME:
-                case Results.DATABASE_ID_SHOWS:
+                case DATABASE_ID_DRAWR_IMAGES:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_drawr_id),
+                            mData.getDrawrId(),
+                            context.getString(R.string.metadata_est_time),
+                            mData.getEstTime()
+                    );
+                case DATABASE_ID_H_MISC:
+                    return String.format("%s: %s\n%s\n%s",
+                            context.getString(R.string.metadata_creators),
+                            mData.getCreators(),
+                            mData.getEngName(),
+                            mData.getJpName()
+                    );
+                case DATABASE_ID_ANIME:
+                case DATABASE_ID_H_ANIME:
+                case DATABASE_ID_SHOWS:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_year),
                             mData.getYear(),
                             context.getString(R.string.metadata_est_time),
                             mData.getEstTime()
                     );
-                case Results.DATABASE_ID_DANBOORU:
-                case Results.DATABASE_ID_SANKAKU_CHANNEL:
+                case DATABASE_ID_DANBOORU:
+                case DATABASE_ID_SANKAKU_CHANNEL:
                     return String.format("%s: %s",
                             context.getString(R.string.metadata_creator),
                             mData.getCreator()
                     );
-                case Results.DATABASE_ID_BCY_ILLUST:
+                case DATABASE_ID_BCY_ILLUST:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_bcy_id_illust),
                             mData.getBcyId(),
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
-                case Results.DATABASE_ID_BCY_COSPLAY:
+                case DATABASE_ID_BCY_COSPLAY:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_bcy_id_cosplay),
                             mData.getBcyId(),
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
-                case Results.DATABASE_ID_DEVIANTART:
+                case DATABASE_ID_DEVIANTART:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_da_id),
                             mData.getDaId(),
@@ -178,6 +192,8 @@ public class Results {
                             context.getString(R.string.metadata_author),
                             mData.getPawooUserUsername()
                     );
+                case DATABASE_ID_MANGA:
+                    return String.format("%s 一 (%s)", mData.getPart(), mData.getType());
                 default:
                     Log.w(LOG_TAG, "Unhandled database id: " + mHeader.getIndexId() +
                             " in getMetadata()");
@@ -189,13 +205,17 @@ public class Results {
             switch (mHeader.getIndexId()) {
                 case DATABASE_ID_PIXIV_IMAGES:
                 case DATABASE_ID_NICO_NICO_SEIGA:
+                case DATABASE_ID_DRAWR_IMAGES:
                 case DATABASE_ID_BCY_ILLUST:
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
+                case Results.DATABASE_ID_H_MISC:
+                    return mData.getSource();
                 case Results.DATABASE_ID_ANIME:
                 case Results.DATABASE_ID_H_ANIME:
                 case Results.DATABASE_ID_SHOWS:
+                case Results.DATABASE_ID_MANGA:
                     return String.format("%s 一 %s", mData.getSource(), mData.getPart());
                 case DATABASE_ID_PAWOO:
                     return mData.getCreatedAt();
@@ -226,7 +246,9 @@ public class Results {
 
         private String getString(JSONObject jsonObject, String key, String def) {
             try {
-                return jsonObject.getString(key);
+                if (!jsonObject.isNull(key)) {
+                    return jsonObject.getString(key);
+                }
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Unable to read key: " + key);
             }
@@ -280,12 +302,16 @@ public class Results {
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_DANBOORU_ID = "danbooru_id";
+            private static final String KEY_DRAWR_ID = "drawr_id";
+            private static final String KEY_ENG_NAME = "eng_name";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
+            private static final String KEY_JP_NAME = "jp_name";
             private static final String KEY_MEMBER_ID = "member_id";
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
+            private static final String KEY_MU_ID = "mu_id";
             private static final String KEY_PART = "part";
             private static final String KEY_PAWOO_ID = "pawoo_id";
             private static final String KEY_PAWOO_USER_ACCT = "pawoo_user_acct";
@@ -296,6 +322,7 @@ public class Results {
             private static final String KEY_SEIGA_ID = "seiga_id";
             private static final String KEY_SOURCE = "source";
             private static final String KEY_TITLE = "title";
+            private static final String KEY_TYPE = "type";
             private static final String KEY_YEAR = "year";
 
             private JSONObject mJsonObject;
@@ -332,12 +359,35 @@ public class Results {
                 return getString(mJsonObject, KEY_CREATOR, "");
             }
 
+            public String getCreators() {
+                JSONArray jsonArray = getArray(mJsonObject, KEY_CREATOR, new JSONArray());
+                String[] creators = new String[jsonArray.length()];
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        creators[i] = jsonArray.getString(i);
+                    } catch (JSONException e) {
+                        Log.e(LOG_TAG, "Unable to read creator at index: " + i);
+                    }
+                }
+
+                return String.join(", ", creators);
+            }
+
             public int getDaId() {
                 return getInt(mJsonObject, KEY_DA_ID, -1);
             }
 
             public int getDanbooruId() {
                 return getInt(mJsonObject, KEY_DANBOORU_ID, -1);
+            }
+
+            public int getDrawrId() {
+                return getInt(mJsonObject, KEY_DRAWR_ID, -1);
+            }
+
+            public String getEngName() {
+                return getString(mJsonObject, KEY_ENG_NAME, "");
             }
 
             public String getEstTime() {
@@ -363,6 +413,10 @@ public class Results {
                 return getInt(mJsonObject, KEY_GELBOORU_ID, -1);
             }
 
+            public String getJpName() {
+                return getString(mJsonObject, KEY_JP_NAME, "");
+            }
+
             public int getMemberLinkId() {
                 return getInt(mJsonObject, KEY_MEMBER_LINK_ID, -1);
             }
@@ -373,6 +427,10 @@ public class Results {
 
             public String getMemberName() {
                 return getString(mJsonObject, KEY_MEMBER_NAME, "");
+            }
+
+            public String getMuId() {
+                return getString(mJsonObject, KEY_MU_ID, "");
             }
 
             public String getPart() {
@@ -413,6 +471,10 @@ public class Results {
 
             public String getTitle() {
                 return getString(mJsonObject, KEY_TITLE, "");
+            }
+
+            public String getType() {
+                return getString(mJsonObject, KEY_TYPE, "");
             }
 
             public String getYear() {
