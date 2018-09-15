@@ -144,6 +144,7 @@ public class Results {
                             context.getString(R.string.metadata_est_time),
                             mData.getEstTime()
                     );
+                case Results.DATABASE_ID_DANBOORU:
                 case Results.DATABASE_ID_SANKAKU_CHANNEL:
                     return String.format("%s: %s",
                             context.getString(R.string.metadata_creator),
@@ -278,8 +279,10 @@ public class Results {
             private static final String KEY_CREATED_AT = "created_at";
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
+            private static final String KEY_DANBOORU_ID = "danbooru_id";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
+            private static final String KEY_GELBOORU_ID = "gelbooru_id";
             private static final String KEY_MEMBER_ID = "member_id";
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
@@ -333,6 +336,10 @@ public class Results {
                 return getInt(mJsonObject, KEY_DA_ID, -1);
             }
 
+            public int getDanbooruId() {
+                return getInt(mJsonObject, KEY_DANBOORU_ID, -1);
+            }
+
             public String getEstTime() {
                 return getString(mJsonObject, KEY_EST_TIME, "");
             }
@@ -350,6 +357,10 @@ public class Results {
                 }
 
                 return extUrls;
+            }
+
+            public int getGelbooruId() {
+                return getInt(mJsonObject, KEY_GELBOORU_ID, -1);
             }
 
             public int getMemberLinkId() {
