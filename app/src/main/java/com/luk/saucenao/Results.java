@@ -159,6 +159,7 @@ public class Results {
                             mData.getEstTime()
                     );
                 case DATABASE_ID_DANBOORU:
+                case DATABASE_ID_GELBOORU:
                 case DATABASE_ID_SANKAKU_CHANNEL:
                     return String.format("%s: %s",
                             context.getString(R.string.metadata_creator),
