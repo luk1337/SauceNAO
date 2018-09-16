@@ -137,9 +137,9 @@ public class ResultsActivity  extends AppCompatActivity {
             try {
                 thumbnail = BitmapFactory.decodeStream(new java.net.URL(params[0]).openStream());
             } catch (MalformedURLException e) {
-                Log.e(LOG_TAG,"Invalid thumbnail URL", e);
+                Log.e(LOG_TAG, "Invalid thumbnail URL", e);
             } catch (IOException e) {
-                Log.e(LOG_TAG,"Unable to load thumbnail", e);
+                Log.e(LOG_TAG, "Unable to load thumbnail", e);
             }
 
             return thumbnail;
