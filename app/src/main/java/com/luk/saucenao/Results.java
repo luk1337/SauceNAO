@@ -87,7 +87,7 @@ public class Results {
     }};
 
     private JSONObject mJsonObject;
-    private ArrayList<Result> mResults = new ArrayList<>();;
+    private ArrayList<Result> mResults = new ArrayList<>();
 
     Results(JSONObject jsonObject) {
         mJsonObject = jsonObject;
