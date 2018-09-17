@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -107,9 +108,32 @@ public class ResultsActivity  extends AppCompatActivity {
             similarity.setText(result.mHeader.getSimilarity());
 
             // Set on click listener
-            template.findViewById(R.id.card_result).setOnClickListener(view ->
+            template.findViewById(R.id.card_result).setOnClickListener(view -> {
+                String[] extUrls = result.mData.getExtUrls();
+
+                if (extUrls.length == 0) {
+                    return;
+                }
+
+                if (extUrls.length == 1) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(extUrls[0])));
+                    return;
+                }
+
+                PopupMenu popupMenu = new PopupMenu(this, view);
+
+                for (int i = 0; i < extUrls.length; i++) {
+                    popupMenu.getMenu().add(0, i, i, extUrls[i]);
+                }
+
+                popupMenu.show();
+
+                popupMenu.setOnMenuItemClickListener(item -> {
                     startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(result.mData.getExtUrls()[0]))));
+                            Uri.parse(extUrls[item.getItemId()])));
+                    return true;
+                });
+            });
 
             // Set on long click listener
             template.findViewById(R.id.card_result).setOnLongClickListener(view -> {
