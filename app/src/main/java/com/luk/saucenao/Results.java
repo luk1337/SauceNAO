@@ -161,6 +161,7 @@ public class Results {
                 case DATABASE_ID_DANBOORU:
                 case DATABASE_ID_GELBOORU:
                 case DATABASE_ID_SANKAKU_CHANNEL:
+                case DATABASE_ID_E621:
                     return String.format("%s: %s",
                             context.getString(R.string.metadata_creator),
                             mData.getCreator()
