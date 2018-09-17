@@ -10,8 +10,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -111,9 +113,29 @@ public class ResultsActivity  extends AppCompatActivity {
 
             // Set on long click listener
             template.findViewById(R.id.card_result).setOnLongClickListener(view -> {
-                mClipboardManager.setPrimaryClip(ClipData.newPlainText("", title.getText()));
-                Toast.makeText(this, getString(R.string.title_copied_to_clipboard),
-                        Toast.LENGTH_SHORT).show();
+                PopupMenu popupMenu = new PopupMenu(this, view);
+                popupMenu.inflate(R.menu.card_long_press);
+                popupMenu.show();
+
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case R.id.copy_to_clipboard_item:
+                            mClipboardManager.setPrimaryClip(
+                                    ClipData.newPlainText("", title.getText()));
+                            Toast.makeText(this,
+                                    getString(R.string.title_copied_to_clipboard),
+                                    Toast.LENGTH_SHORT).show();
+                            break;
+                        case R.id.share_item:
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT, title.getText());
+                            startActivity(Intent.createChooser(intent,
+                                    getString(R.string.abc_shareactionprovider_share_with)));
+                            break;
+                    }
+                    return true;
+                });
                 return false;
             });
 
