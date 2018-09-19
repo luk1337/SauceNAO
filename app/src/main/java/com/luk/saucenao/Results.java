@@ -186,6 +186,7 @@ public class Results {
                     );
                 case DATABASE_ID_DANBOORU:
                 case DATABASE_ID_YANDERE:
+                case DATABASE_ID_2D_MARKET:
                 case DATABASE_ID_GELBOORU:
                 case DATABASE_ID_SANKAKU_CHANNEL:
                 case DATABASE_ID_E621:
@@ -245,6 +246,7 @@ public class Results {
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
                 case DATABASE_ID_H_MISC:
+                case DATABASE_ID_2D_MARKET:
                     return mData.getSource();
                 case DATABASE_ID_ANIME:
                 case DATABASE_ID_H_ANIME:
