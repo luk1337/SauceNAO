@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button mSelectImageButton;
     private ProgressDialog mProgressDialog;
+    private AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> mResultTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,16 +87,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (requestCode) {
             case REQUEST_DOCUMENTS:
+                mResultTask = new GetResultsTask();
+                mResultTask.execute(data.getData());
                 mProgressDialog = ProgressDialog.show(this,
                         getString(R.string.loading_results), getString(R.string.please_wait),
-                        true, false);
-                new GetResultsTask().execute(data.getData());
+                        true, true);
+                mProgressDialog.setOnCancelListener(dialog ->
+                        mResultTask.cancel(true));
                 break;
             case REQUEST_SHARE:
+                mResultTask = new GetResultsTask();
+                mResultTask.execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
                 mProgressDialog = ProgressDialog.show(this,
                         getString(R.string.loading_results), getString(R.string.please_wait),
-                        true, false);
-                new GetResultsTask().execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
+                        true, true);
+                mProgressDialog.setOnCancelListener(dialog ->
+                        mResultTask.cancel(true));
                 break;
         }
     }
