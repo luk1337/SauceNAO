@@ -18,44 +18,46 @@ public class Results {
     private static final String KEY_HEADER = "header";
     private static final String KEY_RESULTS = "results";
 
-    private static final int DATABASE_ID_H_MAGAZINES     = 0;
-    private static final int DATABASE_ID_H_GAME_CG       = 2;
-    private static final int DATABASE_ID_DOUJINSHIDB     = 3;
-    private static final int DATABASE_ID_PIXIV_IMAGES    = 5;
-    private static final int DATABASE_ID_NICO_NICO_SEIGA = 8;
-    private static final int DATABASE_ID_DANBOORU        = 9;
-    private static final int DATABASE_ID_DRAWR_IMAGES    = 10;
-    private static final int DATABASE_ID_NIJIE_IMAGES    = 11;
-    private static final int DATABASE_ID_YANDERE         = 12;
-    private static final int DATABASE_ID_OPENINGS        = 13;
-    private static final int DATABASE_ID_SHUTTERSTOCK    = 15;
-    private static final int DATABASE_ID_FAKKU           = 16;
-    private static final int DATABASE_ID_H_MISC          = 18;
-    private static final int DATABASE_ID_2D_MARKET       = 19;
-    private static final int DATABASE_ID_MEDIBANG        = 20;
-    private static final int DATABASE_ID_ANIME           = 21;
-    private static final int DATABASE_ID_H_ANIME         = 22;
-    private static final int DATABASE_ID_MOVIES          = 23;
-    private static final int DATABASE_ID_SHOWS           = 24;
-    private static final int DATABASE_ID_GELBOORU        = 25;
-    private static final int DATABASE_ID_KONACHAN        = 26;
-    private static final int DATABASE_ID_SANKAKU_CHANNEL = 27;
-    private static final int DATABASE_ID_ANIME_PICTURES  = 28;
-    private static final int DATABASE_ID_E621            = 29;
-    private static final int DATABASE_ID_IDOL_COMPLEX    = 30;
-    private static final int DATABASE_ID_BCY_ILLUST      = 31;
-    private static final int DATABASE_ID_BCY_COSPLAY     = 32;
-    private static final int DATABASE_ID_PORTALGRAPHICS  = 33;
-    private static final int DATABASE_ID_DEVIANTART      = 34;
-    private static final int DATABASE_ID_PAWOO           = 35;
-    private static final int DATABASE_ID_MANGA           = 36;
-    private static final int DATABASE_ID_TBA             = 999;
+    private static final int DATABASE_ID_H_MAGAZINES      = 0;
+    private static final int DATABASE_ID_H_GAME_CG        = 2;
+    private static final int DATABASE_ID_DOUJINSHIDB      = 3;
+    private static final int DATABASE_ID_PIXIV_IMAGES     = 5;
+    private static final int DATABASE_ID_PIXIV_HISTORICAL = 6;
+    private static final int DATABASE_ID_NICO_NICO_SEIGA  = 8;
+    private static final int DATABASE_ID_DANBOORU         = 9;
+    private static final int DATABASE_ID_DRAWR_IMAGES     = 10;
+    private static final int DATABASE_ID_NIJIE_IMAGES     = 11;
+    private static final int DATABASE_ID_YANDERE          = 12;
+    private static final int DATABASE_ID_OPENINGS         = 13;
+    private static final int DATABASE_ID_SHUTTERSTOCK     = 15;
+    private static final int DATABASE_ID_FAKKU            = 16;
+    private static final int DATABASE_ID_H_MISC           = 18;
+    private static final int DATABASE_ID_2D_MARKET        = 19;
+    private static final int DATABASE_ID_MEDIBANG         = 20;
+    private static final int DATABASE_ID_ANIME            = 21;
+    private static final int DATABASE_ID_H_ANIME          = 22;
+    private static final int DATABASE_ID_MOVIES           = 23;
+    private static final int DATABASE_ID_SHOWS            = 24;
+    private static final int DATABASE_ID_GELBOORU         = 25;
+    private static final int DATABASE_ID_KONACHAN         = 26;
+    private static final int DATABASE_ID_SANKAKU_CHANNEL  = 27;
+    private static final int DATABASE_ID_ANIME_PICTURES   = 28;
+    private static final int DATABASE_ID_E621             = 29;
+    private static final int DATABASE_ID_IDOL_COMPLEX     = 30;
+    private static final int DATABASE_ID_BCY_ILLUST       = 31;
+    private static final int DATABASE_ID_BCY_COSPLAY      = 32;
+    private static final int DATABASE_ID_PORTALGRAPHICS   = 33;
+    private static final int DATABASE_ID_DEVIANTART       = 34;
+    private static final int DATABASE_ID_PAWOO            = 35;
+    private static final int DATABASE_ID_MANGA            = 36;
+    private static final int DATABASE_ID_TBA              = 999;
 
     public static final HashMap<Integer, String> DATABASE_NAMES = new HashMap<Integer, String>() {{
         put(DATABASE_ID_H_MAGAZINES, "H-Magazines");
         put(DATABASE_ID_H_GAME_CG, "H-Game CG");
         put(DATABASE_ID_DOUJINSHIDB, "DoujinshiDB");
         put(DATABASE_ID_PIXIV_IMAGES, "pixiv Images");
+        put(DATABASE_ID_PIXIV_HISTORICAL, "Pixiv Historical");
         put(DATABASE_ID_NICO_NICO_SEIGA, "Nico Nico Seiga");
         put(DATABASE_ID_DANBOORU, "Danbooru");
         put(DATABASE_ID_DRAWR_IMAGES, "drawr Images");
@@ -141,6 +143,7 @@ public class Results {
                             mData.getDdbId()
                     );
                 case DATABASE_ID_PIXIV_IMAGES:
+                case DATABASE_ID_PIXIV_HISTORICAL:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_pixiv_id),
                             mData.getPixivId(),
@@ -238,6 +241,7 @@ public class Results {
                 case DATABASE_ID_H_GAME_CG:
                 case DATABASE_ID_DOUJINSHIDB:
                 case DATABASE_ID_PIXIV_IMAGES:
+                case DATABASE_ID_PIXIV_HISTORICAL:
                 case DATABASE_ID_NICO_NICO_SEIGA:
                 case DATABASE_ID_DRAWR_IMAGES:
                 case DATABASE_ID_NIJIE_IMAGES:
