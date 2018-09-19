@@ -121,14 +121,21 @@ public class Results {
 
         public String getMetadata(Context context) {
             switch (mHeader.getIndexId()) {
-                case Results.DATABASE_ID_PIXIV_IMAGES:
+                case DATABASE_ID_DOUJINSHIDB:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_title),
+                            mData.getEngTitle(),
+                            context.getString(R.string.metadata_ddb_id),
+                            mData.getDdbId()
+                    );
+                case DATABASE_ID_PIXIV_IMAGES:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_pixiv_id),
                             mData.getPixivId(),
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
-                case Results.DATABASE_ID_NICO_NICO_SEIGA:
+                case DATABASE_ID_NICO_NICO_SEIGA:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_seiga_id),
                             mData.getSeigaId(),
@@ -205,6 +212,7 @@ public class Results {
 
         public String getTitle() {
             switch (mHeader.getIndexId()) {
+                case DATABASE_ID_DOUJINSHIDB:
                 case DATABASE_ID_PIXIV_IMAGES:
                 case DATABASE_ID_NICO_NICO_SEIGA:
                 case DATABASE_ID_DRAWR_IMAGES:
@@ -304,8 +312,10 @@ public class Results {
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_DANBOORU_ID = "danbooru_id";
+            private static final String KEY_DDB_ID = "ddb_id";
             private static final String KEY_DRAWR_ID = "drawr_id";
             private static final String KEY_ENG_NAME = "eng_name";
+            private static final String KEY_ENG_TITLE = "eng_title";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
@@ -384,12 +394,20 @@ public class Results {
                 return getInt(mJsonObject, KEY_DANBOORU_ID, -1);
             }
 
+            public int getDdbId() {
+                return getInt(mJsonObject, KEY_DDB_ID, -1);
+            }
+
             public int getDrawrId() {
                 return getInt(mJsonObject, KEY_DRAWR_ID, -1);
             }
 
             public String getEngName() {
                 return getString(mJsonObject, KEY_ENG_NAME, "");
+            }
+
+            public String getEngTitle() {
+                return getString(mJsonObject, KEY_ENG_TITLE, "");
             }
 
             public String getEstTime() {
