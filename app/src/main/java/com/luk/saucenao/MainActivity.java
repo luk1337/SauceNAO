@@ -101,10 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("StaticFieldLeak")
     private class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> {
 
-        public GetResultsTask() {
-            super();
-        }
-
         @Override
         protected Pair<Integer, JSONObject> doInBackground(Uri... params) {
             Bitmap bitmap;
