@@ -121,6 +121,18 @@ public class Results {
 
         public String getMetadata(Context context) {
             switch (mHeader.getIndexId()) {
+                case DATABASE_ID_H_MAGAZINES:
+                    return String.format("%s: %s",
+                            context.getString(R.string.metadata_date),
+                            mData.getDate()
+                    );
+                case DATABASE_ID_H_GAME_CG:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_company),
+                            mData.getCompany(),
+                            context.getString(R.string.metadata_getchu_id),
+                            mData.getGetchuId()
+                    );
                 case DATABASE_ID_DOUJINSHIDB:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_title),
@@ -148,6 +160,13 @@ public class Results {
                             mData.getDrawrId(),
                             context.getString(R.string.metadata_est_time),
                             mData.getEstTime()
+                    );
+                case DATABASE_ID_NIJIE_IMAGES:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_nijie_id),
+                            mData.getNijieId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
                     );
                 case DATABASE_ID_H_MISC:
                     return String.format("%s: %s\n%s\n%s",
@@ -212,10 +231,14 @@ public class Results {
 
         public String getTitle() {
             switch (mHeader.getIndexId()) {
+                case DATABASE_ID_H_MAGAZINES:
+                    return String.format("%s 一 %s", mData.getTitle(), mData.getPart());
+                case DATABASE_ID_H_GAME_CG:
                 case DATABASE_ID_DOUJINSHIDB:
                 case DATABASE_ID_PIXIV_IMAGES:
                 case DATABASE_ID_NICO_NICO_SEIGA:
                 case DATABASE_ID_DRAWR_IMAGES:
+                case DATABASE_ID_NIJIE_IMAGES:
                 case DATABASE_ID_BCY_ILLUST:
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
@@ -303,15 +326,16 @@ public class Results {
 
         class Data {
 
-            private static final String KEY_ANIDB_AID = "anidb_aid";
             private static final String KEY_AUTHOR_NAME = "author_name";
             private static final String KEY_AUTHOR_URL = "author_url";
             private static final String KEY_BCY_ID = "bcy_id";
             private static final String KEY_BCY_TYPE =  "bcy_type";
+            private static final String KEY_COMPANY = "company";
             private static final String KEY_CREATED_AT = "created_at";
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_DANBOORU_ID = "danbooru_id";
+            private static final String KEY_DATE_ID = "date";
             private static final String KEY_DDB_ID = "ddb_id";
             private static final String KEY_DRAWR_ID = "drawr_id";
             private static final String KEY_ENG_NAME = "eng_name";
@@ -319,11 +343,13 @@ public class Results {
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
+            private static final String KEY_GETCHU_ID = "getchu_id";
             private static final String KEY_JP_NAME = "jp_name";
             private static final String KEY_MEMBER_ID = "member_id";
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
             private static final String KEY_MU_ID = "mu_id";
+            private static final String KEY_NIJIE_ID = "nijie_id";
             private static final String KEY_PART = "part";
             private static final String KEY_PAWOO_ID = "pawoo_id";
             private static final String KEY_PAWOO_USER_ACCT = "pawoo_user_acct";
@@ -336,6 +362,7 @@ public class Results {
             private static final String KEY_TITLE = "title";
             private static final String KEY_TYPE = "type";
             private static final String KEY_YEAR = "year";
+            private static final String KEY_ANIDB_AID = "anidb_aid";
 
             private JSONObject mJsonObject;
 
@@ -361,6 +388,10 @@ public class Results {
 
             public String getBcyType() {
                 return getString(mJsonObject, KEY_BCY_TYPE, "");
+            }
+
+            public String getCompany() {
+                return getString(mJsonObject, KEY_COMPANY, "");
             }
 
             public String getCreatedAt() {
@@ -392,6 +423,10 @@ public class Results {
 
             public int getDanbooruId() {
                 return getInt(mJsonObject, KEY_DANBOORU_ID, -1);
+            }
+
+            public String getDate() {
+                return getString(mJsonObject, KEY_DATE_ID, "");
             }
 
             public int getDdbId() {
@@ -433,6 +468,10 @@ public class Results {
                 return getInt(mJsonObject, KEY_GELBOORU_ID, -1);
             }
 
+            public int getGetchuId() {
+                return getInt(mJsonObject, KEY_GETCHU_ID, -1);
+            }
+
             public String getJpName() {
                 return getString(mJsonObject, KEY_JP_NAME, "");
             }
@@ -451,6 +490,10 @@ public class Results {
 
             public String getMuId() {
                 return getString(mJsonObject, KEY_MU_ID, "");
+            }
+
+            public String getNijieId() {
+                return getString(mJsonObject, KEY_NIJIE_ID, "");
             }
 
             public String getPart() {
