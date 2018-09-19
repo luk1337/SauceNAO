@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_DOCUMENTS = 0;
     private static final int REQUEST_SHARE = 1;
-    private static final int RESULT_OK = 0;
-    private static final int RESULT_GENERIC_ERROR = 1;
-    private static final int RESULT_TOO_MANY_REQUESTS = 2;
-    private static final int RESULT_INVALID_API_KEY = 3;
-    private static final int RESULT_INVALID_JSON = 4;
+    private static final int REQUEST_RESULT_OK = 0;
+    private static final int REQUEST_RESULT_GENERIC_ERROR = 1;
+    private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
+    private static final int REQUEST_RESULT_INVALID_API_KEY = 3;
+    private static final int REQUEST_RESULT_INVALID_JSON = 4;
 
     private Button mSelectImageButton;
     private ProgressDialog mProgressDialog;
@@ -154,21 +154,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     switch (response.code()) {
                         case 403:
-                            return new Pair<>(RESULT_INVALID_API_KEY, null);
+                            return new Pair<>(REQUEST_RESULT_INVALID_API_KEY, null);
                         case 429:
-                            return new Pair<>(RESULT_TOO_MANY_REQUESTS, null);
+                            return new Pair<>(REQUEST_RESULT_TOO_MANY_REQUESTS, null);
                         default:
-                            return new Pair<>(RESULT_GENERIC_ERROR, null);
+                            return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
                     }
                 }
 
-                return new Pair<>(RESULT_OK, new JSONObject(response.body().string()));
+                return new Pair<>(REQUEST_RESULT_OK, new JSONObject(response.body().string()));
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
-                return new Pair<>(RESULT_GENERIC_ERROR, null);
+                return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Unable to parse HTTP output as JSON", e);
-                return new Pair<>(RESULT_INVALID_JSON, null);
+                return new Pair<>(REQUEST_RESULT_INVALID_JSON, null);
             }
         }
 
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mProgressDialog.dismiss();
 
             switch (result.first) {
-                case RESULT_OK:
+                case REQUEST_RESULT_OK:
                     Bundle bundle = new Bundle();
                     bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second.toString());
 
@@ -187,22 +187,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     startActivity(intent);
                     break;
-                case RESULT_GENERIC_ERROR:
+                case REQUEST_RESULT_GENERIC_ERROR:
                     Toast.makeText(MainActivity.this,
                             getString(R.string.error_cannot_load_results),
                             Toast.LENGTH_SHORT).show();
                     break;
-                case RESULT_TOO_MANY_REQUESTS:
+                case REQUEST_RESULT_TOO_MANY_REQUESTS:
                     Toast.makeText(MainActivity.this,
                             getString(R.string.error_too_many_requests),
                             Toast.LENGTH_SHORT).show();
                     break;
-                case RESULT_INVALID_API_KEY:
+                case REQUEST_RESULT_INVALID_API_KEY:
                     Toast.makeText(MainActivity.this,
                             getString(R.string.error_invalid_api_keys),
                             Toast.LENGTH_SHORT).show();
                     break;
-                case RESULT_INVALID_JSON:
+                case REQUEST_RESULT_INVALID_JSON:
                     Toast.makeText(MainActivity.this,
                             getString(R.string.error_cannot_parse_results),
                             Toast.LENGTH_SHORT).show();
