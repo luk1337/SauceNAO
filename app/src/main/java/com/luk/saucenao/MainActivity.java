@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_DOCUMENTS = 0;
     private static final int REQUEST_SHARE = 1;
+    private static final int RESULT_OK = 0;
+    private static final int RESULT_GENERIC_ERROR = 1;
+    private static final int RESULT_TOO_MANY_REQUESTS = 2;
+    private static final int RESULT_INVALID_API_KEY = 3;
+    private static final int RESULT_INVALID_JSON = 4;
 
     private Button mSelectImageButton;
     private ProgressDialog mProgressDialog;
@@ -93,10 +99,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetResultsTask extends AsyncTask<Uri, Integer, JSONObject> {
+    private class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> {
+
+        public GetResultsTask() {
+            super();
+        }
 
         @Override
-        protected JSONObject doInBackground(Uri... params) {
+        protected Pair<Integer, JSONObject> doInBackground(Uri... params) {
             Bitmap bitmap;
 
             try {
@@ -133,33 +143,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 Response response = okHttpClient.newCall(request).execute();
-                return new JSONObject(response.body().string());
+
+                if (response.code() != 200) {
+                    Log.e(LOG_TAG, "HTTP request returned code: " + response.code());
+
+                    switch (response.code()) {
+                        case 403:
+                            return new Pair<>(RESULT_INVALID_API_KEY, null);
+                        case 429:
+                            return new Pair<>(RESULT_TOO_MANY_REQUESTS, null);
+                        default:
+                            return new Pair<>(RESULT_GENERIC_ERROR, null);
+                    }
+                }
+
+                return new Pair<>(RESULT_OK, new JSONObject(response.body().string()));
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
-                return null;
+                return new Pair<>(RESULT_GENERIC_ERROR, null);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Unable to parse HTTP output as JSON", e);
-                return null;
+                return new Pair<>(RESULT_INVALID_JSON, null);
             }
         }
 
         @Override
-        protected void onPostExecute(JSONObject result) {
+        protected void onPostExecute(Pair<Integer, JSONObject> result) {
             mProgressDialog.dismiss();
 
-            if (result == null) {
-                Toast.makeText(MainActivity.this,
-                        getString(R.string.error_cannot_parse_results), Toast.LENGTH_SHORT).show();
-                return;
+            switch (result.first) {
+                case RESULT_OK:
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second.toString());
+
+                    Intent intent = new Intent(MainActivity.this,
+                            ResultsActivity.class);
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
+                    break;
+                case RESULT_GENERIC_ERROR:
+                    Toast.makeText(MainActivity.this,
+                            getString(R.string.error_cannot_load_results),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case RESULT_TOO_MANY_REQUESTS:
+                    Toast.makeText(MainActivity.this,
+                            getString(R.string.error_too_many_requests),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case RESULT_INVALID_API_KEY:
+                    Toast.makeText(MainActivity.this,
+                            getString(R.string.error_invalid_api_keys),
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case RESULT_INVALID_JSON:
+                    Toast.makeText(MainActivity.this,
+                            getString(R.string.error_cannot_parse_results),
+                            Toast.LENGTH_SHORT).show();
+                    break;
             }
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ResultsActivity.EXTRA_RESULTS, result.toString());
-
-            Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-            intent.putExtras(bundle);
-
-            startActivity(intent);
         }
     }
 }

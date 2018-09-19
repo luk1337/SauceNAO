@@ -7,7 +7,10 @@
 
     <string name="no_results">No results</string>
 
-    <string name="error_cannot_parse_results">Unable to load results!</string>
+    <string name="error_cannot_load_results">Unable to load results!</string>
+    <string name="error_cannot_parse_results">Unable to parse results!</string>
+    <string name="error_invalid_api_keys">API key is invalid!</string>
+    <string name="error_too_many_requests">Too many requests!</string>
 
     <string name="metadata_author">Author</string>
     <string name="metadata_bcy_id_cosplay">bcy Cosplay ID</string>
