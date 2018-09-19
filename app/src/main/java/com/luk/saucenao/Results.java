@@ -244,12 +244,12 @@ public class Results {
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
-                case Results.DATABASE_ID_H_MISC:
+                case DATABASE_ID_H_MISC:
                     return mData.getSource();
-                case Results.DATABASE_ID_ANIME:
-                case Results.DATABASE_ID_H_ANIME:
-                case Results.DATABASE_ID_SHOWS:
-                case Results.DATABASE_ID_MANGA:
+                case DATABASE_ID_ANIME:
+                case DATABASE_ID_H_ANIME:
+                case DATABASE_ID_SHOWS:
+                case DATABASE_ID_MANGA:
                     return String.format("%s 一 %s", mData.getSource(), mData.getPart());
                 case DATABASE_ID_PAWOO:
                     return mData.getCreatedAt();
