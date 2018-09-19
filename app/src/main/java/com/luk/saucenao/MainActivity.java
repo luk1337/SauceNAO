@@ -86,13 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (requestCode) {
             case REQUEST_DOCUMENTS:
-                mProgressDialog = ProgressDialog.show(this, "Loading results",
-                        "Please wait...", true, false);
+                mProgressDialog = ProgressDialog.show(this,
+                        getString(R.string.loading_results), getString(R.string.please_wait),
+                        true, false);
                 new GetResultsTask().execute(data.getData());
                 break;
             case REQUEST_SHARE:
-                mProgressDialog = ProgressDialog.show(this, "Loading results",
-                        "Please wait...", true, false);
+                mProgressDialog = ProgressDialog.show(this,
+                        getString(R.string.loading_results), getString(R.string.please_wait),
+                        true, false);
                 new GetResultsTask().execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
                 break;
         }

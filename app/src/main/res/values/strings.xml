@@ -7,6 +7,9 @@
 
     <string name="no_results">No results</string>
 
+    <string name="loading_results">Loading results</string>
+    <string name="please_wait">Please wait…</string>
+
     <string name="error_cannot_load_results">Unable to load results!</string>
     <string name="error_cannot_parse_results">Unable to parse results!</string>
     <string name="error_invalid_api_keys">API key is invalid!</string>
