@@ -185,6 +185,7 @@ public class Results {
                             mData.getEstTime()
                     );
                 case DATABASE_ID_DANBOORU:
+                case DATABASE_ID_YANDERE:
                 case DATABASE_ID_GELBOORU:
                 case DATABASE_ID_SANKAKU_CHANNEL:
                 case DATABASE_ID_E621:
@@ -326,6 +327,7 @@ public class Results {
 
         class Data {
 
+            private static final String KEY_ANIDB_AID = "anidb_aid";
             private static final String KEY_AUTHOR_NAME = "author_name";
             private static final String KEY_AUTHOR_URL = "author_url";
             private static final String KEY_BCY_ID = "bcy_id";
@@ -361,8 +363,8 @@ public class Results {
             private static final String KEY_SOURCE = "source";
             private static final String KEY_TITLE = "title";
             private static final String KEY_TYPE = "type";
+            private static final String KEY_YANDERE_ID = "yandere_id";
             private static final String KEY_YEAR = "year";
-            private static final String KEY_ANIDB_AID = "anidb_aid";
 
             private JSONObject mJsonObject;
 
@@ -534,6 +536,10 @@ public class Results {
 
             public String getTitle() {
                 return getString(mJsonObject, KEY_TITLE, "");
+            }
+
+            public int getYandereId() {
+                return getInt(mJsonObject, KEY_YANDERE_ID, -1);
             }
 
             public String getType() {
