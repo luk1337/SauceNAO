@@ -590,6 +590,10 @@ public class Results {
             public String getYear() {
                 String[] year = getString(mJsonObject, KEY_YEAR, "").split("-");
 
+                if (year.length == 1) {
+                    return year[0];
+                }
+
                 if (year.length != 2) {
                     return "";
                 }
