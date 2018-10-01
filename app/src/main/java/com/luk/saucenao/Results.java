@@ -265,6 +265,7 @@ public class Results {
                 case DATABASE_ID_H_MISC:
                 case DATABASE_ID_2D_MARKET:
                     return mData.getSource();
+                case DATABASE_ID_OPENINGS:
                 case DATABASE_ID_ANIME:
                 case DATABASE_ID_H_ANIME:
                 case DATABASE_ID_SHOWS:
@@ -363,6 +364,7 @@ public class Results {
             private static final String KEY_ENG_TITLE = "eng_title";
             private static final String KEY_EST_TIME = "est_time";
             private static final String KEY_EXT_URLS = "ext_urls";
+            private static final String KEY_FILE = "file";
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
             private static final String KEY_GETCHU_ID = "getchu_id";
             private static final String KEY_IDOL_ID = "idol_id";
@@ -485,6 +487,10 @@ public class Results {
                 }
 
                 return extUrls;
+            }
+
+            public String getFile() {
+                return getString(mJsonObject, KEY_FILE, "");
             }
 
             public int getGelbooruId() {
