@@ -16,4 +16,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/select_database"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/databases_entries"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_image" />
+
 </android.support.constraint.ConstraintLayout>

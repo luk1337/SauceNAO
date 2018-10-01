@@ -1,0 +1,71 @@
+<resources>
+    <string-array name="databases_entries">
+        <item>All databases</item>
+        <item>H-Magazines</item>
+        <item>H-Game CG</item>
+        <item>DoujinshiDB</item>
+        <item>pixiv Images</item>
+        <item>Nico Nico Seiga</item>
+        <item>Danbooru</item>
+        <item>drawr Images</item>
+        <item>Nijie Images</item>
+        <item>Yande.re</item>
+        <item>Openings.moe</item>
+        <item>Shutterstock</item>
+        <item>FAKKU</item>
+        <item>H-Misc</item>
+        <item>2D-Market</item>
+        <item>MediBang</item>
+        <item>Anime</item>
+        <item>H-Anime</item>
+        <item>Movies</item>
+        <item>Shows</item>
+        <item>Gelbooru</item>
+        <item>Konachan</item>
+        <item>Sankaku Channel</item>
+        <item>Anime-Pictures.net</item>
+        <item>e621.net</item>
+        <item>Idol Complex</item>
+        <item>bcy.net Illust</item>
+        <item>bcy.net Cosplay</item>
+        <item>PortalGraphics.net (Hist)</item>
+        <item>deviantArt</item>
+        <item>Pawoo.net</item>
+        <item>Manga</item>
+    </string-array>
+
+    <integer-array name="databases_values">
+        <item>999</item>
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>15</item>
+        <item>16</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+    </integer-array>
+</resources>

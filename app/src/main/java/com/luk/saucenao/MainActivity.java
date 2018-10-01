@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_RESULT_INVALID_JSON = 4;
 
     private Button mSelectImageButton;
+    private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
     private AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> mResultTask;
 
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSelectImageButton = findViewById(R.id.select_image);
         mSelectImageButton.setOnClickListener(this);
+
+        mSelectDatabaseSpinner = findViewById(R.id.select_database);
     }
 
     @Override
@@ -127,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .host("saucenao.com")
                     .addPathSegment("search.php")
                     .addQueryParameter("api_key", BuildConfig.ApiKey)
+                    .addQueryParameter("db", String.valueOf(
+                            getResources().getIntArray(R.array.databases_values)
+                                    [mSelectDatabaseSpinner.getSelectedItemPosition()]))
                     .addQueryParameter("output_type", "2")
                     .build();
 
