@@ -196,6 +196,7 @@ public class Results {
                 case DATABASE_ID_YANDERE:
                 case DATABASE_ID_2D_MARKET:
                 case DATABASE_ID_GELBOORU:
+                case DATABASE_ID_KONACHAN:
                 case DATABASE_ID_SANKAKU_CHANNEL:
                 case DATABASE_ID_E621:
                     return String.format("%s: %s",
@@ -360,6 +361,7 @@ public class Results {
             private static final String KEY_GETCHU_ID = "getchu_id";
             private static final String KEY_IDOL_ID = "idol_id";
             private static final String KEY_JP_NAME = "jp_name";
+            private static final String KEY_KONACHAN_ID = "konachan_id";
             private static final String KEY_MEMBER_ID = "member_id";
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
             private static final String KEY_MEMBER_NAME = "member_name";
@@ -493,6 +495,10 @@ public class Results {
 
             public String getJpName() {
                 return getString(mJsonObject, KEY_JP_NAME, "");
+            }
+
+            public int getKonachanId() {
+                return getInt(mJsonObject, KEY_KONACHAN_ID, -1);
             }
 
             public int getMemberLinkId() {
