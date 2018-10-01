@@ -31,6 +31,7 @@
     <string name="metadata_member">Member</string>
     <string name="metadata_nijie_id">Nijie ID</string>
     <string name="metadata_pawoo_id">Pawoo ID</string>
+    <string name="metadata_pg_id">PG ID</string>
     <string name="metadata_pixiv_id">Pixiv ID</string>
     <string name="metadata_seiga_id">Seiga ID</string>
     <string name="metadata_title">Title</string>

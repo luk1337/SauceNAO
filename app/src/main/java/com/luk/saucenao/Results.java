@@ -223,6 +223,13 @@ public class Results {
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
+                case DATABASE_ID_PORTALGRAPHICS:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_pg_id),
+                            mData.getPgId(),
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
                 case DATABASE_ID_DEVIANTART:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_da_id),
@@ -260,6 +267,7 @@ public class Results {
                 case DATABASE_ID_MEDIBANG:
                 case DATABASE_ID_BCY_ILLUST:
                 case DATABASE_ID_BCY_COSPLAY:
+                case DATABASE_ID_PORTALGRAPHICS:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
                 case DATABASE_ID_FAKKU:
@@ -382,6 +390,7 @@ public class Results {
             private static final String KEY_PAWOO_USER_ACCT = "pawoo_user_acct";
             private static final String KEY_PAWOO_USER_DISPLAY_NAME = "pawoo_user_display_name";
             private static final String KEY_PAWOO_USER_USERNAME = "pawoo_user_username";
+            private static final String KEY_PG_ID = "pg_id";
             private static final String KEY_PIXIV_ID = "pixiv_id";
             private static final String KEY_SANKAKU_ID = "sankaku_id";
             private static final String KEY_SEIGA_ID = "seiga_id";
@@ -557,6 +566,10 @@ public class Results {
 
             public String getPawooUserDisplayName() {
                 return getString(mJsonObject, KEY_PAWOO_USER_DISPLAY_NAME, "");
+            }
+
+            public int getPgId() {
+                return getInt(mJsonObject, KEY_PG_ID, -1);
             }
 
             public int getPixivId() {
