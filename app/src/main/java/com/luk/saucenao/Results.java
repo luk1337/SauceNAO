@@ -171,6 +171,11 @@ public class Results {
                             context.getString(R.string.metadata_member),
                             mData.getMemberName()
                     );
+                case DATABASE_ID_FAKKU:
+                    return String.format("%s: %s",
+                            context.getString(R.string.metadata_artist),
+                            mData.getCreator()
+                    );
                 case DATABASE_ID_H_MISC:
                     return String.format("%s: %s\n%s\n%s",
                             context.getString(R.string.metadata_creators),
@@ -249,6 +254,7 @@ public class Results {
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
+                case DATABASE_ID_FAKKU:
                 case DATABASE_ID_H_MISC:
                 case DATABASE_ID_2D_MARKET:
                     return mData.getSource();
