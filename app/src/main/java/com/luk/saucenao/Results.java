@@ -203,6 +203,11 @@ public class Results {
                             context.getString(R.string.metadata_creator),
                             mData.getCreator()
                     );
+                case DATABASE_ID_MEDIBANG:
+                    return String.format("%s: %s",
+                            context.getString(R.string.metadata_member),
+                            mData.getMemberName()
+                    );
                 case DATABASE_ID_BCY_ILLUST:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_bcy_id_illust),
@@ -251,6 +256,7 @@ public class Results {
                 case DATABASE_ID_NICO_NICO_SEIGA:
                 case DATABASE_ID_DRAWR_IMAGES:
                 case DATABASE_ID_NIJIE_IMAGES:
+                case DATABASE_ID_MEDIBANG:
                 case DATABASE_ID_BCY_ILLUST:
                 case DATABASE_ID_BCY_COSPLAY:
                 case DATABASE_ID_DEVIANTART:
