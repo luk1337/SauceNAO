@@ -125,7 +125,7 @@ public class Results {
             switch (mHeader.getIndexId()) {
                 case DATABASE_ID_H_MAGAZINES:
                     return String.format("%s: %s",
-                            context.getString(R.string.metadata_date),
+                            context.getString(R.string.metadata_publication_date),
                             mData.getDate()
                     );
                 case DATABASE_ID_H_GAME_CG:
@@ -204,6 +204,13 @@ public class Results {
                             context.getString(R.string.metadata_creator),
                             mData.getCreator()
                     );
+                case DATABASE_ID_SHUTTERSTOCK:
+                    return String.format("%s: %s\n%s: %s",
+                            context.getString(R.string.metadata_date),
+                            mData.getDate(),
+                            context.getString(R.string.metadata_contributor),
+                            mData.getContributorId()
+                    );
                 case DATABASE_ID_MEDIBANG:
                     return String.format("%s: %s",
                             context.getString(R.string.metadata_member),
@@ -253,7 +260,7 @@ public class Results {
             }
         }
 
-        public String getTitle() {
+        public String getTitle(Context context) {
             switch (mHeader.getIndexId()) {
                 case DATABASE_ID_H_MAGAZINES:
                     return String.format("%s 一 %s", mData.getTitle(), mData.getPart());
@@ -270,6 +277,10 @@ public class Results {
                 case DATABASE_ID_PORTALGRAPHICS:
                 case DATABASE_ID_DEVIANTART:
                     return mData.getTitle();
+                case DATABASE_ID_SHUTTERSTOCK:
+                    return String.format("%s: %s\n",
+                            context.getString(R.string.metadata_shutterstock_id),
+                            mData.getShutterstockId());
                 case DATABASE_ID_FAKKU:
                 case DATABASE_ID_H_MISC:
                 case DATABASE_ID_2D_MARKET:
@@ -362,6 +373,7 @@ public class Results {
             private static final String KEY_BCY_ID = "bcy_id";
             private static final String KEY_BCY_TYPE =  "bcy_type";
             private static final String KEY_COMPANY = "company";
+            private static final String KEY_CONTRIBUTOR_ID = "contributor_id";
             private static final String KEY_CREATED_AT = "created_at";
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
@@ -394,6 +406,7 @@ public class Results {
             private static final String KEY_PIXIV_ID = "pixiv_id";
             private static final String KEY_SANKAKU_ID = "sankaku_id";
             private static final String KEY_SEIGA_ID = "seiga_id";
+            private static final String KEY_SHUTTERSTOCK_ID = "shutterstock_id";
             private static final String KEY_SOURCE = "source";
             private static final String KEY_TITLE = "title";
             private static final String KEY_TYPE = "type";
@@ -428,6 +441,10 @@ public class Results {
 
             public String getCompany() {
                 return getString(mJsonObject, KEY_COMPANY, "");
+            }
+
+            public int getContributorId() {
+                return getInt(mJsonObject, KEY_CONTRIBUTOR_ID, -1);
             }
 
             public String getCreatedAt() {
@@ -582,6 +599,10 @@ public class Results {
 
             public int getSeigaId() {
                 return getInt(mJsonObject, KEY_SEIGA_ID, -1);
+            }
+
+            public int getShutterstockId() {
+                return getInt(mJsonObject, KEY_SHUTTERSTOCK_ID, -1);
             }
 
             public String getSource() {

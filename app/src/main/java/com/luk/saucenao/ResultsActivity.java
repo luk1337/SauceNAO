@@ -99,7 +99,7 @@ public class ResultsActivity  extends AppCompatActivity {
 
             // Load index specific data
             metadata.setText(result.getMetadata(this));
-            title.setText(result.getTitle());
+            title.setText(result.getTitle(this));
 
             // Load global data
             databaseName.setText(Results.DATABASE_NAMES.get(result.mHeader.getIndexId()));
