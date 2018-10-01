@@ -185,6 +185,7 @@ public class Results {
                     );
                 case DATABASE_ID_ANIME:
                 case DATABASE_ID_H_ANIME:
+                case DATABASE_ID_MOVIES:
                 case DATABASE_ID_SHOWS:
                     return String.format("%s: %s\n%s: %s",
                             context.getString(R.string.metadata_year),
@@ -368,6 +369,7 @@ public class Results {
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
             private static final String KEY_GETCHU_ID = "getchu_id";
             private static final String KEY_IDOL_ID = "idol_id";
+            private static final String KEY_IMDB_ID = "imdb_id";
             private static final String KEY_JP_NAME = "jp_name";
             private static final String KEY_KONACHAN_ID = "konachan_id";
             private static final String KEY_MEMBER_ID = "member_id";
@@ -503,6 +505,10 @@ public class Results {
 
             public int getIdolId() {
                 return getInt(mJsonObject, KEY_IDOL_ID, -1);
+            }
+
+            public String getImdbId() {
+                return getString(mJsonObject, KEY_IMDB_ID, "");
             }
 
             public String getJpName() {
