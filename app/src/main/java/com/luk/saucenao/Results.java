@@ -358,6 +358,7 @@ public class Results {
             private static final String KEY_EXT_URLS = "ext_urls";
             private static final String KEY_GELBOORU_ID = "gelbooru_id";
             private static final String KEY_GETCHU_ID = "getchu_id";
+            private static final String KEY_IDOL_ID = "idol_id";
             private static final String KEY_JP_NAME = "jp_name";
             private static final String KEY_MEMBER_ID = "member_id";
             private static final String KEY_MEMBER_LINK_ID = "member_link_id";
@@ -484,6 +485,10 @@ public class Results {
 
             public int getGetchuId() {
                 return getInt(mJsonObject, KEY_GETCHU_ID, -1);
+            }
+
+            public int getIdolId() {
+                return getInt(mJsonObject, KEY_IDOL_ID, -1);
             }
 
             public String getJpName() {
