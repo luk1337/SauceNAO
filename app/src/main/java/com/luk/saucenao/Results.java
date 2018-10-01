@@ -366,7 +366,7 @@ public class Results {
             private static final String KEY_CREATOR = "creator";
             private static final String KEY_DA_ID = "da_id";
             private static final String KEY_DANBOORU_ID = "danbooru_id";
-            private static final String KEY_DATE_ID = "date";
+            private static final String KEY_DATE = "date";
             private static final String KEY_DDB_ID = "ddb_id";
             private static final String KEY_DRAWR_ID = "drawr_id";
             private static final String KEY_ENG_NAME = "eng_name";
@@ -462,7 +462,7 @@ public class Results {
             }
 
             public String getDate() {
-                return getString(mJsonObject, KEY_DATE_ID, "");
+                return getString(mJsonObject, KEY_DATE, "");
             }
 
             public int getDdbId() {
