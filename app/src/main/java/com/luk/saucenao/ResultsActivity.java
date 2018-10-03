@@ -3,6 +3,7 @@ package com.luk.saucenao;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,8 +45,8 @@ public class ResultsActivity  extends AppCompatActivity {
         setTitle(R.string.results);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mClipboardManager = getSystemService(ClipboardManager.class);
-        mLayoutInflater = getSystemService(LayoutInflater.class);
+        mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mNoResults = findViewById(R.id.no_results);
         Bundle bundle = getIntent().getExtras();
 
