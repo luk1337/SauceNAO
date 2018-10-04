@@ -13,6 +13,8 @@ public class Results {
 
     private static final String LOG_TAG = Results.class.getSimpleName();
 
+    private static final String URL_LOOKUP_SUBSTRING = "https://saucenao.com/info.php?lookup_type=";
+
     private Document mDocument;
     private ArrayList<Result> mResults = new ArrayList<>();
 
@@ -81,7 +83,7 @@ public class Results {
                 for (Element a : resultMatchInfo.getElementsByTag("a")) {
                     String href = a.attr("href");
 
-                    if (!href.isEmpty()) {
+                    if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
                         mExtUrls.add(href);
                     }
                 }
@@ -90,7 +92,7 @@ public class Results {
                     for (Element a : resultContentColumn.getElementsByTag("a")) {
                         String href = a.attr("href");
 
-                        if (!href.isEmpty()) {
+                        if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
                             mExtUrls.add(href);
                         }
                     }
