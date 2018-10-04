@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,8 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -54,14 +54,8 @@ public class ResultsActivity  extends AppCompatActivity {
             String results = bundle.getString(EXTRA_RESULTS);
 
             if (results != null) {
-                try {
-                    mResults = new Results(new JSONObject(results));
-                    mResults.parse();
-                } catch (JSONException e) {
-                    Toast.makeText(this, getString(R.string.error_cannot_parse_results),
-                            Toast.LENGTH_SHORT).show();
-                    Log.e(LOG_TAG, "Unable to parse results", e);
-                }
+                mResults = new Results(Jsoup.parse(results));
+                mResults.parse();
             }
         }
 
@@ -89,47 +83,44 @@ public class ResultsActivity  extends AppCompatActivity {
 
         for (Results.Result result : mResults.getResults()) {
             View template = mLayoutInflater.inflate(R.layout.card_result, null);
-            TextView databaseName = template.findViewById(R.id.database_name);
             TextView metadata = template.findViewById(R.id.metadata);
             TextView similarity = template.findViewById(R.id.similarity);
             TextView title = template.findViewById(R.id.title);
 
             // Load thumbnail in new task
             new DownloadThumbnailTask(template.findViewById(R.id.thumbnail))
-                    .execute(result.mHeader.getThumbnail());
+                    .execute(result.mThumbnail);
 
             // Load index specific data
-            metadata.setText(result.getMetadata(this));
-            title.setText(result.getTitle(this));
+            metadata.setText(TextUtils.join("\n", result.mColumns));
+            title.setText(result.mTitle);
 
             // Load global data
-            databaseName.setText(Results.DATABASE_NAMES.get(result.mHeader.getIndexId()));
-            similarity.setText(result.mHeader.getSimilarity());
+            similarity.setText(result.mSimilarity);
 
             // Set on click listener
             template.findViewById(R.id.card_result).setOnClickListener(view -> {
-                String[] extUrls = result.mData.getExtUrls();
-
-                if (extUrls.length == 0) {
+                if (result.mExtUrls.size() == 0) {
                     return;
                 }
 
-                if (extUrls.length == 1) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(extUrls[0])));
+                if (result.mExtUrls.size() == 1) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(result.mExtUrls.get(0))));
                     return;
                 }
 
                 PopupMenu popupMenu = new PopupMenu(this, view);
 
-                for (int i = 0; i < extUrls.length; i++) {
-                    popupMenu.getMenu().add(0, i, i, extUrls[i]);
+                for (int i = 0; i < result.mExtUrls.size(); i++) {
+                    popupMenu.getMenu().add(0, i, i, result.mExtUrls.get(i));
                 }
 
                 popupMenu.show();
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(extUrls[item.getItemId()])));
+                            Uri.parse(result.mExtUrls.get(item.getItemId()))));
                     return true;
                 });
             });

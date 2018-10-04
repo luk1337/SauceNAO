@@ -16,9 +16,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mSelectImageButton;
     private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
-    private AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> mResultTask;
+    private AsyncTask<Uri, Integer, Pair<Integer, String>> mResultTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, JSONObject>> {
+    private class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, String>> {
 
         @Override
-        protected Pair<Integer, JSONObject> doInBackground(Uri... params) {
+        protected Pair<Integer, String> doInBackground(Uri... params) {
             Bitmap bitmap;
 
             try {
@@ -134,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .addQueryParameter("db", String.valueOf(
                             getResources().getIntArray(R.array.databases_values)
                                     [mSelectDatabaseSpinner.getSelectedItemPosition()]))
-                    .addQueryParameter("output_type", "2")
                     .build();
 
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -167,24 +163,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
 
-                return new Pair<>(REQUEST_RESULT_OK, new JSONObject(response.body().string()));
+                return new Pair<>(REQUEST_RESULT_OK, response.body().string());
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, "Unable to parse HTTP output as JSON", e);
-                return new Pair<>(REQUEST_RESULT_INVALID_JSON, null);
             }
         }
 
         @Override
-        protected void onPostExecute(Pair<Integer, JSONObject> result) {
+        protected void onPostExecute(Pair<Integer, String> result) {
             mProgressDialog.dismiss();
 
             switch (result.first) {
                 case REQUEST_RESULT_OK:
                     Bundle bundle = new Bundle();
-                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second.toString());
+                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second);
 
                     Intent intent = new Intent(MainActivity.this,
                             ResultsActivity.class);
