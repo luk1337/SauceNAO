@@ -13,11 +13,12 @@ public class Results {
 
     private static final String LOG_TAG = Results.class.getSimpleName();
 
-    private static final String CLASS_RESULT_CONTENT_COLUMN = "resultcontentcolumn";
-    private static final String CLASS_RESULT_IMAGE          = "resultimage";
-    private static final String CLASS_RESULT_MATCH_INFO     = "resultmatchinfo";
-    private static final String CLASS_RESULT_TABLE          = "resulttable";
-    private static final String CLASS_RESULT_TITLE          = "resulttitle";
+    private static final String CLASS_RESULT_CONTENT_COLUMN  = "resultcontentcolumn";
+    private static final String CLASS_RESULT_IMAGE           = "resultimage";
+    private static final String CLASS_RESULT_MATCH_INFO      = "resultmatchinfo";
+    private static final String CLASS_RESULT_SIMILARITY_INFO = "resultsimilarityinfo";
+    private static final String CLASS_RESULT_TABLE           = "resulttable";
+    private static final String CLASS_RESULT_TITLE           = "resulttitle";
 
     private static final String URL_LOOKUP_SUBSTRING = "https://saucenao.com/info.php?lookup_type=";
 
@@ -59,7 +60,7 @@ public class Results {
 
         void loadSimilarityInfo(Element resultMatchInfo) {
             try {
-                mSimilarity = resultMatchInfo.getElementsByClass("resultsimilarityinfo")
+                mSimilarity = resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO)
                         .first()
                         .text();
             } catch (NullPointerException e) {
