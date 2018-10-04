@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Results {
 
@@ -35,7 +36,7 @@ public class Results {
             newResult.loadSimilarityInfo(resultMatchInfo);
             newResult.loadThumbnail(resultImage);
             newResult.loadTitle(resultTitle);
-            newResult.loadExtUrls(resultMatchInfo);
+            newResult.loadExtUrls(resultMatchInfo, resultContentColumns);
             newResult.loadColumns(resultContentColumns);
 
             mResults.add(newResult);
@@ -75,22 +76,30 @@ public class Results {
             }
         }
 
-        void loadExtUrls(Element resultMatchInfo) {
+        void loadExtUrls(Element resultMatchInfo, Elements resultContentColumns) {
             try {
-                Element resultMiscInfo =
-                        resultMatchInfo.getElementsByClass("resultmiscinfo")
-                                .first();
-
-                for (Element a : resultMiscInfo.getElementsByTag("a")) {
+                for (Element a : resultMatchInfo.getElementsByTag("a")) {
                     String href = a.attr("href");
 
                     if (!href.isEmpty()) {
                         mExtUrls.add(href);
                     }
                 }
+
+                for (Element resultContentColumn : resultContentColumns) {
+                    for (Element a : resultContentColumn.getElementsByTag("a")) {
+                        String href = a.attr("href");
+
+                        if (!href.isEmpty()) {
+                            mExtUrls.add(href);
+                        }
+                    }
+                }
             } catch (IndexOutOfBoundsException | NullPointerException e) {
                 Log.e(LOG_TAG, "Unable to load external URLs", e);
             }
+
+            Collections.sort(mExtUrls);
         }
 
         void loadColumns(Elements resultContentColumns) {
