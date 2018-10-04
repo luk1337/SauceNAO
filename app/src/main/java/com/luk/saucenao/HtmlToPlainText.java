@@ -30,9 +30,9 @@ public class HtmlToPlainText {
     }
 
     private class FormattingVisitor implements NodeVisitor {
-        private static final int maxWidth = 80;
-        private int width = 0;
-        private StringBuilder accum = new StringBuilder();
+        private static final int mMaxWidth = 80;
+        private int mWidth = 0;
+        private StringBuilder mAccum = new StringBuilder();
 
         public void head(Node node, int depth) {
             String name = node.nodeName();
@@ -63,17 +63,17 @@ public class HtmlToPlainText {
         private void append(String text) {
             // Reset counter if starts with a newline. only from formats above, not in natural text
             if (text.startsWith("\n")) {
-                width = 0;
+                mWidth = 0;
             }
 
             // Don't accumulate long runs of empty spaces
-            if (text.equals(" ") && (accum.length() == 0 || StringUtil.in(
-                    accum.substring(accum.length() - 1), " ", "\n"))) {
+            if (text.equals(" ") && (mAccum.length() == 0 || StringUtil.in(
+                    mAccum.substring(mAccum.length() - 1), " ", "\n"))) {
                 return;
             }
 
             // Won't fit, needs to wrap
-            if (text.length() + width > maxWidth) {
+            if (text.length() + mWidth > mMaxWidth) {
                 String words[] = text.split("\\s+");
 
                 for (int i = 0; i < words.length; i++) {
@@ -86,24 +86,24 @@ public class HtmlToPlainText {
                     }
 
                     // Wrap and reset counter
-                    if (word.length() + width > maxWidth) {
-                        accum.append("\n").append(word);
-                        width = word.length();
+                    if (word.length() + mWidth > mMaxWidth) {
+                        mAccum.append("\n").append(word);
+                        mWidth = word.length();
                     } else {
-                        accum.append(word);
-                        width += word.length();
+                        mAccum.append(word);
+                        mWidth += word.length();
                     }
                 }
             } else {
                 // Fits as is, without need to wrap text
-                accum.append(text);
-                width += text.length();
+                mAccum.append(text);
+                mWidth += text.length();
             }
         }
 
         @Override
         public String toString() {
-            return accum.toString();
+            return mAccum.toString();
         }
     }
 }
