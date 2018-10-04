@@ -69,7 +69,13 @@ public class Results {
 
         void loadThumbnail(Element resultImage) {
             try {
-                mThumbnail = resultImage.child(0).child(0).attr("data-src");
+                Element img = resultImage.child(0).child(0);
+
+                if (img.hasAttr("data-src")) {
+                    mThumbnail = img.attr("data-src");
+                } else if (img.hasAttr("src")) {
+                    mThumbnail = img.attr("src");
+                }
             } catch (IndexOutOfBoundsException | NullPointerException e) {
                 Log.e(LOG_TAG, "Unable to load thumbnail", e);
             }
