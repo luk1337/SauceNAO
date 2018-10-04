@@ -13,6 +13,12 @@ public class Results {
 
     private static final String LOG_TAG = Results.class.getSimpleName();
 
+    private static final String CLASS_RESULT_CONTENT_COLUMN = "resultcontentcolumn";
+    private static final String CLASS_RESULT_IMAGE          = "resultimage";
+    private static final String CLASS_RESULT_MATCH_INFO     = "resultmatchinfo";
+    private static final String CLASS_RESULT_TABLE          = "resulttable";
+    private static final String CLASS_RESULT_TITLE          = "resulttitle";
+
     private static final String URL_LOOKUP_SUBSTRING = "https://saucenao.com/info.php?lookup_type=";
 
     private Document mDocument;
@@ -27,12 +33,11 @@ public class Results {
     }
 
     public void parse() {
-        for (Element result : mDocument.getElementsByClass("resulttable")) {
-            Element resultImage = result.getElementsByClass("resultimage").first();
-            Element resultMatchInfo = result.getElementsByClass("resultmatchinfo").first();
-            Element resultTitle = result.getElementsByClass("resulttitle").first();
-            Elements resultContentColumns =
-                    result.getElementsByClass("resultcontentcolumn");
+        for (Element result : mDocument.getElementsByClass(CLASS_RESULT_TABLE)) {
+            Element resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first();
+            Element resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first();
+            Element resultTitle = result.getElementsByClass(CLASS_RESULT_TITLE).first();
+            Elements resultContentColumns = result.getElementsByClass(CLASS_RESULT_CONTENT_COLUMN);
 
             Result newResult = new Result();
             newResult.loadSimilarityInfo(resultMatchInfo);
