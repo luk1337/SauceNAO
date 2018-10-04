@@ -1,6 +1,7 @@
 package com.luk.saucenao;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -467,7 +468,7 @@ public class Results {
                     }
                 }
 
-                return String.join(", ", creators);
+                return TextUtils.join(", ", creators);
             }
 
             public int getDaId() {
@@ -636,7 +637,7 @@ public class Results {
                     return year[0];
                 }
 
-                return String.join("-", year);
+                return TextUtils.join("-", year);
             }
         }
     }
