@@ -182,17 +182,15 @@ public class ResultsActivity  extends AppCompatActivity {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            Bitmap thumbnail = null;
-
             try {
-                thumbnail = BitmapFactory.decodeStream(new java.net.URL(params[0]).openStream());
+                return BitmapFactory.decodeStream(new java.net.URL(params[0]).openStream());
             } catch (MalformedURLException e) {
                 Log.e(LOG_TAG, "Invalid thumbnail URL", e);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to load thumbnail", e);
             }
 
-            return thumbnail;
+            return null;
         }
 
         protected void onPostExecute(Bitmap result) {
