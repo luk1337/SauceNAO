@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_RESULT_OK = 0;
     private static final int REQUEST_RESULT_GENERIC_ERROR = 1;
     private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
-    private static final int REQUEST_RESULT_INVALID_API_KEY = 3;
-    private static final int REQUEST_RESULT_INVALID_JSON = 4;
 
     private Button mSelectImageButton;
     private Spinner mSelectDatabaseSpinner;
@@ -153,8 +151,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.e(LOG_TAG, "HTTP request returned code: " + response.code());
 
                     switch (response.code()) {
-                        case 403:
-                            return new Pair<>(REQUEST_RESULT_INVALID_API_KEY, null);
                         case 429:
                             return new Pair<>(REQUEST_RESULT_TOO_MANY_REQUESTS, null);
                         default:
@@ -192,16 +188,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case REQUEST_RESULT_TOO_MANY_REQUESTS:
                     Toast.makeText(MainActivity.this,
                             getString(R.string.error_too_many_requests),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case REQUEST_RESULT_INVALID_API_KEY:
-                    Toast.makeText(MainActivity.this,
-                            getString(R.string.error_invalid_api_keys),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case REQUEST_RESULT_INVALID_JSON:
-                    Toast.makeText(MainActivity.this,
-                            getString(R.string.error_cannot_parse_results),
                             Toast.LENGTH_SHORT).show();
                     break;
             }
