@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .scheme("https")
                     .host("saucenao.com")
                     .addPathSegment("search.php")
-                    .addQueryParameter("api_key", BuildConfig.ApiKey)
                     .addQueryParameter("db", String.valueOf(
                             getResources().getIntArray(R.array.databases_values)
                                     [mSelectDatabaseSpinner.getSelectedItemPosition()]))
