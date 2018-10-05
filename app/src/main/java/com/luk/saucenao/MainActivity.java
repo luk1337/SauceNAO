@@ -1,6 +1,5 @@
 package com.luk.saucenao;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +21,7 @@ import org.jsoup.Jsoup;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_RESULT_GENERIC_ERROR = 1;
     private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
 
+    private int[] mDatabasesValues;
     private Button mSelectImageButton;
     private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (Intent.ACTION_SEND.equals(intent.getAction())) {
             onActivityResult(REQUEST_SHARE, RESULT_OK, intent);
         }
+
+        mDatabasesValues = getResources().getIntArray(R.array.databases_values);
 
         mSelectImageButton = findViewById(R.id.select_image);
         mSelectImageButton.setOnClickListener(this);
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (requestCode) {
             case REQUEST_DOCUMENTS:
-                mResultTask = new GetResultsTask();
+                mResultTask = new GetResultsTask(this);
                 mResultTask.execute(data.getData());
                 mProgressDialog = ProgressDialog.show(this,
                         getString(R.string.loading_results), getString(R.string.please_wait),
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mResultTask.cancel(true));
                 break;
             case REQUEST_SHARE:
-                mResultTask = new GetResultsTask();
+                mResultTask = new GetResultsTask(this);
                 mResultTask.execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
                 mProgressDialog = ProgressDialog.show(this,
                         getString(R.string.loading_results), getString(R.string.please_wait),
@@ -99,15 +102,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, String>> {
+    private static class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, String>> {
+
+        private WeakReference<MainActivity> mMainActivity;
+
+        GetResultsTask(MainActivity mainActivity) {
+            mMainActivity = new WeakReference<>(mainActivity);
+        }
 
         @Override
         protected Pair<Integer, String> doInBackground(Uri... params) {
+            MainActivity mainActivity = mMainActivity.get();
+
+            if (mainActivity == null || mainActivity.isFinishing()) {
+                return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
+            }
+
             Bitmap bitmap;
 
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), params[0]);
+                bitmap = MediaStore.Images.Media.getBitmap(
+                        mainActivity.getContentResolver(), params[0]);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to read image bitmap", e);
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
@@ -117,10 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
             try {
+                int database = mainActivity.mDatabasesValues[
+                        mainActivity.mSelectDatabaseSpinner.getSelectedItemPosition()];
                 Connection.Response response = Jsoup.connect(
-                        "https://saucenao.com/search.php?db=" +
-                                getResources().getIntArray(R.array.databases_values)
-                                        [mSelectDatabaseSpinner.getSelectedItemPosition()])
+                        "https://saucenao.com/search.php?db=" + database)
                         .data("file", "image.png",
                                 new ByteArrayInputStream(stream.toByteArray()))
                         .method(Connection.Method.POST)
@@ -146,27 +161,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected void onPostExecute(Pair<Integer, String> result) {
-            mProgressDialog.dismiss();
+            MainActivity mainActivity = mMainActivity.get();
+
+            if (mainActivity == null || mainActivity.isFinishing()) {
+                return;
+            }
+
+            mainActivity.mProgressDialog.dismiss();
 
             switch (result.first) {
                 case REQUEST_RESULT_OK:
                     Bundle bundle = new Bundle();
                     bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second);
 
-                    Intent intent = new Intent(MainActivity.this,
+                    Intent intent = new Intent(mainActivity,
                             ResultsActivity.class);
                     intent.putExtras(bundle);
 
-                    startActivity(intent);
+                    mainActivity.startActivity(intent);
                     break;
                 case REQUEST_RESULT_GENERIC_ERROR:
-                    Toast.makeText(MainActivity.this,
-                            getString(R.string.error_cannot_load_results),
+                    Toast.makeText(mainActivity,
+                            mainActivity.getString(R.string.error_cannot_load_results),
                             Toast.LENGTH_SHORT).show();
                     break;
                 case REQUEST_RESULT_TOO_MANY_REQUESTS:
-                    Toast.makeText(MainActivity.this,
-                            getString(R.string.error_too_many_requests),
+                    Toast.makeText(mainActivity,
+                            mainActivity.getString(R.string.error_too_many_requests),
                             Toast.LENGTH_SHORT).show();
                     break;
             }

@@ -1,6 +1,5 @@
 package com.luk.saucenao;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 
 public class ResultsActivity  extends AppCompatActivity {
@@ -166,13 +166,12 @@ public class ResultsActivity  extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class DownloadThumbnailTask extends AsyncTask<String, Void, Bitmap> {
+    private static class DownloadThumbnailTask extends AsyncTask<String, Void, Bitmap> {
 
-        private ImageView mImageView;
+        private WeakReference<ImageView> mImageView;
 
         DownloadThumbnailTask(ImageView imageView) {
-            this.mImageView = imageView;
+            mImageView = new WeakReference<>(imageView);
         }
 
         @Override
@@ -191,7 +190,11 @@ public class ResultsActivity  extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
-            mImageView.setImageBitmap(result);
+            ImageView imageView = mImageView.get();
+
+            if (imageView != null) {
+                imageView.setImageBitmap(result);
+            }
         }
     }
 }
