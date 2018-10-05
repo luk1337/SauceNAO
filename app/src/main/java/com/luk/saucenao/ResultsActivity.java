@@ -48,6 +48,7 @@ public class ResultsActivity  extends AppCompatActivity {
         mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mNoResults = findViewById(R.id.no_results);
+
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
@@ -55,7 +56,6 @@ public class ResultsActivity  extends AppCompatActivity {
 
             if (results != null) {
                 mResults = new Results(Jsoup.parse(results));
-                mResults.parse();
             }
         }
 

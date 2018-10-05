@@ -22,19 +22,10 @@ public class Results {
 
     private static final String URL_LOOKUP_SUBSTRING = "https://saucenao.com/info.php?lookup_type=";
 
-    private Document mDocument;
     private ArrayList<Result> mResults = new ArrayList<>();
 
     Results(Document document) {
-        mDocument = document;
-    }
-
-    public ArrayList<Result> getResults() {
-        return mResults;
-    }
-
-    public void parse() {
-        for (Element result : mDocument.getElementsByClass(CLASS_RESULT_TABLE)) {
+        for (Element result : document.getElementsByClass(CLASS_RESULT_TABLE)) {
             Element resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first();
             Element resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first();
             Element resultTitle = result.getElementsByClass(CLASS_RESULT_TITLE).first();
@@ -51,6 +42,10 @@ public class Results {
         }
     }
 
+    public ArrayList<Result> getResults() {
+        return mResults;
+    }
+
     class Result {
         String mSimilarity;
         String mThumbnail;
@@ -58,7 +53,7 @@ public class Results {
         ArrayList<String> mExtUrls = new ArrayList<>();
         ArrayList<String> mColumns = new ArrayList<>();
 
-        void loadSimilarityInfo(Element resultMatchInfo) {
+        private void loadSimilarityInfo(Element resultMatchInfo) {
             try {
                 mSimilarity = resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO)
                         .first()
@@ -68,7 +63,7 @@ public class Results {
             }
         }
 
-        void loadThumbnail(Element resultImage) {
+        private void loadThumbnail(Element resultImage) {
             try {
                 Element img = resultImage.getElementsByTag("img").first();
 
@@ -82,7 +77,7 @@ public class Results {
             }
         }
 
-        void loadTitle(Element resultTitle) {
+        private void loadTitle(Element resultTitle) {
             try {
                 mTitle = new HtmlToPlainText().getPlainText(resultTitle);
             } catch (NullPointerException e) {
@@ -90,7 +85,7 @@ public class Results {
             }
         }
 
-        void loadExtUrls(Element resultMatchInfo, Elements resultContentColumns) {
+        private void loadExtUrls(Element resultMatchInfo, Elements resultContentColumns) {
             try {
                 for (Element a : resultMatchInfo.getElementsByTag("a")) {
                     String href = a.attr("href");
@@ -116,7 +111,7 @@ public class Results {
             Collections.sort(mExtUrls);
         }
 
-        void loadColumns(Elements resultContentColumns) {
+        private void loadColumns(Elements resultContentColumns) {
             try {
                 for (Element resultContentColumn : resultContentColumns) {
                     mColumns.add(new HtmlToPlainText().getPlainText(resultContentColumn));
