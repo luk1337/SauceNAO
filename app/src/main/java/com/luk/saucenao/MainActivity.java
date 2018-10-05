@@ -16,17 +16,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -121,36 +116,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-            HttpUrl httpUrl = new HttpUrl.Builder()
-                    .scheme("https")
-                    .host("saucenao.com")
-                    .addPathSegment("search.php")
-                    .addQueryParameter("db", String.valueOf(
-                            getResources().getIntArray(R.array.databases_values)
-                                    [mSelectDatabaseSpinner.getSelectedItemPosition()]))
-                    .build();
-
-            OkHttpClient okHttpClient = new OkHttpClient();
-            RequestBody requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", "someValue")
-                    .addPart(
-                            Headers.of("Content-Disposition", "form-data; name=\"file\";" +
-                                    "filename=\"image.png\""),
-                            RequestBody.create(MediaType.parse("image/*"), stream.toByteArray()))
-                    .build();
-            Request request = new Request.Builder()
-                    .url(httpUrl)
-                    .post(requestBody)
-                    .build();
-
             try {
-                Response response = okHttpClient.newCall(request).execute();
+                Connection.Response response = Jsoup.connect("https://saucenao.com/search.php")
+                        .data("db", String.valueOf(
+                                getResources().getIntArray(R.array.databases_values)
+                                        [mSelectDatabaseSpinner.getSelectedItemPosition()]))
+                        .data("file", "image.png",
+                                new ByteArrayInputStream(stream.toByteArray()))
+                        .method(Connection.Method.POST)
+                        .execute();
 
-                if (response.code() != 200) {
-                    Log.e(LOG_TAG, "HTTP request returned code: " + response.code());
+                if (response.statusCode() != 200) {
+                    Log.e(LOG_TAG, "HTTP request returned code: " + response.statusCode());
 
-                    switch (response.code()) {
+                    switch (response.statusCode()) {
                         case 429:
                             return new Pair<>(REQUEST_RESULT_TOO_MANY_REQUESTS, null);
                         default:
@@ -158,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
 
-                return new Pair<>(REQUEST_RESULT_OK, response.body().string());
+                return new Pair<>(REQUEST_RESULT_OK, response.body());
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
