@@ -117,10 +117,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
             try {
-                Connection.Response response = Jsoup.connect("https://saucenao.com/search.php")
-                        .data("db", String.valueOf(
+                Connection.Response response = Jsoup.connect(
+                        "https://saucenao.com/search.php?db=" +
                                 getResources().getIntArray(R.array.databases_values)
-                                        [mSelectDatabaseSpinner.getSelectedItemPosition()]))
+                                        [mSelectDatabaseSpinner.getSelectedItemPosition()])
                         .data("file", "image.png",
                                 new ByteArrayInputStream(stream.toByteArray()))
                         .method(Connection.Method.POST)
