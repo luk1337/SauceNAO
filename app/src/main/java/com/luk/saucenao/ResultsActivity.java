@@ -92,8 +92,17 @@ public class ResultsActivity  extends AppCompatActivity {
                     .execute(result.mThumbnail);
 
             // Load index specific data
+            String[] titleAndMetadata = result.mTitle.split("\n", 2);
+
+            if (titleAndMetadata.length > 0) {
+                title.setText(titleAndMetadata[0]);
+
+                if (titleAndMetadata.length == 2) {
+                    result.mColumns.add(0, titleAndMetadata[1]);
+                }
+            }
+
             metadata.setText(TextUtils.join("\n", result.mColumns));
-            title.setText(result.mTitle);
 
             // Load global data
             similarity.setText(result.mSimilarity);
