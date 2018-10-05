@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), params[0]);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to read image bitmap", e);
-                return null;
+                return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
             }
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
