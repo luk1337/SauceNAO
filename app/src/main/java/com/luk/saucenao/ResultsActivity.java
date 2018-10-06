@@ -44,7 +44,6 @@ public class ResultsActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        setTitle(R.string.results);
 
         mClipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
