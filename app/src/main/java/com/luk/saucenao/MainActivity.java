@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
 
     private int[] mDatabasesValues;
-    private Button mSelectImageButton;
     private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
     private AsyncTask<Uri, Integer, Pair<Integer, String>> mResultTask;
@@ -45,28 +43,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-
-        if (Intent.ACTION_SEND.equals(intent.getAction())) {
-            onActivityResult(REQUEST_SHARE, RESULT_OK, intent);
-        }
-
         mDatabasesValues = getResources().getIntArray(R.array.databases_values);
 
-        mSelectImageButton = findViewById(R.id.select_image);
-        mSelectImageButton.setOnClickListener(this);
-
         mSelectDatabaseSpinner = findViewById(R.id.select_database);
-    }
 
-    @Override
-    public void onClick(View view) {
-        if (view == mSelectImageButton) {
+        Button selectImageButton = findViewById(R.id.select_image);
+        selectImageButton.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
 
             startActivityForResult(intent, REQUEST_DOCUMENTS);
+        });
+
+        Intent intent = getIntent();
+
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            onActivityResult(REQUEST_SHARE, RESULT_OK, intent);
         }
     }
 
