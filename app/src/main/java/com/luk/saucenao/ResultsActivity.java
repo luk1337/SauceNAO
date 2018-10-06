@@ -27,6 +27,7 @@ import org.jsoup.Jsoup;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ResultsActivity  extends AppCompatActivity {
 
@@ -183,7 +184,7 @@ public class ResultsActivity  extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... params) {
             try {
-                return BitmapFactory.decodeStream(new java.net.URL(params[0]).openStream());
+                return BitmapFactory.decodeStream(new URL(params[0]).openStream());
             } catch (MalformedURLException e) {
                 Log.e(LOG_TAG, "Invalid thumbnail URL", e);
             } catch (IOException e) {
