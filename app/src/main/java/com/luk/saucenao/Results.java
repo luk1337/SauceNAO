@@ -104,7 +104,7 @@ public class Results {
                         }
                     }
                 }
-            } catch (IndexOutOfBoundsException | NullPointerException e) {
+            } catch (NullPointerException e) {
                 Log.e(LOG_TAG, "Unable to load external URLs", e);
             }
 
