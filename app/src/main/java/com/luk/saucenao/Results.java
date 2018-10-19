@@ -1,7 +1,5 @@
 package com.luk.saucenao;
 
-import android.util.Log;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -54,70 +52,55 @@ public class Results {
         ArrayList<String> mColumns = new ArrayList<>();
 
         private void loadSimilarityInfo(Element resultMatchInfo) {
-            try {
-                mSimilarity = resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO)
-                        .first()
-                        .text();
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Unable to load similarity info", e);
+            Element similarityInfo =
+                    resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO).first();
+
+            if (similarityInfo != null) {
+                mSimilarity = similarityInfo.text();
             }
         }
 
         private void loadThumbnail(Element resultImage) {
-            try {
-                Element img = resultImage.getElementsByTag("img").first();
+            Element img = resultImage.getElementsByTag("img").first();
 
+            if (img != null) {
                 if (img.hasAttr("data-src")) {
                     mThumbnail = img.attr("data-src");
                 } else if (img.hasAttr("src")) {
                     mThumbnail = img.attr("src");
                 }
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Unable to load thumbnail", e);
             }
         }
 
         private void loadTitle(Element resultTitle) {
-            try {
-                mTitle = new HtmlToPlainText().getPlainText(resultTitle);
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Unable to load title", e);
-            }
+            mTitle = new HtmlToPlainText().getPlainText(resultTitle);
         }
 
         private void loadExtUrls(Element resultMatchInfo, Elements resultContentColumns) {
-            try {
-                for (Element a : resultMatchInfo.getElementsByTag("a")) {
+            for (Element a : resultMatchInfo.getElementsByTag("a")) {
+                String href = a.attr("href");
+
+                if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
+                    mExtUrls.add(href);
+                }
+            }
+
+            for (Element resultContentColumn : resultContentColumns) {
+                for (Element a : resultContentColumn.getElementsByTag("a")) {
                     String href = a.attr("href");
 
                     if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
                         mExtUrls.add(href);
                     }
                 }
-
-                for (Element resultContentColumn : resultContentColumns) {
-                    for (Element a : resultContentColumn.getElementsByTag("a")) {
-                        String href = a.attr("href");
-
-                        if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
-                            mExtUrls.add(href);
-                        }
-                    }
-                }
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Unable to load external URLs", e);
             }
 
             Collections.sort(mExtUrls);
         }
 
         private void loadColumns(Elements resultContentColumns) {
-            try {
-                for (Element resultContentColumn : resultContentColumns) {
-                    mColumns.add(new HtmlToPlainText().getPlainText(resultContentColumn));
-                }
-            } catch (NullPointerException e) {
-                Log.e(LOG_TAG, "Unable to load columns", e);
+            for (Element resultContentColumn : resultContentColumns) {
+                mColumns.add(new HtmlToPlainText().getPlainText(resultContentColumn));
             }
         }
     }
