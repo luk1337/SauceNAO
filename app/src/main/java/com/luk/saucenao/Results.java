@@ -77,16 +77,12 @@ public class Results {
         }
 
         private void loadExtUrls(Element resultMatchInfo, Elements resultContentColumns) {
-            for (Element a : resultMatchInfo.getElementsByTag("a")) {
-                String href = a.attr("href");
+            Elements elements = new Elements();
+            elements.add(resultMatchInfo);
+            elements.addAll(resultContentColumns);
 
-                if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
-                    mExtUrls.add(href);
-                }
-            }
-
-            for (Element resultContentColumn : resultContentColumns) {
-                for (Element a : resultContentColumn.getElementsByTag("a")) {
+            for (Element element : elements) {
+                for (Element a : element.getElementsByTag("a")) {
                     String href = a.attr("href");
 
                     if (!href.isEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
