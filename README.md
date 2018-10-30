@@ -1,6 +1,8 @@
 # SauceNAO
 Unofficial [SauceNAO](https://saucenao.com) client for Android.
 
+Available on: [F-Droid](https://f-droid.org/app/com.luk.saucenao)
+
 # Screenshots
 ![Screenshots](https://raw.githubusercontent.com/luk1337/SauceNAO/assets/Screenshot_README.png)
 
