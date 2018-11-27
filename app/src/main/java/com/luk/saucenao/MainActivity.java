@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private static final int REQUEST_DOCUMENTS = 0;
-    private static final int REQUEST_SHARE     = 1;
+    private static final int REQUEST_SHARE = 1;
 
-    private static final int REQUEST_RESULT_OK                = 0;
-    private static final int REQUEST_RESULT_GENERIC_ERROR     = 1;
+    private static final int REQUEST_RESULT_OK = 0;
+    private static final int REQUEST_RESULT_GENERIC_ERROR = 1;
     private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
 
     private int[] mDatabasesValues;

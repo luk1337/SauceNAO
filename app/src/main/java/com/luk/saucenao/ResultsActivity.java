@@ -33,7 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class ResultsActivity  extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ResultsActivity.class.getSimpleName();
 

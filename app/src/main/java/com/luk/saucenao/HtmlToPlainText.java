@@ -19,6 +19,7 @@ public class HtmlToPlainText {
 
     /**
      * Format an Element to plain-text
+     *
      * @param element the root element to format
      * @return formatted text
      */
@@ -39,13 +40,13 @@ public class HtmlToPlainText {
 
             if (node instanceof TextNode)
                 append(((TextNode) node).text());
-            else if (name.equals("li"))  {
+            else if (name.equals("li")) {
                 append("\n * ");
             } else if (name.equals("dt")) {
                 append("  ");
             } else if (StringUtil.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr")) {
                 append("\n");
-            } else if (name.equals("strong"))  {
+            } else if (name.equals("strong")) {
                 append(" ");
             }
         }
