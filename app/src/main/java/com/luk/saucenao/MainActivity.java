@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -21,6 +19,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 
 public class MainActivity extends AppCompatActivity {
 
