@@ -29,7 +29,9 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResultsActivity" android:label="@string/results" />
+        <activity
+            android:name=".ResultsActivity"
+            android:label="@string/results" />
     </application>
 
 </manifest>
