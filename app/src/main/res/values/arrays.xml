@@ -10,7 +10,6 @@
         <item>drawr Images</item>
         <item>Nijie Images</item>
         <item>Yande.re</item>
-        <item>Openings.moe</item>
         <item>Shutterstock</item>
         <item>FAKKU</item>
         <item>H-Misc</item>
@@ -31,7 +30,8 @@
         <item>PortalGraphics.net (Hist)</item>
         <item>deviantArt</item>
         <item>Pawoo.net</item>
-        <item>Manga</item>
+        <item>Madokami (Manga)</item>
+        <item>MangaDex</item>
     </string-array>
 
     <integer-array name="databases_values">
@@ -45,7 +45,6 @@
         <item>10</item>
         <item>11</item>
         <item>12</item>
-        <item>13</item>
         <item>15</item>
         <item>16</item>
         <item>18</item>
@@ -67,5 +66,6 @@
         <item>34</item>
         <item>35</item>
         <item>36</item>
+        <item>37</item>
     </integer-array>
 </resources>
