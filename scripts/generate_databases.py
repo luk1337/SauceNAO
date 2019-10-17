@@ -14,6 +14,7 @@ for child in root.find('.//select[@name="database"]').getchildren():
 
     databases.append((text, value))
 
+databases.sort(key=lambda tup: tup[0].lower())
 databases.insert(0, ('All databases', 999))
 
 v = [x[1] for x in databases]
