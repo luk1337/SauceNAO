@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] mDatabasesValues;
     private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
-    private AsyncTask<Uri, Integer, Pair<Integer, String>> mResultTask;
+    private AsyncTask<Object, Integer, Pair<Integer, String>> mResultTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case REQUEST_SHARE:
                 mResultTask = new GetResultsTask(this);
-                mResultTask.execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
+                if (data.hasExtra(Intent.EXTRA_STREAM)) {
+                    mResultTask.execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
+                } else if (data.hasExtra(Intent.EXTRA_TEXT)) {
+                    mResultTask.execute(data.getStringExtra(Intent.EXTRA_TEXT));
+                }
                 mProgressDialog = ProgressDialog.show(this,
                         getString(R.string.loading_results), getString(R.string.please_wait),
                         true, true);
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static class GetResultsTask extends AsyncTask<Uri, Integer, Pair<Integer, String>> {
+    private static class GetResultsTask extends AsyncTask<Object, Integer, Pair<Integer, String>> {
 
         private WeakReference<MainActivity> mMainActivity;
 
@@ -107,35 +111,46 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Pair<Integer, String> doInBackground(Uri... params) {
+        protected Pair<Integer, String> doInBackground(Object... params) {
             MainActivity mainActivity = mMainActivity.get();
 
             if (mainActivity == null || mainActivity.isFinishing()) {
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
             }
 
-            Bitmap bitmap;
-
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(
-                        mainActivity.getContentResolver(), params[0]);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Unable to read image bitmap", e);
-                return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
-            }
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
             try {
                 int database = mainActivity.mDatabasesValues[
                         mainActivity.mSelectDatabaseSpinner.getSelectedItemPosition()];
-                Connection.Response response = Jsoup.connect(
-                        "https://saucenao.com/search.php?db=" + database)
-                        .data("file", "image.png",
-                                new ByteArrayInputStream(stream.toByteArray()))
-                        .method(Connection.Method.POST)
-                        .execute();
+
+                Connection.Response response = null;
+
+                if (params[0] instanceof Uri) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                                mainActivity.getContentResolver(), (Uri) params[0]);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "Unable to read image bitmap", e);
+                        return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
+                    }
+
+                    response = Jsoup.connect(
+                            "https://saucenao.com/search.php?db=" + database)
+                            .data("file", "image.png",
+                                    new ByteArrayInputStream(stream.toByteArray()))
+                            .method(Connection.Method.POST)
+                            .execute();
+                } else if (params[0] instanceof String) {
+                    response = Jsoup.connect(
+                            "https://saucenao.com/search.php?db=" + database)
+                            .data("url", (String) params[0])
+                            .method(Connection.Method.POST)
+                            .execute();
+                }
+
+                assert response != null;
 
                 if (response.statusCode() != 200) {
                     Log.e(LOG_TAG, "HTTP request returned code: " + response.statusCode());
