@@ -4,13 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -18,10 +21,11 @@ import org.jsoup.Jsoup;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Pair;
+import java.io.InterruptedIOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,18 +35,21 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_SHARE = 1;
 
     private static final int REQUEST_RESULT_OK = 0;
-    private static final int REQUEST_RESULT_GENERIC_ERROR = 1;
-    private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 2;
+    private static final int REQUEST_RESULT_INTERUPTED = 1;
+    private static final int REQUEST_RESULT_GENERIC_ERROR = 2;
+    private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 3;
 
     private int[] mDatabasesValues;
+    private ExecutorService mExecutorService;
     private Spinner mSelectDatabaseSpinner;
     private ProgressDialog mProgressDialog;
-    private AsyncTask<Object, Integer, Pair<Integer, String>> mResultTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mExecutorService = Executors.newSingleThreadExecutor();
 
         mDatabasesValues = getResources().getIntArray(R.array.databases_values);
 
@@ -78,58 +85,83 @@ public class MainActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case REQUEST_DOCUMENTS:
-                mResultTask = new GetResultsTask(this);
-                mResultTask.execute(data.getData());
-                mProgressDialog = ProgressDialog.show(this,
-                        getString(R.string.loading_results), getString(R.string.please_wait),
-                        true, true);
-                mProgressDialog.setOnCancelListener(dialog ->
-                        mResultTask.cancel(true));
+                waitForResults(mExecutorService.submit(new GetResultsTask(data.getData())));
                 break;
             case REQUEST_SHARE:
-                mResultTask = new GetResultsTask(this);
                 if (data.hasExtra(Intent.EXTRA_STREAM)) {
-                    mResultTask.execute((Uri) data.getParcelableExtra(Intent.EXTRA_STREAM));
+                    waitForResults(mExecutorService.submit(
+                            new GetResultsTask(data.getParcelableExtra(Intent.EXTRA_STREAM))));
                 } else if (data.hasExtra(Intent.EXTRA_TEXT)) {
-                    mResultTask.execute(data.getStringExtra(Intent.EXTRA_TEXT));
+                    waitForResults(mExecutorService.submit(
+                            new GetResultsTask(data.getStringExtra(Intent.EXTRA_TEXT))));
                 }
-                mProgressDialog = ProgressDialog.show(this,
-                        getString(R.string.loading_results), getString(R.string.please_wait),
-                        true, true);
-                mProgressDialog.setOnCancelListener(dialog ->
-                        mResultTask.cancel(true));
                 break;
         }
     }
 
-    private static class GetResultsTask extends AsyncTask<Object, Integer, Pair<Integer, String>> {
+    private void waitForResults(Future<?> future) {
+        mProgressDialog = ProgressDialog.show(this,
+                getString(R.string.loading_results), getString(R.string.please_wait),
+                true, true);
+        mProgressDialog.setOnCancelListener(dialog -> future.cancel(true));
+    }
 
-        private WeakReference<MainActivity> mMainActivity;
+    public class GetResultsTask implements Callable<Void> {
 
-        GetResultsTask(MainActivity mainActivity) {
-            mMainActivity = new WeakReference<>(mainActivity);
+        private Object mData;
+
+        GetResultsTask(Object data) {
+            mData = data;
         }
 
         @Override
-        protected Pair<Integer, String> doInBackground(Object... params) {
-            MainActivity mainActivity = mMainActivity.get();
-
-            if (mainActivity == null || mainActivity.isFinishing()) {
-                return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
+        public Void call() {
+            if (isFinishing()) {
+                return null;
             }
 
+            Pair<Integer, String> result = getResult();
+
+            Handler handler = new Handler(getMainLooper());
+            handler.post(() -> mProgressDialog.dismiss());
+
+            switch (result.first) {
+                case REQUEST_RESULT_OK:
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second);
+
+                    Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                    intent.putExtras(bundle);
+
+                    handler.post(() -> startActivity(intent));
+                    break;
+                case REQUEST_RESULT_GENERIC_ERROR:
+                    handler.post(() -> Toast.makeText(MainActivity.this,
+                            getString(R.string.error_cannot_load_results),
+                            Toast.LENGTH_SHORT).show());
+                    break;
+                case REQUEST_RESULT_TOO_MANY_REQUESTS:
+                    handler.post(() -> Toast.makeText(MainActivity.this,
+                            getString(R.string.error_too_many_requests),
+                            Toast.LENGTH_SHORT).show());
+                    break;
+            }
+
+            return null;
+        }
+
+        private Pair<Integer, String> getResult() {
             try {
-                int database = mainActivity.mDatabasesValues[
-                        mainActivity.mSelectDatabaseSpinner.getSelectedItemPosition()];
+                int database = mDatabasesValues[mSelectDatabaseSpinner.getSelectedItemPosition()];
 
                 Connection.Response response = null;
 
-                if (params[0] instanceof Uri) {
+                if (mData instanceof Uri) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                                mainActivity.getContentResolver(), (Uri) params[0]);
+                                getContentResolver(), (Uri) mData);
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "Unable to read image bitmap", e);
@@ -142,10 +174,10 @@ public class MainActivity extends AppCompatActivity {
                                     new ByteArrayInputStream(stream.toByteArray()))
                             .method(Connection.Method.POST)
                             .execute();
-                } else if (params[0] instanceof String) {
+                } else if (mData instanceof String) {
                     response = Jsoup.connect(
                             "https://saucenao.com/search.php?db=" + database)
-                            .data("url", (String) params[0])
+                            .data("url", (String) mData)
                             .method(Connection.Method.POST)
                             .execute();
                 }
@@ -163,44 +195,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                return new Pair<>(REQUEST_RESULT_OK, response.body());
+                String body = response.body();
+
+                if (body.isEmpty()) {
+                    return new Pair<>(REQUEST_RESULT_INTERUPTED, null);
+                }
+
+                return new Pair<>(REQUEST_RESULT_OK, body);
+            } catch (InterruptedIOException e) {
+                return new Pair<>(REQUEST_RESULT_INTERUPTED, null);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Pair<Integer, String> result) {
-            MainActivity mainActivity = mMainActivity.get();
-
-            if (mainActivity == null || mainActivity.isFinishing()) {
-                return;
-            }
-
-            mainActivity.mProgressDialog.dismiss();
-
-            switch (result.first) {
-                case REQUEST_RESULT_OK:
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second);
-
-                    Intent intent = new Intent(mainActivity,
-                            ResultsActivity.class);
-                    intent.putExtras(bundle);
-
-                    mainActivity.startActivity(intent);
-                    break;
-                case REQUEST_RESULT_GENERIC_ERROR:
-                    Toast.makeText(mainActivity,
-                            mainActivity.getString(R.string.error_cannot_load_results),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case REQUEST_RESULT_TOO_MANY_REQUESTS:
-                    Toast.makeText(mainActivity,
-                            mainActivity.getString(R.string.error_too_many_requests),
-                            Toast.LENGTH_SHORT).show();
-                    break;
             }
         }
     }
