@@ -7,8 +7,8 @@ android {
         applicationId "com.luk.saucenao"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
