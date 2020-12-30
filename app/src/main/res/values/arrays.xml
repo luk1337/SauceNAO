@@ -4,6 +4,7 @@
         <item>2D-Market</item>
         <item>Anime</item>
         <item>Anime-Pictures.net</item>
+        <item>ArtStation</item>
         <item>bcy.net Cosplay</item>
         <item>bcy.net Illust</item>
         <item>Danbooru</item>
@@ -12,6 +13,8 @@
         <item>drawr Images</item>
         <item>e621.net</item>
         <item>FAKKU</item>
+        <item>FurAffinity</item>
+        <item>Furry Network</item>
         <item>Gelbooru</item>
         <item>H-Anime</item>
         <item>H-Game CG</item>
@@ -32,6 +35,7 @@
         <item>Sankaku Channel</item>
         <item>Shows</item>
         <item>Shutterstock</item>
+        <item>Twitter</item>
         <item>Yande.re</item>
     </string-array>
 
@@ -40,6 +44,7 @@
         <item>19</item>
         <item>21</item>
         <item>28</item>
+        <item>39</item>
         <item>32</item>
         <item>31</item>
         <item>9</item>
@@ -48,6 +53,8 @@
         <item>10</item>
         <item>29</item>
         <item>16</item>
+        <item>40</item>
+        <item>42</item>
         <item>25</item>
         <item>22</item>
         <item>2</item>
@@ -68,6 +75,7 @@
         <item>27</item>
         <item>24</item>
         <item>15</item>
+        <item>41</item>
         <item>12</item>
     </integer-array>
 </resources>
