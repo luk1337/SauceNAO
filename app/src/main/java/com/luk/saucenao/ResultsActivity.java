@@ -7,8 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +23,11 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -39,6 +41,9 @@ public class ResultsActivity extends AppCompatActivity {
     private static final String LOG_TAG = ResultsActivity.class.getSimpleName();
 
     public static final String EXTRA_RESULTS = "extra_results";
+
+    private final Executor mExecutor = Executors.newFixedThreadPool(4);
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private ClipboardManager mClipboardManager;
     private Results mResults;
@@ -81,36 +86,6 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private static class DownloadThumbnailTask extends AsyncTask<String, Void, Bitmap> {
-
-        private WeakReference<ImageView> mImageView;
-
-        DownloadThumbnailTask(ImageView imageView) {
-            mImageView = new WeakReference<>(imageView);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                return BitmapFactory.decodeStream(new URL(params[0]).openStream());
-            } catch (MalformedURLException e) {
-                Log.e(LOG_TAG, "Invalid thumbnail URL", e);
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Unable to load thumbnail", e);
-            }
-
-            return null;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            ImageView imageView = mImageView.get();
-
-            if (imageView != null) {
-                imageView.setImageBitmap(result);
-            }
-        }
     }
 
     public class ResultsAdapter extends
@@ -213,8 +188,18 @@ public class ResultsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ResultsViewHolder resultsViewHolder, int i) {
             Results.Result result = mResults.get(i);
 
-            // Load thumbnail in new task
-            new DownloadThumbnailTask(resultsViewHolder.mThumbnail).execute(result.mThumbnail);
+            // Load thumbnail in executor
+            mExecutor.execute(() -> {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(
+                            new URL(result.mThumbnail).openStream());
+                    mHandler.post(() -> resultsViewHolder.mThumbnail.setImageBitmap(bitmap));
+                } catch (MalformedURLException e) {
+                    Log.e(LOG_TAG, "Invalid thumbnail URL", e);
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "Unable to load thumbnail", e);
+                }
+            });
 
             // Load index specific data
             String[] titleAndMetadata = result.mTitle.split("\n", 2);
