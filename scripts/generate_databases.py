@@ -6,8 +6,8 @@ root = lxml.html.fromstring(urllib.request.urlopen('https://saucenao.com').read(
 
 databases = []
 
-for child in root.find('.//select[@name="database"]').getchildren():
-    text, value = child.text, int(child.get('value'))
+for child in root.findall('.//input[@name="dbs[]"]'):
+    text, value = child.tail, int(child.get('value'))
 
     if value == 999:
         continue
