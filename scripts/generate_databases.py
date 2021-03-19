@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import lxml.html
+import os
+import re
 import urllib.request
 
 root = lxml.html.fromstring(urllib.request.urlopen('https://saucenao.com').read())
@@ -14,23 +16,31 @@ for child in root.findall('.//input[@name="dbs[]"]'):
 
     databases.append((text, value))
 
+assert(len(databases) > 0)
 databases.sort(key=lambda tup: tup[0].lower())
 databases.insert(0, ('All databases', 999))
 
 v = [x[1] for x in databases]
 
-print('<string-array name="databases_entries">')
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../app/src/main/res/values/arrays.xml'), 'r+') as f:
+    data = f.read()
 
-for k in [x[0] for x in databases]:
-    print(f'    <item>{k}</item>')
+    databases_entries = '<string-array name="databases_entries">'
 
-print('</string-array>')
+    for k in [x[0] for x in databases]:
+        databases_entries += f'\n        <item>{k}</item>'
 
-print('')
+    databases_entries += '\n    </string-array>'
+    data = re.sub(r'<string-array name="databases_entries">[^>]*>[^~]*?<\/string-array>', databases_entries, data)
 
-print('<integer-array name="databases_values">')
+    databases_values = '<integer-array name="databases_values">'
 
-for v in [x[1] for x in databases]:
-    print(f'    <item>{v}</item>')
+    for v in [x[1] for x in databases]:
+        databases_values += f'\n        <item>{v}</item>'
 
-print('</integer-array>')
+    databases_values += '\n    </integer-array>'
+    data = re.sub(r'<integer-array name="databases_values">[^>]*>[^~]*?<\/integer-array>', databases_values, data)
+
+    f.seek(0)
+    f.write(data)
+    f.truncate()
