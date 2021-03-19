@@ -1,7 +1,7 @@
 <resources>
     <string-array name="databases_entries">
         <item>All databases</item>
-        <item>2D-Market</item>
+        <item>aaa2D-Market</item>
         <item>Anime</item>
         <item>Anime-Pictures.net</item>
         <item>ArtStation</item>
