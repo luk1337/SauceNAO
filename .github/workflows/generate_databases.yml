@@ -1,0 +1,24 @@
+name: generate_databases
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install dependencies
+      run: pip3 install lxml
+    - name: Generate databases
+      run: python3 scripts/generate_databases.py
+    - name: Commit changes
+      run: |
+       git add app/src/main/res/values/arrays.xml
+       git commit -m "Regenerate databases list"
+    - name: Push changes to repo
+      uses: ad-m/github-push-action@master
+      with:
+       github_token: ${{ secrets.GITHUB_TOKEN }}
