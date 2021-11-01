@@ -17,6 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        github {
+            buildConfigField "String", "SAUCENAO_HIDE", "\"0\""
+        }
+
+        googlePlay {
+            buildConfigField "String", "SAUCENAO_HIDE", "\"3\""
+        }
+    }
     compileOptions {
         encoding = 'UTF-8'
         sourceCompatibility JavaVersion.VERSION_1_8

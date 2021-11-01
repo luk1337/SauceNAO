@@ -36,7 +36,10 @@ public class Results {
             newResult.loadExtUrls(resultMatchInfo, resultContentColumns);
             newResult.loadColumns(resultContentColumns);
 
-            mResults.add(newResult);
+            // Skip hidden results
+            if (!newResult.mThumbnail.equals("images/static/hidden.png")) {
+                mResults.add(newResult);
+            }
         }
     }
 

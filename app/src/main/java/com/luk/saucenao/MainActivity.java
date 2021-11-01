@@ -172,12 +172,14 @@ public class MainActivity extends AppCompatActivity {
                             "https://saucenao.com/search.php?db=" + database)
                             .data("file", "image.png",
                                     new ByteArrayInputStream(stream.toByteArray()))
+                            .data("hide", BuildConfig.SAUCENAO_HIDE)
                             .method(Connection.Method.POST)
                             .execute();
                 } else if (mData instanceof String) {
                     response = Jsoup.connect(
                             "https://saucenao.com/search.php?db=" + database)
                             .data("url", (String) mData)
+                            .data("hide", BuildConfig.SAUCENAO_HIDE)
                             .method(Connection.Method.POST)
                             .execute();
                 }
