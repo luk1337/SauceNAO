@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_SHARE = 1;
 
     private static final int REQUEST_RESULT_OK = 0;
-    private static final int REQUEST_RESULT_INTERUPTED = 1;
+    private static final int REQUEST_RESULT_INTERRUPTED = 1;
     private static final int REQUEST_RESULT_GENERIC_ERROR = 2;
     private static final int REQUEST_RESULT_TOO_MANY_REQUESTS = 3;
 
@@ -198,12 +198,12 @@ public class MainActivity extends AppCompatActivity {
                 String body = response.body();
 
                 if (body.isEmpty()) {
-                    return new Pair<>(REQUEST_RESULT_INTERUPTED, null);
+                    return new Pair<>(REQUEST_RESULT_INTERRUPTED, null);
                 }
 
                 return new Pair<>(REQUEST_RESULT_OK, body);
             } catch (InterruptedIOException e) {
-                return new Pair<>(REQUEST_RESULT_INTERUPTED, null);
+                return new Pair<>(REQUEST_RESULT_INTERRUPTED, null);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e);
                 return new Pair<>(REQUEST_RESULT_GENERIC_ERROR, null);
