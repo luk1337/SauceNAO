@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         progressDialog.setOnCancelListener { future.cancel(true) }
     }
 
-    inner class GetResultsTask internal constructor(private val data: Any?) : Callable<Void?> {
+    inner class GetResultsTask(private val data: Any?) : Callable<Void?> {
         override fun call(): Void? {
             if (isFinishing) {
                 return null
