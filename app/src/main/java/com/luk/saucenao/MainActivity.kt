@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
 import org.jsoup.Connection
@@ -22,13 +23,17 @@ import java.io.InterruptedIOException
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 class MainActivity : AppCompatActivity() {
     private lateinit var databasesValues: IntArray
     private lateinit var executorService: ExecutorService
     private lateinit var selectDatabaseSpinner: Spinner
     private lateinit var progressDialog: ProgressDialog
+
+    private val getResultsFromFile =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri ->
+            waitForResults(uri)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,50 +45,20 @@ class MainActivity : AppCompatActivity() {
 
         val selectImageButton = findViewById<Button>(R.id.select_image)
         selectImageButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "image/*"
-
-            startActivityForResult(intent, REQUEST_DOCUMENTS)
+            getResultsFromFile.launch("image/*")
         }
 
         if (Intent.ACTION_SEND == intent.action) {
-            onActivityResult(REQUEST_SHARE, RESULT_OK, intent)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_CANCELED || data == null) {
-            return
-        }
-
-        when (requestCode) {
-            REQUEST_DOCUMENTS -> {
-                waitForResults(
-                    executorService.submit(GetResultsTask(data.data))
-                )
-            }
-            REQUEST_SHARE -> {
-                if (data.hasExtra(Intent.EXTRA_STREAM)) {
-                    waitForResults(
-                        executorService.submit(
-                            GetResultsTask(data.getParcelableExtra(Intent.EXTRA_STREAM))
-                        )
-                    )
-                } else if (data.hasExtra(Intent.EXTRA_TEXT)) {
-                    waitForResults(
-                        executorService.submit(
-                            GetResultsTask(data.getStringExtra(Intent.EXTRA_TEXT))
-                        )
-                    )
-                }
+            if (intent.hasExtra(Intent.EXTRA_STREAM)) {
+                waitForResults(intent.getParcelableExtra(Intent.EXTRA_STREAM)!!)
+            } else if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+                waitForResults(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
             }
         }
     }
 
-    private fun waitForResults(future: Future<*>) {
+    private fun waitForResults(data: Any) {
+        val future = executorService.submit(GetResultsTask(data))
         progressDialog = ProgressDialog.show(
             this,
             getString(R.string.loading_results), getString(R.string.please_wait),
@@ -188,8 +163,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private val LOG_TAG = MainActivity::class.java.simpleName
 
-        private const val REQUEST_DOCUMENTS = 0
-        private const val REQUEST_SHARE = 1
         private const val REQUEST_RESULT_OK = 0
         private const val REQUEST_RESULT_INTERRUPTED = 1
         private const val REQUEST_RESULT_GENERIC_ERROR = 2
