@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     private val getResultsFromFile =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri ->
-            waitForResults(uri)
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { waitForResults(it) }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
