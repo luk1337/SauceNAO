@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 if (data is Uri) {
                     val stream = ByteArrayOutputStream()
                     try {
-                        MediaStore.Images.Media.getBitmap(contentResolver, data as Uri?)
+                        MediaStore.Images.Media.getBitmap(contentResolver, data)
                             .compress(Bitmap.CompressFormat.PNG, 100, stream)
                     } catch (e: IOException) {
                         Log.e(LOG_TAG, "Unable to read image bitmap", e)
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                         .execute()
                 } else if (data is String) {
                     response = Jsoup.connect("https://saucenao.com/search.php?db=$database")
-                        .data("url", data as String?)
+                        .data("url", data)
                         .data("hide", BuildConfig.SAUCENAO_HIDE)
                         .method(Connection.Method.POST)
                         .execute()
