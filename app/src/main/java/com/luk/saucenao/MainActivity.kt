@@ -21,13 +21,14 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var databasesValues: IntArray
-    private lateinit var executorService: ExecutorService
-    private lateinit var selectDatabaseSpinner: Spinner
+    private val executorService = Executors.newSingleThreadExecutor()
+
+    private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
+    private val selectDatabaseSpinner by lazy { findViewById<Spinner>(R.id.select_database) }
+
     private lateinit var progressDialog: ProgressDialog
 
     private val getResultsFromFile =
@@ -38,10 +39,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        executorService = Executors.newSingleThreadExecutor()
-        databasesValues = resources.getIntArray(R.array.databases_values)
-        selectDatabaseSpinner = findViewById(R.id.select_database)
 
         val selectImageButton = findViewById<Button>(R.id.select_image)
         selectImageButton.setOnClickListener {
