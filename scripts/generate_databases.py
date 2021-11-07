@@ -18,7 +18,6 @@ for child in root.findall('.//input[@name="dbs[]"]'):
 
 assert(len(databases) > 0)
 databases.sort(key=lambda tup: tup[0].lower())
-databases.insert(0, ('All databases', 999))
 
 v = [x[1] for x in databases]
 

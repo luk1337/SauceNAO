@@ -16,11 +16,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/select_database"
+    <Button
+        android:id="@+id/select_databases"
+        style="?spinnerStyle"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:entries="@array/databases_entries"
+        android:layout_marginStart="9dp"
+        android:text="@string/all_databases"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/select_image" />

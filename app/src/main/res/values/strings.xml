@@ -3,6 +3,10 @@
 
     <string name="select_image">Select image</string>
 
+    <string name="all_databases">All databases</string>
+    <string name="select_databases">Select databases</string>
+    <string name="selected_databases">%d databases</string>
+
     <string name="results">Results</string>
 
     <string name="no_results">No results</string>

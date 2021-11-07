@@ -1,6 +1,5 @@
 <resources>
     <string-array name="databases_entries">
-        <item>All databases</item>
         <item>2D-Market</item>
         <item>Anime</item>
         <item>Anime-Pictures.net</item>
@@ -40,7 +39,6 @@
     </string-array>
 
     <integer-array name="databases_values">
-        <item>999</item>
         <item>19</item>
         <item>21</item>
         <item>28</item>

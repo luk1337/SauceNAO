@@ -9,11 +9,12 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.io.ByteArrayInputStream
@@ -27,7 +28,19 @@ class MainActivity : AppCompatActivity() {
     private val executorService = Executors.newSingleThreadExecutor()
 
     private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
-    private val selectDatabaseSpinner by lazy { findViewById<Spinner>(R.id.select_database) }
+    private val selectDatabasesButton by lazy { findViewById<Button>(R.id.select_databases) }
+
+    private var selectedDatabases = intArrayOf()
+        set(value) {
+            field = value
+            when {
+                value.isEmpty() -> selectDatabasesButton.setText(R.string.all_databases)
+                value.size == 1 -> selectDatabasesButton.text =
+                    resources.getStringArray(R.array.databases_entries)[value.first()]
+                else -> selectDatabasesButton.text =
+                    getString(R.string.selected_databases, value.size)
+            }
+        }
 
     private lateinit var progressDialog: ProgressDialog
 
@@ -43,6 +56,20 @@ class MainActivity : AppCompatActivity() {
         val selectImageButton = findViewById<Button>(R.id.select_image)
         selectImageButton.setOnClickListener {
             getResultsFromFile.launch("image/*")
+        }
+
+        selectDatabasesButton.setOnClickListener {
+            MaterialDialog(this).show {
+                title(R.string.select_databases)
+                listItemsMultiChoice(
+                    R.array.databases_entries,
+                    initialSelection = selectedDatabases,
+                    allowEmptySelection = true
+                ) { _, ints, _ ->
+                    selectedDatabases = ints
+                }
+                positiveButton(android.R.string.ok)
+            }
         }
 
         if (Intent.ACTION_SEND == intent.action) {
@@ -110,8 +137,12 @@ class MainActivity : AppCompatActivity() {
 
         private fun fetchResult(): Pair<Int, String?> {
             try {
-                val database = databasesValues[selectDatabaseSpinner.selectedItemPosition]
-                var response: Connection.Response? = null
+                val connection = Jsoup.connect("https://saucenao.com/search.php")
+                    .method(Connection.Method.POST)
+                    .data("hide", BuildConfig.SAUCENAO_HIDE)
+                selectedDatabases.forEach {
+                    connection.data("dbs[]", databasesValues[it].toString())
+                }
 
                 if (data is Uri) {
                     val stream = ByteArrayOutputStream()
@@ -122,18 +153,12 @@ class MainActivity : AppCompatActivity() {
                         Log.e(LOG_TAG, "Unable to read image bitmap", e)
                         return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
                     }
-                    response = Jsoup.connect("https://saucenao.com/search.php?db=$database")
-                        .data("file", "image.png", ByteArrayInputStream(stream.toByteArray()))
-                        .data("hide", BuildConfig.SAUCENAO_HIDE)
-                        .method(Connection.Method.POST)
-                        .execute()
+                    connection.data("file", "image.png", ByteArrayInputStream(stream.toByteArray()))
                 } else if (data is String) {
-                    response = Jsoup.connect("https://saucenao.com/search.php?db=$database")
-                        .data("url", data)
-                        .data("hide", BuildConfig.SAUCENAO_HIDE)
-                        .method(Connection.Method.POST)
-                        .execute()
+                    connection.data("url", data)
                 }
+
+                val response = connection!!.execute()
                 if (response!!.statusCode() != 200) {
                     Log.e(LOG_TAG, "HTTP request returned code: ${response.statusCode()}")
                     return when (response.statusCode()) {
@@ -141,6 +166,7 @@ class MainActivity : AppCompatActivity() {
                         else -> Pair(REQUEST_RESULT_GENERIC_ERROR, null)
                     }
                 }
+
                 val body = response.body()
                 if (body.isEmpty()) {
                     return Pair(REQUEST_RESULT_INTERRUPTED, null)
