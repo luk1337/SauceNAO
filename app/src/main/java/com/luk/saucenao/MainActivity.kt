@@ -134,7 +134,6 @@ class MainActivity : AppCompatActivity() {
                         .method(Connection.Method.POST)
                         .execute()
                 }
-                assert(response != null)
                 if (response!!.statusCode() != 200) {
                     Log.e(LOG_TAG, "HTTP request returned code: ${response.statusCode()}")
                     return when (response.statusCode()) {
