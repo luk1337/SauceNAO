@@ -10,73 +10,59 @@ class Results(document: Document) {
 
     init {
         for (result in document.getElementsByClass(CLASS_RESULT_TABLE)) {
-            val resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first()
-            val resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first()
-            val resultTitle = result.getElementsByClass(CLASS_RESULT_TITLE).first()
-            val resultContentColumns = result.getElementsByClass(CLASS_RESULT_CONTENT_COLUMN)
-
-            val newResult = Result()
-            newResult.loadSimilarityInfo(resultMatchInfo)
-            newResult.loadThumbnail(resultImage)
-            newResult.loadTitle(resultTitle)
-            newResult.loadExtUrls(resultMatchInfo, resultContentColumns)
-            newResult.loadColumns(resultContentColumns)
-
-            // Skip hidden results
-            if (newResult.thumbnail != "images/static/hidden.png") {
-                results.add(newResult)
+            Result(result).let {
+                // Skip hidden results
+                if (it.thumbnail != "images/static/hidden.png") {
+                    results.add(it)
+                }
             }
         }
     }
 
-    inner class Result {
-        var similarity: String? = null
-        var thumbnail: String? = null
-        var title: String? = null
-        var extUrls = ArrayList<String>()
-        var columns = ArrayList<String>()
+    inner class Result(result: Element) {
+        private val resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first()
+        private val resultContentColumns = result.getElementsByClass(CLASS_RESULT_CONTENT_COLUMN)
 
-        fun loadSimilarityInfo(resultMatchInfo: Element) {
-            resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO).first()?.let {
-                similarity = it.text()
-            }
+        val similarity by lazy {
+            resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO).first()?.text()
         }
-
-        fun loadThumbnail(resultImage: Element) {
-            resultImage.getElementsByTag("img").first()?.let {
-                if (it.hasAttr("data-src")) {
-                    thumbnail = it.attr("data-src")
-                } else if (it.hasAttr("src")) {
-                    thumbnail = it.attr("src")
+        val thumbnail by lazy {
+            val resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first()
+            resultImage?.getElementsByTag("img")?.first()?.let {
+                when {
+                    it.hasAttr("data-src") -> it.attr("data-src")
+                    it.hasAttr("src") -> it.attr("src")
+                    else -> null
                 }
             }
         }
-
-        fun loadTitle(resultTitle: Element) {
-            title = HtmlToPlainText().getPlainText(resultTitle)
+        val title by lazy {
+            HtmlToPlainText().getPlainText(result.getElementsByClass(CLASS_RESULT_TITLE).first())
         }
+        val extUrls by lazy {
+            val list = arrayListOf<String>()
 
-        fun loadExtUrls(resultMatchInfo: Element, resultContentColumns: Elements) {
             val elements = Elements()
             elements.add(resultMatchInfo)
             elements.addAll(resultContentColumns)
 
-            for (element in elements) {
-                for (a in element.getElementsByTag("a")) {
+            elements.forEach {
+                it.getElementsByTag("a").forEach { a ->
                     val href = a.attr("href")
                     if (href.isNotEmpty() && !href.startsWith(URL_LOOKUP_SUBSTRING)) {
-                        extUrls.add(href)
+                        list.add(href)
                     }
                 }
             }
 
-            extUrls.sort()
+            list.sorted()
         }
-
-        fun loadColumns(resultContentColumns: Elements) {
-            for (resultContentColumn in resultContentColumns) {
-                columns.add(HtmlToPlainText().getPlainText(resultContentColumn))
+        val columns by lazy {
+            val list = arrayListOf<String>()
+            resultContentColumns.forEach {
+                list.add(HtmlToPlainText().getPlainText(it))
             }
+            list
         }
     }
 

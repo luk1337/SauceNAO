@@ -67,7 +67,7 @@ class ResultsActivity : AppCompatActivity() {
         RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
         inner class ResultsViewHolder(view: View) : ViewHolder(view), View.OnClickListener,
             OnLongClickListener {
-            var extUrls: ArrayList<String>? = null
+            var extUrls: List<String>? = null
             var thumbnail: ImageView = view.findViewById(R.id.thumbnail)
             var metadata: TextView = view.findViewById(R.id.metadata)
             var similarity: TextView = view.findViewById(R.id.similarity)
