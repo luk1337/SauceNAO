@@ -11,33 +11,7 @@
     <string name="please_wait">Please wait…</string>
 
     <string name="error_cannot_load_results">Unable to load results!</string>
-    <string name="error_invalid_api_keys">API key is invalid!</string>
     <string name="error_too_many_requests">Too many requests!</string>
-
-    <string name="metadata_artist">Artist</string>
-    <string name="metadata_author">Author</string>
-    <string name="metadata_bcy_id_cosplay">bcy Cosplay ID</string>
-    <string name="metadata_bcy_id_illust">bcy.net Illust ID</string>
-    <string name="metadata_company">Company</string>
-    <string name="metadata_contributor">Contributor</string>
-    <string name="metadata_creator">Creator</string>
-    <string name="metadata_creators">Creators</string>
-    <string name="metadata_da_id">dA ID</string>
-    <string name="metadata_date">Date</string>
-    <string name="metadata_ddb_id">DDB ID</string>
-    <string name="metadata_drawr_id">Drawr ID</string>
-    <string name="metadata_est_time">Estimated time</string>
-    <string name="metadata_getchu_id">Getchu ID</string>
-    <string name="metadata_member">Member</string>
-    <string name="metadata_nijie_id">Nijie ID</string>
-    <string name="metadata_pawoo_id">Pawoo ID</string>
-    <string name="metadata_pg_id">PG ID</string>
-    <string name="metadata_pixiv_id">Pixiv ID</string>
-    <string name="metadata_publication_date">Publication Date</string>
-    <string name="metadata_seiga_id">Seiga ID</string>
-    <string name="metadata_shutterstock_id">Shutterstock ID</string>
-    <string name="metadata_title">Title</string>
-    <string name="metadata_year">Year</string>
 
     <string name="copy_to_clipboard_item">Copy to clipboard</string>
     <string name="share_item">Share</string>
