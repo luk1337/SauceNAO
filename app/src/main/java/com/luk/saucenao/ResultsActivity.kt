@@ -31,16 +31,14 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class ResultsActivity : AppCompatActivity() {
+    private val clipboardManager by lazy { getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
     private val executor: Executor = Executors.newFixedThreadPool(4)
     private val handler = Handler(Looper.getMainLooper())
-    private var clipboardManager: ClipboardManager? = null
     private var results: Results? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
-
-        clipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -50,10 +48,11 @@ class ResultsActivity : AppCompatActivity() {
             }
         }
 
-        val resultsRecyclerView = findViewById<ResultsRecyclerView>(R.id.results)
-        resultsRecyclerView.layoutManager = LinearLayoutManager(this)
-        resultsRecyclerView.emptyView = findViewById(R.id.no_results)
-        resultsRecyclerView.adapter = ResultsAdapter(results!!.results)
+        findViewById<ResultsRecyclerView>(R.id.results).let {
+            it.layoutManager = LinearLayoutManager(this)
+            it.emptyView = findViewById(R.id.no_results)
+            it.adapter = ResultsAdapter(results!!.results)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -67,71 +66,78 @@ class ResultsActivity : AppCompatActivity() {
         RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder>() {
         inner class ResultsViewHolder(view: View) : ViewHolder(view), View.OnClickListener,
             OnLongClickListener {
-            var extUrls: List<String>? = null
-            var thumbnail: ImageView = view.findViewById(R.id.thumbnail)
-            var metadata: TextView = view.findViewById(R.id.metadata)
-            var similarity: TextView = view.findViewById(R.id.similarity)
-            var title: TextView = view.findViewById(R.id.title)
+            var extUrls = listOf<String>()
+
+            val thumbnail = view.findViewById<ImageView>(R.id.thumbnail)!!
+            val metadata = view.findViewById<TextView>(R.id.metadata)!!
+            val similarity = view.findViewById<TextView>(R.id.similarity)!!
+            val title = view.findViewById<TextView>(R.id.title)!!
 
             override fun onClick(view: View) {
-                if (extUrls == null || extUrls!!.isEmpty()) {
+                if (extUrls.isEmpty()) {
                     return
                 }
-                if (extUrls!!.size == 1) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(extUrls!!.first())))
+                if (extUrls.size == 1) {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(extUrls.first())))
                     return
                 }
-                val popupMenu = PopupMenu(view.context, view)
-                extUrls!!.indices.forEach { popupMenu.menu.add(0, it, it, extUrls!![it]) }
-                popupMenu.show()
-                popupMenu.setOnMenuItemClickListener {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(extUrls!![it.itemId])))
-                    true
+                PopupMenu(view.context, view).let {
+                    extUrls.forEachIndexed { key, value -> it.menu.add(0, key, key, value) }
+                    it.setOnMenuItemClickListener { item ->
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(extUrls[item.itemId])))
+                        true
+                    }
+                    it.show()
                 }
             }
 
             override fun onLongClick(view: View): Boolean {
-                val popupMenu = PopupMenu(view.context, view)
-                popupMenu.inflate(R.menu.card_long_press)
-                popupMenu.show()
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.copy_to_clipboard_item -> {
-                            clipboardManager!!.setPrimaryClip(ClipData.newPlainText("", title.text))
-                            Toast.makeText(
-                                view.context,
-                                getString(R.string.title_copied_to_clipboard),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        R.id.share_item -> {
-                            val intent = Intent(Intent.ACTION_SEND)
-                            intent.type = "text/plain"
-                            intent.putExtra(Intent.EXTRA_TEXT, title.text)
-                            startActivity(
-                                Intent.createChooser(
-                                    intent,
-                                    getString(R.string.abc_shareactionprovider_share_with)
+                PopupMenu(view.context, view).let {
+                    it.inflate(R.menu.card_long_press)
+                    it.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.copy_to_clipboard_item -> {
+                                clipboardManager.setPrimaryClip(
+                                    ClipData.newPlainText("", title.text)
                                 )
-                            )
+                                Toast.makeText(
+                                    view.context,
+                                    getString(R.string.title_copied_to_clipboard),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            R.id.share_item -> {
+                                val intent = Intent(Intent.ACTION_SEND)
+                                intent.type = "text/plain"
+                                intent.putExtra(Intent.EXTRA_TEXT, title.text)
+                                startActivity(
+                                    Intent.createChooser(
+                                        intent,
+                                        getString(R.string.abc_shareactionprovider_share_with)
+                                    )
+                                )
+                            }
                         }
+                        true
                     }
-                    true
+                    it.show()
                 }
                 return false
             }
 
             init {
-                val cardResult = view.findViewById<View>(R.id.card_result)
-                cardResult.setOnClickListener(this)
-                cardResult.setOnLongClickListener(this)
+                view.findViewById<View>(R.id.card_result).let {
+                    it.setOnClickListener(this)
+                    it.setOnLongClickListener(this)
+                }
             }
         }
 
         override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ResultsViewHolder {
-            val view = LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.card_result, viewGroup, false)
-            return ResultsViewHolder(view)
+            return ResultsViewHolder(
+                LayoutInflater.from(viewGroup.context)
+                    .inflate(R.layout.card_result, viewGroup, false)
+            )
         }
 
         override fun onBindViewHolder(resultsViewHolder: ResultsViewHolder, i: Int) {
@@ -140,9 +146,7 @@ class ResultsActivity : AppCompatActivity() {
             // Load thumbnail in executor
             executor.execute {
                 try {
-                    val bitmap = BitmapFactory.decodeStream(
-                        URL(result.thumbnail).openStream()
-                    )
+                    val bitmap = BitmapFactory.decodeStream(URL(result.thumbnail).openStream())
                     handler.post { resultsViewHolder.thumbnail.setImageBitmap(bitmap) }
                 } catch (e: MalformedURLException) {
                     Log.e(LOG_TAG, "Invalid thumbnail URL", e)
@@ -152,7 +156,7 @@ class ResultsActivity : AppCompatActivity() {
             }
 
             // Load index specific data
-            result.title?.let {
+            result.title.let {
                 val titleAndMetadata = it.split("\n", limit = 2).toTypedArray()
                 if (titleAndMetadata.isNotEmpty()) {
                     resultsViewHolder.title.text = titleAndMetadata[0]
@@ -168,13 +172,12 @@ class ResultsActivity : AppCompatActivity() {
             resultsViewHolder.similarity.text = result.similarity
         }
 
-        override fun getItemCount(): Int {
-            return results.size
-        }
+        override fun getItemCount() = results.size
     }
 
     companion object {
         private val LOG_TAG = ResultsActivity::class.java.simpleName
+
         const val EXTRA_RESULTS = "extra_results"
     }
 }
