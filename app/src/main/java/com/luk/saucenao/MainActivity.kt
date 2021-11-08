@@ -59,17 +59,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         selectDatabasesButton.setOnClickListener {
-            MaterialDialog(this).show {
-                title(R.string.select_databases)
-                listItemsMultiChoice(
+            MaterialDialog(this)
+                .title(R.string.select_databases)
+                .listItemsMultiChoice(
                     R.array.databases_entries,
                     initialSelection = selectedDatabases,
                     allowEmptySelection = true
                 ) { _, ints, _ ->
                     selectedDatabases = ints
                 }
-                positiveButton(android.R.string.ok)
-            }
+                .positiveButton(android.R.string.ok)
+                .show()
         }
 
         if (Intent.ACTION_SEND == intent.action) {
