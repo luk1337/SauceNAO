@@ -158,8 +158,8 @@ class MainActivity : AppCompatActivity() {
                     connection.data("url", data)
                 }
 
-                val response = connection!!.execute()
-                if (response!!.statusCode() != 200) {
+                val response = connection.execute()
+                if (response.statusCode() != 200) {
                     Log.e(LOG_TAG, "HTTP request returned code: ${response.statusCode()}")
                     return when (response.statusCode()) {
                         429 -> Pair(REQUEST_RESULT_TOO_MANY_REQUESTS, null)
