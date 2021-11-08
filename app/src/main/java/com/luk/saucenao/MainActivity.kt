@@ -29,6 +29,12 @@ class MainActivity : AppCompatActivity() {
 
     private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
     private val selectDatabasesButton by lazy { findViewById<Button>(R.id.select_databases) }
+    private val progressDialog by lazy {
+        ProgressDialog(this).apply {
+            setTitle(R.string.loading_results)
+            setMessage(getString(R.string.please_wait))
+        }
+    }
 
     private var selectedDatabases = intArrayOf()
         set(value) {
@@ -41,8 +47,6 @@ class MainActivity : AppCompatActivity() {
                     getString(R.string.selected_databases, value.size)
             }
         }
-
-    private lateinit var progressDialog: ProgressDialog
 
     private val getResultsFromFile =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -83,12 +87,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun waitForResults(data: Any) {
         val future = executorService.submit(GetResultsTask(data))
-        progressDialog = ProgressDialog.show(
-            this,
-            getString(R.string.loading_results), getString(R.string.please_wait),
-            true, true
-        )
-        progressDialog.setOnCancelListener { future.cancel(true) }
+        progressDialog.setOnCancelListener {
+            future.cancel(true)
+        }
+        progressDialog.show()
     }
 
     inner class GetResultsTask(private val data: Any?) : Callable<Void?> {
