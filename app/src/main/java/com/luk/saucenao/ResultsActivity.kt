@@ -102,7 +102,7 @@ class ResultsActivity : AppCompatActivity() {
                                 )
                                 Toast.makeText(
                                     view.context,
-                                    getString(R.string.title_copied_to_clipboard),
+                                    R.string.title_copied_to_clipboard,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }

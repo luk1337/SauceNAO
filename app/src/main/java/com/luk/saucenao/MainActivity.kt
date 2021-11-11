@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     handler.post {
                         Toast.makeText(
                             this@MainActivity,
-                            getString(R.string.error_cannot_load_results),
+                            R.string.error_cannot_load_results,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                     handler.post {
                         Toast.makeText(
                             this@MainActivity,
-                            getString(R.string.error_too_many_requests),
+                            R.string.error_too_many_requests,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
