@@ -16,9 +16,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <view
         android:id="@+id/select_databases"
-        style="?spinnerStyle"
+        class="com.luk.saucenao.MainActivity$FauxSpinner"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"

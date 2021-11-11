@@ -1,17 +1,22 @@
 package com.luk.saucenao
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.AttributeSet
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.content.res.getTextOrThrow
 import androidx.core.util.Pair
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
@@ -28,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val executorService = Executors.newSingleThreadExecutor()
 
     private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
-    private val selectDatabasesButton by lazy { findViewById<Button>(R.id.select_databases) }
+    private val selectDatabasesSpinner by lazy { findViewById<FauxSpinner>(R.id.select_databases) }
     private val progressDialog by lazy {
         ProgressDialog(this).apply {
             setTitle(R.string.loading_results)
@@ -40,10 +45,11 @@ class MainActivity : AppCompatActivity() {
         set(value) {
             field = value
             when {
-                value.isEmpty() -> selectDatabasesButton.setText(R.string.all_databases)
-                value.size == 1 -> selectDatabasesButton.text =
+                value.isEmpty() -> selectDatabasesSpinner.text =
+                    getString(R.string.all_databases)
+                value.size == 1 -> selectDatabasesSpinner.text =
                     resources.getStringArray(R.array.databases_entries)[value.first()]
-                else -> selectDatabasesButton.text =
+                else -> selectDatabasesSpinner.text =
                     getString(R.string.selected_databases, value.size)
             }
         }
@@ -62,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             getResultsFromFile.launch("image/*")
         }
 
-        selectDatabasesButton.setOnClickListener {
+        selectDatabasesSpinner.onPerformClick = {
             MaterialDialog(this)
                 .title(R.string.select_databases)
                 .listItemsMultiChoice(
@@ -74,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .positiveButton(android.R.string.ok)
                 .show()
+            true
         }
 
         if (Intent.ACTION_SEND == intent.action) {
@@ -180,6 +187,33 @@ class MainActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e)
                 return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
+            }
+        }
+    }
+
+    class FauxSpinner(context: Context, attrs: AttributeSet?) : AppCompatSpinner(context, attrs) {
+        var onPerformClick: (() -> Boolean)? = null
+        var text: CharSequence? = null
+            set(value) {
+                field = value
+                adapter = ArrayAdapter(
+                    context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    listOf(value)
+                )
+            }
+
+        init {
+            context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.text)).let {
+                runCatching { text = it.getTextOrThrow(0) }
+                it.recycle()
+            }
+        }
+
+        override fun performClick(): Boolean {
+            return when {
+                onPerformClick != null -> onPerformClick!!()
+                else -> super.performClick()
             }
         }
     }
