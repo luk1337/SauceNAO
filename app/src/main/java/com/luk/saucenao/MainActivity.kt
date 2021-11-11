@@ -44,13 +44,10 @@ class MainActivity : AppCompatActivity() {
     private var selectedDatabases = intArrayOf()
         set(value) {
             field = value
-            when {
-                value.isEmpty() -> selectDatabasesSpinner.text =
-                    getString(R.string.all_databases)
-                value.size == 1 -> selectDatabasesSpinner.text =
-                    resources.getStringArray(R.array.databases_entries)[value.first()]
-                else -> selectDatabasesSpinner.text =
-                    getString(R.string.selected_databases, value.size)
+            selectDatabasesSpinner.text = when {
+                value.isEmpty() -> getString(R.string.all_databases)
+                value.size == 1 -> resources.getStringArray(R.array.databases_entries)[value.first()]
+                else -> getString(R.string.selected_databases, value.size)
             }
         }
 
