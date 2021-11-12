@@ -22,6 +22,7 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
+        android:spinnerMode="dialog"
         android:text="@string/all_databases"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
