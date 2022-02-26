@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SauceNAO</string>
+    <string name="app_name" translatable="false">SauceNAO</string>
 
     <string name="select_image">Select image</string>
 
