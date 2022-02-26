@@ -8,3 +8,6 @@ Available on: [F-Droid](https://f-droid.org/app/com.luk.saucenao), [Google Play]
 
 # Compiling
 In order to build this project you can either compile the project in Android Studio or simply run `./gradlew build`.
+
+# Translate
+If you'd like to translate this project, please do so on [Crowdin](https://crowdin.com/project/saucenao-android).
