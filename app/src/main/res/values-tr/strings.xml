@@ -1,22 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="select_image">Resim seç</string>
-
     <string name="all_databases">Tüm veri tabanları</string>
     <string name="select_databases">Veri tabanlarını seç</string>
     <string name="selected_databases">%d veri tabanı</string>
-
     <string name="results">Sonuçlar</string>
-
     <string name="no_results">Sonuç yok</string>
-
     <string name="loading_results">Sonuçlar yükleniyor</string>
     <string name="please_wait">Lütfen bekleyin…</string>
-
     <string name="error_cannot_load_results">Sonuçlar yüklenemedi!</string>
     <string name="error_too_many_requests">Çok fazla istek!</string>
-
     <string name="copy_to_clipboard_item">Panoya kopyala</string>
     <string name="share_item">Paylaş</string>
-
     <string name="title_copied_to_clipboard">Başlık panoya kopyalandı!</string>
 </resources>
