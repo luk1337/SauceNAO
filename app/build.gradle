@@ -39,11 +39,16 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
-    lintOptions {
-        disable 'GoogleAppIndexingWarning'
-    }
     packagingOptions {
-        exclude 'META-INF/*'
+        jniLibs {
+            excludes += ['META-INF/*']
+        }
+        resources {
+            excludes += ['META-INF/*']
+        }
+    }
+    lint {
+        disable 'GoogleAppIndexingWarning'
     }
 }
 
