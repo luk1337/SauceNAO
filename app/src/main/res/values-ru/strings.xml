@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_image">Выберите изображение</string>
+    <string name="all_databases">Все базы данных</string>
+    <string name="select_databases">Выбор базы данных</string>
+    <string name="selected_databases">%d база данных</string>
+    <string name="results">Результаты</string>
+    <string name="no_results">По запросу ничего не найдено</string>
+    <string name="loading_results">Загружаем результаты</string>
+    <string name="please_wait">Пожалуйста, подождите…</string>
+    <string name="error_cannot_load_results">Не удалось загрузить результаты!</string>
+    <string name="error_too_many_requests">Слишком Много Запросов!</string>
+    <string name="copy_to_clipboard_item">Копировать в буфер</string>
+    <string name="share_item">Поделиться</string>
+    <string name="title_copied_to_clipboard">Название скопировано в буфер!</string>
+</resources>
