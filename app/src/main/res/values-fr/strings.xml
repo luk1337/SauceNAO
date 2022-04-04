@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_image">Sélectionner une image</string>
+    <string name="all_databases">Toutes les bases de données</string>
+    <string name="select_databases">Sélectionner les bases de données</string>
+    <string name="selected_databases">%d bases de données</string>
+    <string name="results">Résultats</string>
+    <string name="no_results">Il n’y a aucun résultat</string>
+    <string name="loading_results">Chargement des résultats</string>
+    <string name="please_wait">Veuillez patienter…</string>
+    <string name="error_cannot_load_results">Impossible de charger les résultats !</string>
+    <string name="error_too_many_requests">Trop de demandes !</string>
+    <string name="copy_to_clipboard_item">Copier dans le presse-papier</string>
+    <string name="share_item">Partager</string>
+    <string name="title_copied_to_clipboard">Titre copié dans le presse-papiers !</string>
+</resources>
