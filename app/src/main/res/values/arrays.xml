@@ -36,6 +36,7 @@
         <item>Sankaku Channel</item>
         <item>Shows</item>
         <item>Shutterstock</item>
+        <item>Skeb</item>
         <item>Twitter</item>
         <item>Yande.re</item>
     </string-array>
@@ -76,6 +77,7 @@
         <item>27</item>
         <item>24</item>
         <item>15</item>
+        <item>44</item>
         <item>41</item>
         <item>12</item>
     </integer-array>
