@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_image">Valitse Kuva</string>
+    <string name="all_databases">Kaikki tietokannat</string>
+    <string name="select_databases">Valitse tietokannat</string>
+    <string name="selected_databases">%d tietokantaa</string>
+    <string name="results">Tulokset</string>
+    <string name="no_results">Ei tuloksia</string>
+    <string name="loading_results">Ladataan tuloksia</string>
+    <string name="please_wait">Ole hyvä ja odata…</string>
+    <string name="error_cannot_load_results">Tulosten lataaminen epäonnistui!</string>
+    <string name="error_too_many_requests">Liian monta pyyntöä!</string>
+    <string name="copy_to_clipboard_item">Kopio leikepöydälle</string>
+    <string name="share_item">Jaa</string>
+    <string name="title_copied_to_clipboard">Otsikko kopiotu leikepöydälle!</string>
+</resources>
