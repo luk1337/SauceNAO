@@ -1,6 +1,7 @@
 package com.luk.saucenao
 
 import android.app.ProgressDialog
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -8,17 +9,25 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.AttributeSet
 import android.util.Log
+import android.webkit.URLUtil
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.content.getSystemService
 import androidx.core.content.res.getTextOrThrow
 import androidx.core.util.Pair
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.setActionButtonEnabled
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
 import org.jsoup.Connection
 import org.jsoup.Jsoup
@@ -63,6 +72,28 @@ class MainActivity : AppCompatActivity() {
         val selectImageButton = findViewById<Button>(R.id.select_image)
         selectImageButton.setOnClickListener {
             getResultsFromFile.launch("image/*")
+        }
+
+        val selectLinkButton = findViewById<ImageView>(R.id.select_link)
+        selectLinkButton.setOnClickListener {
+            MaterialDialog(this)
+                .title(R.string.search_by_image_url)
+                .input(
+                    prefill = getSystemService<ClipboardManager>()?.primaryClip?.getItemAt(0)?.text?.let {
+                        if (URLUtil.isValidUrl(it.toString())) it else null
+                    },
+                    inputType = InputType.TYPE_TEXT_VARIATION_URI,
+                    waitForPositiveButton = false
+                ) { dialog, text ->
+                    val isValidUrl = URLUtil.isValidUrl(text.toString())
+                    dialog.getInputField().error =
+                        if (isValidUrl || text.isEmpty()) null else getString(R.string.search_by_image_url_error)
+                    dialog.setActionButtonEnabled(WhichButton.POSITIVE, isValidUrl)
+                }
+                .positiveButton(android.R.string.ok) {
+                    waitForResults(it.getInputField().text.toString())
+                }
+                .show()
         }
 
         selectDatabasesSpinner.onPerformClick = {

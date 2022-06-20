@@ -4,6 +4,9 @@
 
     <string name="select_image">Select image</string>
 
+    <string name="search_by_image_url">Search by image URL</string>
+    <string name="search_by_image_url_error">Please enter a valid URL</string>
+
     <string name="all_databases">All databases</string>
     <string name="select_databases">Select databases</string>
     <string name="selected_databases">%d databases</string>
