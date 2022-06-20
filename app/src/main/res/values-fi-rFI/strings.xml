@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Valitse Kuva</string>
     <string name="search_by_image_url">Hae kuva linkillä</string>
     <string name="search_by_image_url_error">Linkki ei ole kelvollinen</string>
