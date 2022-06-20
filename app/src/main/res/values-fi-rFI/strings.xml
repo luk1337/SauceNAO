@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="select_image">Valitse Kuva</string>
+    <string name="search_by_image_url">Hae kuva linkillä</string>
+    <string name="search_by_image_url_error">Linkki ei ole kelvollinen</string>
     <string name="all_databases">Kaikki tietokannat</string>
     <string name="select_databases">Valitse tietokannat</string>
     <string name="selected_databases">%d tietokantaa</string>
