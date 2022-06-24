@@ -1,0 +1,3 @@
+* Added Skeb to the databases list
+* Added "Search by image URL" feature
+* Added Finnish translations
