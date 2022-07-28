@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="select_image">選擇圖片</string>
+    <string name="search_by_image_url">以圖片的 URL 搜尋</string>
+    <string name="search_by_image_url_error">請輸入有效的 URL</string>
+    <string name="all_databases">所有資料庫</string>
+    <string name="select_databases">選擇資料庫</string>
+    <string name="selected_databases">%d 資料庫</string>
+    <string name="results">結果</string>
+    <string name="no_results">無結果</string>
+    <string name="loading_results">正在載入結果</string>
+    <string name="please_wait">請稍候……</string>
+    <string name="error_cannot_load_results">無法載入結果！</string>
+    <string name="error_too_many_requests">要求過多！</string>
+    <string name="copy_to_clipboard_item">複製到剪貼簿</string>
+    <string name="share_item">分享</string>
+    <string name="title_copied_to_clipboard">標題已複製到剪貼簿！</string>
+</resources>
