@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Sélectionner une image</string>
+    <string name="search_by_image_url">Rechercher par URL de l\'image</string>
+    <string name="search_by_image_url_error">Veuillez saisir une URL valide</string>
     <string name="all_databases">Toutes les bases de données</string>
     <string name="select_databases">Sélectionner les bases de données</string>
     <string name="selected_databases">%d bases de données</string>
