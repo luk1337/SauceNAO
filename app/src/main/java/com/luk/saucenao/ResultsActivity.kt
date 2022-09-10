@@ -156,7 +156,7 @@ class ResultsActivity : AppCompatActivity() {
             }
 
             // Load index specific data
-            result.title.let {
+            result.title?.let {
                 val titleAndMetadata = it.split("\n", limit = 2).toTypedArray()
                 if (titleAndMetadata.isNotEmpty()) {
                     resultsViewHolder.title.text = titleAndMetadata[0]

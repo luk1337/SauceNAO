@@ -37,7 +37,9 @@ class Results(document: Document) {
             }
         }
         val title by lazy {
-            HtmlToPlainText().getPlainText(result.getElementsByClass(CLASS_RESULT_TITLE).first())
+            result.getElementsByClass(CLASS_RESULT_TITLE).first()?.let {
+                HtmlToPlainText().getPlainText(it)
+            }
         }
         val extUrls by lazy {
             val list = arrayListOf<String>()
