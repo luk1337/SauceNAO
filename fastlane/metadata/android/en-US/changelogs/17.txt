@@ -1,0 +1,6 @@
+* Added Chinese Simplified translations
+* Updated French translations
+* Updated Turkish translations
+* Updated build dependencies
+* Fixed crash when result has no title
+* Results now show higher res image when available (data-src2)
