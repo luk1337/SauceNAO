@@ -24,7 +24,7 @@ class Results(document: Document) {
         private val resultContentColumns = result.getElementsByClass(CLASS_RESULT_CONTENT_COLUMN)
 
         val similarity by lazy {
-            resultMatchInfo.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO).first()?.text()
+            resultMatchInfo?.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO)?.first()?.text()
         }
         val thumbnail by lazy {
             val resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first()
