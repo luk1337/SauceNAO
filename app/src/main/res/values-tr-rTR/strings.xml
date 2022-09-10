@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Resim seç</string>
+    <string name="search_by_image_url">Görsel URL\'siyle ara</string>
+    <string name="search_by_image_url_error">Geçerli bir URL girin</string>
     <string name="all_databases">Tüm veri tabanları</string>
     <string name="select_databases">Veri tabanlarını seç</string>
     <string name="selected_databases">%d veri tabanı</string>
