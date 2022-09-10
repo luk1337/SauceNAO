@@ -30,6 +30,7 @@ class Results(document: Document) {
             val resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first()
             resultImage?.getElementsByTag("img")?.first()?.let {
                 when {
+                    it.hasAttr("data-src2") -> it.attr("data-src2")
                     it.hasAttr("data-src") -> it.attr("data-src")
                     it.hasAttr("src") -> it.attr("src")
                     else -> null
