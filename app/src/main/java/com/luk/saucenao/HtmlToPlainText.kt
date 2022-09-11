@@ -20,7 +20,7 @@ class HtmlToPlainText {
      * @param element the root element to format
      * @return formatted text
      */
-    fun getPlainText(element: Element?): String {
+    fun getPlainText(element: Element): String {
         val formatter = FormattingVisitor()
         NodeTraversor.traverse(formatter, element)
         return formatter.toString().trim { it <= ' ' }
