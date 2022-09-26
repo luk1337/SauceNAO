@@ -3,7 +3,6 @@
     <string name="select_image">Выберите изображение</string>
     <string name="all_databases">Все базы данных</string>
     <string name="select_databases">Выбор базы данных</string>
-    <string name="selected_databases">%d база данных</string>
     <string name="results">Результаты</string>
     <string name="no_results">По запросу ничего не найдено</string>
     <string name="loading_results">Загружаем результаты</string>

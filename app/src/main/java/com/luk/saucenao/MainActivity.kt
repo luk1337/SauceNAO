@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity() {
             selectDatabasesSpinner.text = when {
                 value.isEmpty() -> getString(R.string.all_databases)
                 value.size == 1 -> resources.getStringArray(R.array.databases_entries)[value.first()]
-                else -> getString(R.string.selected_databases, value.size)
+                else -> resources.getQuantityString(
+                    R.plurals.selected_databases, value.size, value.size
+                )
             }
         }
 

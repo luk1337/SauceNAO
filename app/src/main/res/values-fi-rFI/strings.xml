@@ -5,7 +5,6 @@
     <string name="search_by_image_url_error">Linkki ei ole kelvollinen</string>
     <string name="all_databases">Kaikki tietokannat</string>
     <string name="select_databases">Valitse tietokannat</string>
-    <string name="selected_databases">%d tietokantaa</string>
     <string name="results">Tulokset</string>
     <string name="no_results">Ei tuloksia</string>
     <string name="loading_results">Ladataan tuloksia</string>
