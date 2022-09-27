@@ -5,6 +5,9 @@
     <string name="search_by_image_url_error">請輸入有效的 URL</string>
     <string name="all_databases">所有資料庫</string>
     <string name="select_databases">選擇資料庫</string>
+    <plurals name="selected_databases">
+        <item quantity="other">%d 個資料庫</item>
+    </plurals>
     <string name="results">結果</string>
     <string name="no_results">無結果</string>
     <string name="loading_results">正在載入結果</string>
