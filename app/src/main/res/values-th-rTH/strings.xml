@@ -12,7 +12,7 @@
     <string name="no_results">ไม่มีผลการค้นหา</string>
     <string name="loading_results">กำลังโหลด</string>
     <string name="please_wait">กรุณารอสักครู่…</string>
-    <string name="error_cannot_load_results">ไม่สามารถโหลดผลลัพธ์ได้</string>
+    <string name="error_cannot_load_results">ไม่สามารถโหลดผลการค้นหาได้</string>
     <string name="error_too_many_requests">ส่งคำขอมากเกินไป</string>
     <string name="copy_to_clipboard_item">คัดลอกไปยังคลิปบอร์ด</string>
     <string name="share_item">แชร์</string>
