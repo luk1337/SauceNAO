@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="select_image">เลือกรูปภาพ</string>
+    <string name="search_by_image_url">ค้นหาจาก URL รูปภาพ</string>
+    <string name="search_by_image_url_error">โปรดระบุ URL ที่ถูกต้อง</string>
+    <string name="all_databases">ฐานข้อมูลทั้งหมด</string>
+    <string name="select_databases">เลือกฐานข้อมูล</string>
+    <plurals name="selected_databases">
+        <item quantity="other">%d ฐานข้อมูล</item>
+    </plurals>
+    <string name="results">ผลการค้นหา</string>
+    <string name="no_results">ไม่มีผลการค้นหา</string>
+    <string name="loading_results">กำลังโหลด</string>
+    <string name="please_wait">กรุณารอสักครู่…</string>
+    <string name="error_cannot_load_results">ไม่สามารถโหลดผลลัพธ์ได้</string>
+    <string name="error_too_many_requests">ส่งคำขอมากเกินไป</string>
+    <string name="copy_to_clipboard_item">คัดลอกไปยังคลิปบอร์ด</string>
+    <string name="share_item">แชร์</string>
+    <string name="title_copied_to_clipboard">คัดลอกเสร็จสิ้น!</string>
+</resources>
