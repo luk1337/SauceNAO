@@ -10,8 +10,8 @@ android {
         applicationId "com.luk.saucenao"
         minSdkVersion 19
         targetSdkVersion 33
-        versionCode 17
-        versionName "1.15"
+        versionCode 18
+        versionName "1.16"
     }
     buildTypes {
         release {

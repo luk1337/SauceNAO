@@ -1,0 +1,5 @@
+* Added Thai translations
+* Updated Chinese Traditional translations
+* Updated Finnish translations
+* Updated Turkish translations
+* Updated build dependencies
