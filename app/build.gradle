@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.luk.saucenao"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 18
         versionName "1.16"
@@ -39,6 +39,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.3.1'
+    }
     packagingOptions {
         jniLibs {
             excludes += ['META-INF/*']
@@ -57,14 +63,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // AndroidX
-    implementation 'androidx.appcompat:appcompat:1.5.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation 'androidx.compose.foundation:foundation-layout:1.3.0'
+    implementation 'androidx.compose.ui:ui:1.3.0'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.3.0'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.3.0'
+    implementation 'androidx.compose.material3:material3:1.1.0-alpha01'
 
     // Other
-    implementation 'com.afollestad.material-dialogs:core:3.3.0'
-    implementation 'com.afollestad.material-dialogs:input:3.3.0'
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.27.0'
+    implementation 'io.coil-kt:coil-compose:2.2.2'
     implementation 'org.jsoup:jsoup:1.15.3'
 }

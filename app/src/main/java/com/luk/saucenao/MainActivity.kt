@@ -1,34 +1,21 @@
 package com.luk.saucenao
 
-import android.app.ProgressDialog
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
-import android.text.InputType
-import android.util.AttributeSet
 import android.util.Log
-import android.webkit.URLUtil
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.core.content.getSystemService
-import androidx.core.content.res.getTextOrThrow
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.util.Pair
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.WhichButton
-import com.afollestad.materialdialogs.actions.setActionButtonEnabled
-import com.afollestad.materialdialogs.input.getInputField
-import com.afollestad.materialdialogs.input.input
-import com.afollestad.materialdialogs.list.listItemsMultiChoice
+import com.luk.saucenao.ui.screen.MainScreen
+import com.luk.saucenao.ui.screen.Screen
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.io.ByteArrayInputStream
@@ -37,80 +24,29 @@ import java.io.IOException
 import java.io.InterruptedIOException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private val executorService = Executors.newSingleThreadExecutor()
 
     private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
-    private val selectDatabasesSpinner by lazy { findViewById<FauxSpinner>(R.id.select_databases) }
-    private val progressDialog by lazy {
-        ProgressDialog(this).apply {
-            setTitle(R.string.loading_results)
-            setMessage(getString(R.string.please_wait))
-        }
-    }
 
-    private var selectedDatabases = intArrayOf()
-        set(value) {
-            field = value
-            selectDatabasesSpinner.text = when {
-                value.isEmpty() -> getString(R.string.all_databases)
-                value.size == 1 -> resources.getStringArray(R.array.databases_entries)[value.first()]
-                else -> resources.getQuantityString(
-                    R.plurals.selected_databases, value.size, value.size
-                )
-            }
-        }
+    internal val progressDialogFuture = mutableStateOf<Future<Void?>?>(null)
 
-    private val getResultsFromFile =
+    internal var selectedDatabases = mutableStateListOf<Int>()
+
+    internal val getResultsFromFile =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { waitForResults(it) }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val selectImageButton = findViewById<Button>(R.id.select_image)
-        selectImageButton.setOnClickListener {
-            getResultsFromFile.launch("image/*")
-        }
-
-        val selectLinkButton = findViewById<ImageView>(R.id.select_link)
-        selectLinkButton.setOnClickListener {
-            MaterialDialog(this)
-                .title(R.string.search_by_image_url)
-                .input(
-                    prefill = getSystemService<ClipboardManager>()?.primaryClip?.getItemAt(0)?.text?.let {
-                        if (URLUtil.isValidUrl(it.toString())) it else null
-                    },
-                    inputType = InputType.TYPE_TEXT_VARIATION_URI,
-                    waitForPositiveButton = false
-                ) { dialog, text ->
-                    val isValidUrl = URLUtil.isValidUrl(text.toString())
-                    dialog.getInputField().error =
-                        if (isValidUrl || text.isEmpty()) null else getString(R.string.search_by_image_url_error)
-                    dialog.setActionButtonEnabled(WhichButton.POSITIVE, isValidUrl)
-                }
-                .positiveButton(android.R.string.ok) {
-                    waitForResults(it.getInputField().text.toString())
-                }
-                .show()
-        }
-
-        selectDatabasesSpinner.onPerformClick = {
-            MaterialDialog(this)
-                .title(R.string.select_databases)
-                .listItemsMultiChoice(
-                    R.array.databases_entries,
-                    initialSelection = selectedDatabases,
-                    allowEmptySelection = true
-                ) { _, ints, _ ->
-                    selectedDatabases = ints
-                }
-                .positiveButton(android.R.string.ok)
-                .show()
-            true
+        setContent {
+            Screen {
+                MainScreen(mainActivity = this)
+            }
         }
 
         if (Intent.ACTION_SEND == intent.action) {
@@ -122,12 +58,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun waitForResults(data: Any) {
-        val future = executorService.submit(GetResultsTask(data))
-        progressDialog.setOnCancelListener {
-            future.cancel(true)
-        }
-        progressDialog.show()
+    internal fun waitForResults(data: Any) {
+        progressDialogFuture.value = executorService.submit(GetResultsTask(data))
     }
 
     inner class GetResultsTask(private val data: Any?) : Callable<Void?> {
@@ -139,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             val result = fetchResult()
 
             val handler = Handler(mainLooper)
-            handler.post { progressDialog.dismiss() }
+            handler.post { progressDialogFuture.value = null }
 
             when (result.first) {
                 REQUEST_RESULT_OK -> {
@@ -217,33 +149,6 @@ class MainActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 Log.e(LOG_TAG, "Unable to send HTTP request", e)
                 return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
-            }
-        }
-    }
-
-    class FauxSpinner(context: Context, attrs: AttributeSet?) : AppCompatSpinner(context, attrs) {
-        var onPerformClick: (() -> Boolean)? = null
-        var text: CharSequence? = null
-            set(value) {
-                field = value
-                adapter = ArrayAdapter(
-                    context,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    listOf(value)
-                )
-            }
-
-        init {
-            context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.text)).let {
-                runCatching { text = it.getTextOrThrow(0) }
-                it.recycle()
-            }
-        }
-
-        override fun performClick(): Boolean {
-            return when {
-                onPerformClick != null -> onPerformClick!!()
-                else -> super.performClick()
             }
         }
     }

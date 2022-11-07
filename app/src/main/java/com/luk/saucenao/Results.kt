@@ -3,14 +3,14 @@ package com.luk.saucenao
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import java.util.*
+import kotlin.collections.ArrayList
 
 class Results(document: Document) {
     val results = ArrayList<Result>()
 
     init {
         for (result in document.getElementsByClass(CLASS_RESULT_TABLE)) {
-            Result(result).let {
+            HttpResult(result).let {
                 // Skip hidden results
                 if (it.thumbnail != "images/static/hidden.png") {
                     results.add(it)
@@ -19,14 +19,22 @@ class Results(document: Document) {
         }
     }
 
-    inner class Result(result: Element) {
+    abstract class Result {
+        abstract val similarity: String?
+        abstract val thumbnail: String?
+        abstract var title: String?
+        abstract val extUrls: List<String>
+        abstract val columns: ArrayList<String>
+    }
+
+    inner class HttpResult(result: Element) : Result() {
         private val resultMatchInfo = result.getElementsByClass(CLASS_RESULT_MATCH_INFO).first()
         private val resultContentColumns = result.getElementsByClass(CLASS_RESULT_CONTENT_COLUMN)
 
-        val similarity by lazy {
+        override val similarity = run {
             resultMatchInfo?.getElementsByClass(CLASS_RESULT_SIMILARITY_INFO)?.first()?.text()
         }
-        val thumbnail by lazy {
+        override val thumbnail = run {
             val resultImage = result.getElementsByClass(CLASS_RESULT_IMAGE).first()
             resultImage?.getElementsByTag("img")?.first()?.let {
                 when {
@@ -37,12 +45,8 @@ class Results(document: Document) {
                 }
             }
         }
-        val title by lazy {
-            result.getElementsByClass(CLASS_RESULT_TITLE).first()?.let {
-                HtmlToPlainText().getPlainText(it)
-            }
-        }
-        val extUrls by lazy {
+        override var title: String? = null
+        override val extUrls = run {
             val list = arrayListOf<String>()
 
             val elements = Elements()
@@ -60,12 +64,26 @@ class Results(document: Document) {
 
             list.sorted()
         }
-        val columns by lazy {
+        override val columns = run {
             val list = arrayListOf<String>()
             resultContentColumns.forEach {
                 list.add(HtmlToPlainText().getPlainText(it))
             }
             list
+        }
+
+        init {
+            result.getElementsByClass(CLASS_RESULT_TITLE).first()?.let {
+                HtmlToPlainText().getPlainText(it)
+            }?.let {
+                val titleAndMetadata = it.split("\n", limit = 2).toTypedArray()
+                if (titleAndMetadata.isNotEmpty()) {
+                    title = titleAndMetadata[0]
+                    if (titleAndMetadata.size == 2) {
+                        columns.add(0, titleAndMetadata[1])
+                    }
+                }
+            }
         }
     }
 

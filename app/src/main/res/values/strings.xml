@@ -26,6 +26,7 @@
 
     <string name="copy_to_clipboard_item">Copy to clipboard</string>
     <string name="share_item">Share</string>
+    <string name="share_with">Share with</string>
 
     <string name="title_copied_to_clipboard">Title copied to clipboard!</string>
 </resources>

@@ -2,12 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="md_color_button_text">@android:color/white</item>
-    </style>
+    <style name="AppTheme" parent="android:Theme.Material" />
 
 </resources>
