@@ -16,5 +16,6 @@
     <string name="error_too_many_requests">服务器请求过多</string>
     <string name="copy_to_clipboard_item">复制到剪贴板</string>
     <string name="share_item">分享</string>
+    <string name="share_with">分享对象</string>
     <string name="title_copied_to_clipboard">标题已复制至剪贴板！</string>
 </resources>
