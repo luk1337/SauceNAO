@@ -17,5 +17,6 @@
     <string name="error_too_many_requests">Çok fazla istek!</string>
     <string name="copy_to_clipboard_item">Panoya kopyala</string>
     <string name="share_item">Paylaş</string>
+    <string name="share_with">Şununla paylaş</string>
     <string name="title_copied_to_clipboard">Başlık panoya kopyalandı!</string>
 </resources>
