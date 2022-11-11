@@ -1,5 +1,6 @@
 package com.luk.saucenao.ui.component
 
+import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -123,7 +124,7 @@ private fun ActionsDropdownMenu(expanded: MutableState<Boolean>, result: Results
                 context.startActivity(
                     Intent.createChooser(
                         Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
+                            type = ClipDescription.MIMETYPE_TEXT_PLAIN
                             putExtra(Intent.EXTRA_TEXT, result.title)
                         },
                         context.resources.getString(R.string.share_with)
