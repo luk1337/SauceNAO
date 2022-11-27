@@ -1,0 +1,2 @@
+* Rewrote UI using Jetpack Compose toolkit
+* Updated build dependencies
