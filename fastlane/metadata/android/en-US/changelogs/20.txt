@@ -1,0 +1,4 @@
+* Added Ukrainian translations
+* Added Android 13+ app language preference support
+* Added support for displaying SauceNAO server errors
+* Updated build dependencies
