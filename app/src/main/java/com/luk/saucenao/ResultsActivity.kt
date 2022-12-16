@@ -24,7 +24,10 @@ class ResultsActivity : ComponentActivity() {
 
         setContent {
             Screen {
-                ResultsScreen(results = results.results)
+                ResultsScreen(
+                    results = results.results,
+                    serverError = results.serverError,
+                )
             }
         }
     }

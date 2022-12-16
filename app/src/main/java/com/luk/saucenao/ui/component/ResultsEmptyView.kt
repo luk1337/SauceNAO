@@ -14,7 +14,7 @@ import com.luk.saucenao.R
 import com.luk.saucenao.ui.screen.Screen
 
 @Composable
-fun ResultsEmptyView() {
+fun ResultsEmptyView(text: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -22,7 +22,7 @@ fun ResultsEmptyView() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(text = stringResource(id = R.string.no_results))
+        Text(text = text)
     }
 }
 
@@ -30,6 +30,6 @@ fun ResultsEmptyView() {
 @Composable
 fun PreviewResultsEmptyView() {
     Screen {
-        ResultsEmptyView()
+        ResultsEmptyView(text = stringResource(id = R.string.no_results))
     }
 }

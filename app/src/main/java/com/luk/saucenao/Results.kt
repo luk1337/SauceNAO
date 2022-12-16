@@ -8,6 +8,10 @@ import kotlin.collections.ArrayList
 class Results(document: Document) {
     val results = ArrayList<Result>()
 
+    val serverError by lazy {
+        document.getElementsByClass("servererror").firstOrNull()?.text()
+    }
+
     init {
         for (result in document.getElementsByClass(CLASS_RESULT_TABLE)) {
             HttpResult(result).let {
