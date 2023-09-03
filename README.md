@@ -5,7 +5,7 @@ Available on: [F-Droid](https://f-droid.org/app/com.luk.saucenao), [Google Play]
 
 # WhatIS
 
-SauceNao is a reverse image search engine.
+SauceNAO is a reverse image search engine.
 
 The name 'SauceNAO' is derived from a slang form of "Need to know the source of this Now!" which has found common usage on image boards and other similar sites.
 
