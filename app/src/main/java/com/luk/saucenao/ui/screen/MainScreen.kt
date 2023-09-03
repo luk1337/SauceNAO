@@ -42,44 +42,42 @@ import com.luk.saucenao.ui.component.ProgressDialog
 
 @Composable
 fun MainScreen(mainActivity: MainActivity) {
-    Screen {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Button(
-                    onClick = {
-                        mainActivity.getResultsFromFile.launch(PickVisualMediaRequest(ImageOnly))
-                    },
-                ) {
-                    Text(text = stringResource(R.string.select_image))
-                }
-                SearchByUrl(
-                    waitForResults = {
-                        mainActivity.waitForResults(it)
-                    }
-                )
-            }
-
-            DatabaseSpinner(mainActivity.selectedDatabases)
-        }
-
-        if (mainActivity.progressDialogFuture.value != null) {
-            ProgressDialog(
-                title = stringResource(id = R.string.loading_results),
-                onDismissRequest = {
-                    mainActivity.progressDialogFuture.value?.cancel(true)
-                    mainActivity.progressDialogFuture.value = null
+            Button(
+                onClick = {
+                    mainActivity.getResultsFromFile.launch(PickVisualMediaRequest(ImageOnly))
                 },
+            ) {
+                Text(text = stringResource(R.string.select_image))
+            }
+            SearchByUrl(
+                waitForResults = {
+                    mainActivity.waitForResults(it)
+                }
             )
         }
+
+        DatabaseSpinner(mainActivity.selectedDatabases)
+    }
+
+    if (mainActivity.progressDialogFuture.value != null) {
+        ProgressDialog(
+            title = stringResource(id = R.string.loading_results),
+            onDismissRequest = {
+                mainActivity.progressDialogFuture.value?.cancel(true)
+                mainActivity.progressDialogFuture.value = null
+            },
+        )
     }
 }
 
