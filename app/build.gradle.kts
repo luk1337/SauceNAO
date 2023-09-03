@@ -7,6 +7,7 @@ plugins {
 
 android {
     compileSdk = 34
+    namespace = "com.luk.saucenao"
 
     defaultConfig {
         applicationId = "com.luk.saucenao"
