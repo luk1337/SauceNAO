@@ -152,7 +152,7 @@ private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
                                 } else {
                                     selectedDatabases.add(index)
                                 }
-                                state.value = selectedDatabases.contains(index)
+                                state.value = !state.value
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
