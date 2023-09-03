@@ -1,7 +1,6 @@
 package com.luk.saucenao
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,8 +13,6 @@ class ResultsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         intent.extras?.let {
             it.getString(EXTRA_RESULTS)?.let { results ->
@@ -30,16 +27,12 @@ class ResultsActivity : ComponentActivity() {
                 ResultsScreen(
                     results = results.results,
                     serverError = results.serverError,
+                    onBackPressed = {
+                        onBackPressedDispatcher.onBackPressed()
+                    },
                 )
             }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> onBackPressedDispatcher.onBackPressed()
-        }
-        return true
     }
 
     companion object {
