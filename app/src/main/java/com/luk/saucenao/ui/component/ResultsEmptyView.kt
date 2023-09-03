@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.luk.saucenao.R
-import com.luk.saucenao.ui.screen.Screen
+import com.luk.saucenao.ui.screen.ThemedScreen
 
 @Composable
 fun ResultsEmptyView(text: String) {
@@ -29,7 +29,7 @@ fun ResultsEmptyView(text: String) {
 @Preview
 @Composable
 fun PreviewResultsEmptyView() {
-    Screen {
+    ThemedScreen {
         ResultsEmptyView(text = stringResource(id = R.string.no_results))
     }
 }

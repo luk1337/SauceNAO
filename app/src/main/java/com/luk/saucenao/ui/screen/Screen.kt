@@ -8,12 +8,19 @@ import androidx.compose.ui.Modifier
 import com.luk.saucenao.ui.theme.Theme
 
 @Composable
-fun Screen(content: @Composable () -> Unit) {
+fun Screen(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun ThemedScreen(content: @Composable () -> Unit) {
     Theme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
+        Screen {
             content()
         }
     }

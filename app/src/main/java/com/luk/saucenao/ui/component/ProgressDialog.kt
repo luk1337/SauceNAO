@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.luk.saucenao.R
-import com.luk.saucenao.ui.screen.Screen
+import com.luk.saucenao.ui.screen.ThemedScreen
 
 @Composable
 fun ProgressDialog(
@@ -63,7 +63,7 @@ fun ProgressDialog(
 @Preview
 @Composable
 fun PreviewProgressDialog() {
-    Screen {
+    ThemedScreen {
         ProgressDialog(
             onDismissRequest = {},
             title = "Title",

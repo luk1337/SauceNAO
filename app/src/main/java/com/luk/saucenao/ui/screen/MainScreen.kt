@@ -255,7 +255,7 @@ private fun SearchByUrl(waitForResults: (Any) -> Unit) {
 @Preview
 @Composable
 fun PreviewMainScreen() {
-    Screen {
+    ThemedScreen {
         MainScreen(mainActivity = MainActivity())
     }
 }

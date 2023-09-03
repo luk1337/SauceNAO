@@ -14,11 +14,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.util.Pair
+import com.luk.saucenao.R.string
 import com.luk.saucenao.ui.screen.MainScreen
 import com.luk.saucenao.ui.screen.Screen
+import com.luk.saucenao.ui.theme.Theme
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.io.ByteArrayInputStream
@@ -43,14 +52,31 @@ class MainActivity : ComponentActivity() {
             uri?.let { waitForResults(it) }
         }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
 
         setContent {
-            Screen {
-                MainScreen(mainActivity = this)
+            Theme {
+                Scaffold(
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    resources.getString(string.app_name),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                        )
+                    },
+                ) { innerPadding ->
+                    Screen(modifier = Modifier.padding(innerPadding)) {
+                        MainScreen(mainActivity = this)
+                    }
+                }
             }
         }
 

@@ -36,7 +36,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.luk.saucenao.R
 import com.luk.saucenao.Results
 import com.luk.saucenao.ui.mock.FakeResult
-import com.luk.saucenao.ui.screen.Screen
+import com.luk.saucenao.ui.screen.ThemedScreen
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -166,7 +166,7 @@ private fun ExtLinksDropdownMenu(expanded: MutableState<Boolean>, extUrls: List<
 @Preview
 @Composable
 fun PreviewResultCard() {
-    Screen {
+    ThemedScreen {
         ResultCard(result = FakeResult())
     }
 }

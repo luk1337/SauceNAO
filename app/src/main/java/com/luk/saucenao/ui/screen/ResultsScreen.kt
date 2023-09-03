@@ -2,6 +2,8 @@ package com.luk.saucenao.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,7 +24,9 @@ fun ResultsScreen(results: ArrayList<Results.Result>, serverError: String? = nul
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
-                .padding(10.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(start = 10.dp, end = 10.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
             results.forEach {
@@ -37,7 +41,7 @@ fun ResultsScreen(results: ArrayList<Results.Result>, serverError: String? = nul
 @Preview
 @Composable
 fun PreviewResultsScreen() {
-    Screen {
+    ThemedScreen {
         ResultsScreen(
             results = arrayListOf(
                 FakeResult(),
@@ -51,7 +55,7 @@ fun PreviewResultsScreen() {
 @Preview
 @Composable
 fun PreviewEmptyResultsScreen() {
-    Screen {
+    ThemedScreen {
         ResultsScreen(
             results = arrayListOf()
         )
