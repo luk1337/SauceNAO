@@ -1,6 +1,8 @@
 package com.luk.saucenao.ui.screen
 
 import android.webkit.URLUtil
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +56,7 @@ fun MainScreen(mainActivity: MainActivity) {
             ) {
                 Button(
                     onClick = {
-                        mainActivity.getResultsFromFile.launch("image/*")
+                        mainActivity.getResultsFromFile.launch(PickVisualMediaRequest(ImageOnly))
                     },
                 ) {
                     Text(text = stringResource(R.string.select_image))
