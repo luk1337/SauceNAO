@@ -83,6 +83,7 @@ dependencies {
 
     // Other
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("org.jsoup:jsoup:1.15.3")
 }
