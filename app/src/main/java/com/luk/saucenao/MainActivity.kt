@@ -2,7 +2,9 @@ package com.luk.saucenao
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -51,7 +53,14 @@ class MainActivity : ComponentActivity() {
 
         if (Intent.ACTION_SEND == intent.action) {
             if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-                waitForResults(intent.getParcelableExtra(Intent.EXTRA_STREAM)!!)
+                waitForResults(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Any::class.java)!!
+                    } else {
+                        @Suppress("Deprecation")
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM)!!
+                    }
+                )
             } else if (intent.hasExtra(Intent.EXTRA_TEXT)) {
                 waitForResults(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
             }
@@ -118,8 +127,15 @@ class MainActivity : ComponentActivity() {
                 if (data is Uri) {
                     val stream = ByteArrayOutputStream()
                     try {
-                        MediaStore.Images.Media.getBitmap(contentResolver, data)
-                            .compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            ImageDecoder.decodeBitmap(
+                                ImageDecoder.createSource(contentResolver, data)
+                            ).compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            MediaStore.Images.Media.getBitmap(contentResolver, data)
+                                .compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        }
                     } catch (e: IOException) {
                         Log.e(LOG_TAG, "Unable to read image bitmap", e)
                         return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
