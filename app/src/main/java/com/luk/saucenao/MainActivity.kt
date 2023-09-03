@@ -10,7 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.util.Pair
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     internal var selectedDatabases = mutableStateListOf<Int>()
 
     internal val getResultsFromFile =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
             uri?.let { waitForResults(it) }
         }
 
