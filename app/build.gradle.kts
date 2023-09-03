@@ -1,13 +1,11 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
 }
 
 android {
-    compileSdk = 33
 
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.luk.saucenao"
         minSdk = 21
@@ -66,22 +64,23 @@ android {
     lint {
         disable += "GoogleAppIndexingWarning"
     }
+    namespace = "com.luk.saucenao"
 }
 
 dependencies {
     // Kotlin
-    implementation(kotlin("stdlib", KotlinCompilerVersion.VERSION))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.1")
 
     // AndroidX
-    implementation("androidx.activity:activity-compose:1.6.1")
-    implementation("androidx.compose.foundation:foundation-layout:1.3.1")
-    implementation("androidx.compose.ui:ui:1.3.2")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.2")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.2")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha03")
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.compose.foundation:foundation-layout:1.5.0")
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha06")
 
     // Other
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
-    implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("org.jsoup:jsoup:1.15.3")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("org.jsoup:jsoup:1.16.1")
 }
