@@ -143,21 +143,29 @@ private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
                 ) {
                     resources.getStringArray(R.array.databases_entries)
                         .forEachIndexed { index, s ->
+                            val state = remember {
+                                mutableStateOf(selectedDatabases.contains(index))
+                            }
+                            val toggle = {
+                                if (state.value) {
+                                    selectedDatabases.remove(index)
+                                } else {
+                                    selectedDatabases.add(index)
+                                }
+                                state.value = selectedDatabases.contains(index)
+                            }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        onClick = {
+                                            toggle()
+                                        },
+                                    ),
                             ) {
-                                val state = remember {
-                                    mutableStateOf(selectedDatabases.contains(index))
-                                }
-                                val toggle = {
-                                    if (state.value) {
-                                        selectedDatabases.remove(index)
-                                    } else {
-                                        selectedDatabases.add(index)
-                                    }
-                                    state.value = selectedDatabases.contains(index)
-                                }
                                 Checkbox(
                                     checked = state.value,
                                     onCheckedChange = {
@@ -166,13 +174,6 @@ private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
                                 )
                                 Text(
                                     text = s,
-                                    modifier = Modifier.clickable(
-                                        indication = null,
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        onClick = {
-                                            toggle()
-                                        },
-                                    ),
                                 )
                             }
                         }
