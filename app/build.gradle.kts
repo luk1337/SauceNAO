@@ -56,6 +56,10 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     buildFeatures {
         compose = true
     }
