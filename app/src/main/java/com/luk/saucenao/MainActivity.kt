@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
             if (intent.hasExtra(Intent.EXTRA_STREAM)) {
                 waitForResults(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Any::class.java)!!
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)!!
                     } else {
                         @Suppress("Deprecation")
                         intent.getParcelableExtra(Intent.EXTRA_STREAM)!!
