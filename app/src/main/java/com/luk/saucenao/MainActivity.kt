@@ -54,6 +54,14 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        handleIntent(intent)
+
+        addOnNewIntentListener {
+            handleIntent(it)
+        }
+    }
+
+    private fun handleIntent(intent: Intent) {
         if (Intent.ACTION_SEND == intent.action) {
             if (intent.hasExtra(Intent.EXTRA_STREAM)) {
                 waitForResults(
