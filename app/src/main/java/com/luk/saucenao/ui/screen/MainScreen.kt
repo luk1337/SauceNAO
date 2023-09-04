@@ -56,7 +56,7 @@ fun MainScreen(mainActivity: MainActivity) {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = colorResource(id = R.color.colorPrimary),
-                )
+                ),
             )
         },
         content = {
@@ -82,7 +82,7 @@ fun MainScreen(mainActivity: MainActivity) {
                     SearchByUrl(
                         waitForResults = {
                             mainActivity.waitForResults(it)
-                        }
+                        },
                     )
                 }
 

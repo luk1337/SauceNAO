@@ -100,7 +100,7 @@ private fun ActionsDropdownMenu(expanded: MutableState<Boolean>, result: Results
         expanded = expanded.value,
         onDismissRequest = {
             expanded.value = false
-        }
+        },
     ) {
         DropdownMenuItem(
             text = {
@@ -114,7 +114,7 @@ private fun ActionsDropdownMenu(expanded: MutableState<Boolean>, result: Results
                     Toast.LENGTH_SHORT
                 ).show()
                 expanded.value = false
-            }
+            },
         )
         DropdownMenuItem(
             text = {
@@ -131,7 +131,7 @@ private fun ActionsDropdownMenu(expanded: MutableState<Boolean>, result: Results
                     )
                 )
                 expanded.value = false
-            }
+            },
         )
     }
 }
@@ -144,7 +144,7 @@ private fun ExtLinksDropdownMenu(expanded: MutableState<Boolean>, extUrls: List<
         expanded = expanded.value,
         onDismissRequest = {
             expanded.value = false
-        }
+        },
     ) {
         extUrls.forEach {
             DropdownMenuItem(
@@ -157,7 +157,7 @@ private fun ExtLinksDropdownMenu(expanded: MutableState<Boolean>, extUrls: List<
                             Intent(Intent.ACTION_VIEW, Uri.parse(it))
                         )
                     }
-                }
+                },
             )
         }
     }

@@ -35,7 +35,7 @@ fun ProgressDialog(
                 .fillMaxWidth()
                 .background(
                     color = AlertDialogDefaults.containerColor,
-                    shape = AlertDialogDefaults.shape
+                    shape = AlertDialogDefaults.shape,
                 ),
         ) {
             Column(

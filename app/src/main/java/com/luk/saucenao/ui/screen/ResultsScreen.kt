@@ -87,7 +87,7 @@ fun PreviewResultsScreen() {
                 FakeResult(),
                 FakeResult(),
                 FakeResult(),
-            )
+            ),
         )
     }
 }
@@ -97,7 +97,7 @@ fun PreviewResultsScreen() {
 fun PreviewEmptyResultsScreen() {
     Screen {
         ResultsScreen(
-            results = arrayListOf()
+            results = arrayListOf(),
         )
     }
 }
