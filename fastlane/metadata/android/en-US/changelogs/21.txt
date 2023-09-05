@@ -1,0 +1,8 @@
+* Added Italian translations
+* Fixed Chromium Intent.SEND handling
+* Made whole database row clickable
+* Removed READ_EXTERNAL_STORAGE permission
+* Switched from ActionBar to Jetpack Compose TopAppBar
+* Switched to PickVisualMedia contract
+* Updated build dependencies
+* Updated to non-deprecated APIs where possible
