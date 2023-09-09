@@ -1,0 +1,1 @@
+* Use GetContent() for devices that don't support photo picker
