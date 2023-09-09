@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,11 @@ class MainActivity : ComponentActivity() {
     internal val progressDialogFuture = mutableStateOf<Future<Void?>?>(null)
 
     internal var selectedDatabases = mutableStateListOf<Int>()
+
+    internal val getResultsFromFileLegacy =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { waitForResults(it) }
+        }
 
     internal val getResultsFromFile =
         registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
