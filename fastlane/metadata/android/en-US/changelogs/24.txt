@@ -1,0 +1,2 @@
+* Fixed broken back when result menu is open
+* Updated build dependencies
