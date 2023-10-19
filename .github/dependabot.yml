@@ -21,5 +21,9 @@ updates:
     registries:
       - google
       - maven-central
+    groups:
+      compose:
+        patterns:
+          - "androidx.compose.*"
     schedule:
       interval: "daily"
