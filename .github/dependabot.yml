@@ -25,5 +25,9 @@ updates:
       compose:
         patterns:
           - "androidx.compose.*"
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin.*"
+          - "org.jetbrains.kotlin:*"
     schedule:
       interval: "daily"
