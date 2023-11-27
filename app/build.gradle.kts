@@ -85,5 +85,5 @@ dependencies {
 
     // Other
     implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("org.jsoup:jsoup:1.16.2")
+    implementation("org.jsoup:jsoup:1.17.1")
 }
