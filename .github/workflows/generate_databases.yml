@@ -18,13 +18,17 @@ jobs:
     - name: Generate databases
       run: ./scripts/generate_databases.py
     - name: Commit changes
+      id: commit
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add app/src/main/res/values/arrays.xml
-        git commit -m "Regenerate databases list" || true
+        if git commit -m "Regenerate databases list"; then
+          echo "push=true" >> "$GITHUB_OUTPUT"
+        fi
     - name: Push changes to repo
       uses: ad-m/github-push-action@master
+      if: ${{ needs.commit.outputs.push == 'true' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
