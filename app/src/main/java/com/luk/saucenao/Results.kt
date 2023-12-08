@@ -54,7 +54,9 @@ class Results(document: Document) {
             val list = arrayListOf<String>()
 
             val elements = Elements()
-            elements.add(resultMatchInfo)
+            resultMatchInfo?.let {
+                elements.add(it)
+            }
             elements.addAll(resultContentColumns)
 
             elements.forEach {
