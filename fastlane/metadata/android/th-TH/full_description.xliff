@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file id="24" original="/master/fastlane/metadata/android/en-US/full_description.txt" source-language="en" target-language="th" datatype="plaintext" project-id="501872" tool-id="crowdin">
+    <header>
+      <tool tool-id="crowdin" tool-name="Crowdin" tool-version="1.1"/>
+    </header>
+    <body>
+      <trans-unit id="30">
+        <source>Unofficial application for SauceNAO reverse image search engine.</source>
+        <target state="translated">แอพพลิเคชั่นแบบไม่เป็นทางการของเครื่องมือค้นหารูปภาพย้อนกลับ SauceNAO</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
