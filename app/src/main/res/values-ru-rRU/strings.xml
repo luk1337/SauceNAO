@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="select_image">Выберите изображение</string>
-    <string name="search_by_image_url">Поиск изображения по ссылке</string>
-    <string name="search_by_image_url_error">Пожалуйста, введите правильную ссылку</string>
-    <string name="all_databases">Все базы данных</string>
-    <string name="select_databases">Выбор базы данных</string>
-    <plurals name="selected_databases">
-        <item quantity="one">%d база данных</item>
-        <item quantity="few">%d базы даныч</item>
-        <item quantity="many">%d баз даныч</item>
-        <item quantity="other">%d базы данных</item>
-    </plurals>
-    <string name="results">Результаты</string>
-    <string name="no_results">По запросу ничего не найдено</string>
-    <string name="loading_results">Загружаем результаты</string>
-    <string name="please_wait">Пожалуйста, подождите…</string>
-    <string name="error_cannot_load_results">Не удалось загрузить результаты!</string>
-    <string name="error_too_many_requests">Слишком Много Запросов!</string>
-    <string name="copy_to_clipboard_item">Копировать в буфер</string>
-    <string name="share_item">Поделиться</string>
-    <string name="share_with">Поделиться с помощью</string>
-    <string name="title_copied_to_clipboard">Название скопировано в буфер!</string>
+<resources>
+  <string name="select_image">Выберите изображение</string>
+  <string name="search_by_image_url">Поиск изображения по ссылке</string>
+  <string name="search_by_image_url_error">Пожалуйста, введите правильную ссылку</string>
+  <string name="all_databases">Все базы данных</string>
+  <string name="select_databases">Выбор базы данных</string>
+  <plurals name="selected_databases">
+    <item quantity="one">%d база данных</item>
+    <item quantity="few">%d базы даныч</item>
+    <item quantity="many">%d баз даныч</item>
+    <item quantity="other">%d базы данных</item>
+  </plurals>
+  <string name="results">Результаты</string>
+  <string name="no_results">По запросу ничего не найдено</string>
+  <string name="loading_results">Загружаем результаты</string>
+  <string name="please_wait">Пожалуйста, подождите…</string>
+  <string name="error_cannot_load_results">Не удалось загрузить результаты!</string>
+  <string name="error_too_many_requests">Слишком Много Запросов!</string>
+  <string name="copy_to_clipboard_item">Копировать в буфер</string>
+  <string name="share_item">Поделиться</string>
+  <string name="share_with">Поделиться с помощью</string>
+  <string name="title_copied_to_clipboard">Название скопировано в буфер!</string>
 </resources>
