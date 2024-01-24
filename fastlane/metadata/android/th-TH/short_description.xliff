@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file id="26" original="/master/fastlane/metadata/android/en-US/short_description.txt" source-language="en" target-language="th" datatype="plaintext" project-id="501872" tool-id="crowdin">
+    <header>
+      <tool tool-id="crowdin" tool-name="Crowdin" tool-version="1.1"/>
+    </header>
+    <body>
+      <trans-unit id="32">
+        <source>Unofficial SauceNAO client.</source>
+        <target state="translated">ไคลเอนต์ที่ไม่เป็นทางการของ SauceNAO</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
