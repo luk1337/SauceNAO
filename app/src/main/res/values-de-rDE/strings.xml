@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="select_image">Bild auswählen</string>
-    <string name="search_by_image_url">Mit Bild-URL suchen</string>
-    <string name="search_by_image_url_error">Bitte geben Sie eine gültige URL ein</string>
-    <string name="all_databases">Alle Datenbanken</string>
-    <string name="select_databases">Datenbank auswählen</string>
-    <plurals name="selected_databases">
-        <item quantity="one">%d Datenbank</item>
-        <item quantity="other">%d Datenbanken</item>
-    </plurals>
-    <string name="results">Ergebnisse</string>
-    <string name="no_results">Keine Ergebnisse</string>
-    <string name="loading_results">Ergebnisse werden geladen</string>
-    <string name="please_wait">Bitte warten…</string>
-    <string name="error_cannot_load_results">Ergebnisse konnten nicht geladen werden!</string>
-    <string name="error_too_many_requests">Zu viele Anfragen!</string>
-    <string name="copy_to_clipboard_item">In die Zwischenablage kopieren</string>
-    <string name="share_item">Teilen</string>
-    <string name="share_with">Teilen mit</string>
-    <string name="title_copied_to_clipboard">Titel in Zwischenablage kopiert!</string>
+<resources>
+  <string name="select_image">Bild auswählen</string>
+  <string name="search_by_image_url">Mit Bild-URL suchen</string>
+  <string name="search_by_image_url_error">Bitte geben Sie eine gültige URL ein</string>
+  <string name="all_databases">Alle Datenbanken</string>
+  <string name="select_databases">Datenbank auswählen</string>
+  <plurals name="selected_databases">
+    <item quantity="one">%d Datenbank</item>
+    <item quantity="other">%d Datenbanken</item>
+  </plurals>
+  <string name="results">Ergebnisse</string>
+  <string name="no_results">Keine Ergebnisse</string>
+  <string name="loading_results">Ergebnisse werden geladen</string>
+  <string name="please_wait">Bitte warten…</string>
+  <string name="error_cannot_load_results">Ergebnisse konnten nicht geladen werden!</string>
+  <string name="error_too_many_requests">Zu viele Anfragen!</string>
+  <string name="copy_to_clipboard_item">In die Zwischenablage kopieren</string>
+  <string name="share_item">Teilen</string>
+  <string name="share_with">Teilen mit</string>
+  <string name="title_copied_to_clipboard">Titel in Zwischenablage kopiert!</string>
 </resources>
