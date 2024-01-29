@@ -17,5 +17,6 @@
     <string name="error_too_many_requests">Liian monta pyyntöä!</string>
     <string name="copy_to_clipboard_item">Kopio leikepöydälle</string>
     <string name="share_item">Jaa</string>
+    <string name="share_with">Jaa kanssa</string>
     <string name="title_copied_to_clipboard">Otsikko kopiotu leikepöydälle!</string>
 </resources>
