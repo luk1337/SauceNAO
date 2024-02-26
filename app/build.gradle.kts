@@ -85,6 +85,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0")
 
     // Other
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("org.jsoup:jsoup:1.17.2")
 }
