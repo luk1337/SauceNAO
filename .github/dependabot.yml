@@ -12,6 +12,10 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     groups:
+      agp:
+        patterns:
+          - "com.android.application"
+          - "com.android.library"
       compose:
         patterns:
           - "androidx.compose.*"
