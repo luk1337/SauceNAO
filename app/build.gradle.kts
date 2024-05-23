@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -63,10 +64,6 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
-
     lint {
         disable += "GoogleAppIndexingWarning"
     }
@@ -74,7 +71,7 @@ android {
 
 dependencies {
     // Kotlin
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.9.24"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.0.0"))
 
     // AndroidX
     implementation("androidx.activity:activity-compose:1.9.0")
