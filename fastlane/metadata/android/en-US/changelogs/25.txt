@@ -1,0 +1,2 @@
+* Made photo picker opt-outable (3 dots -> Use photo picker)
+* Updated build dependencies
