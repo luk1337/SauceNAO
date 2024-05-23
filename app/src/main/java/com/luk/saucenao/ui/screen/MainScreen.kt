@@ -143,7 +143,7 @@ fun MainScreen(mainActivity: MainActivity) {
                                     PickVisualMediaRequest(ImageOnly)
                                 )
                             } else {
-                                mainActivity.getResultsFromFileLegacy.launch("image/*")
+                                mainActivity.getResultsFromFileLegacy.launch(arrayOf("image/*"))
                             }
                         },
                     ) {

@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
     internal var selectedDatabases = mutableStateListOf<Int>()
 
     internal val getResultsFromFileLegacy =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let { waitForResults(it) }
         }
 
