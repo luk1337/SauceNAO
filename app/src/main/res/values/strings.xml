@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name" translatable="false">SauceNAO</string>
 
+    <string name="use_photo_picker">Use photo picker</string>
+
     <string name="select_image">Select image</string>
 
     <string name="search_by_image_url">Search by image URL</string>

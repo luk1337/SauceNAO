@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.7")
     implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Other
     implementation("io.coil-kt:coil-compose:2.6.0")

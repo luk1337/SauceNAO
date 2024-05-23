@@ -16,9 +16,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,8 +32,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,18 +47,76 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.preference.PreferenceManager
 import com.luk.saucenao.MainActivity
 import com.luk.saucenao.R
+import com.luk.saucenao.ext.usePhotoPicker
 import com.luk.saucenao.ui.component.ProgressDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(mainActivity: MainActivity) {
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+    val isPhotoPickerAvailable = PickVisualMedia.isPhotoPickerAvailable(mainActivity)
+
+    var showMenu by remember { mutableStateOf(false) }
+    var usePhotoPicker by remember {
+        mutableStateOf(sharedPreferences.usePhotoPicker ?: isPhotoPickerAvailable)
+    }
+
+    val togglePhotoPicker = {
+        usePhotoPicker = !usePhotoPicker
+        sharedPreferences.usePhotoPicker = usePhotoPicker
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(text = stringResource(id = R.string.app_name))
+                },
+                actions = {
+                    if (isPhotoPickerAvailable) {
+                        IconButton(
+                            onClick = {
+                                showMenu = true
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = {
+                            showMenu = false
+                        },
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(end = 8.dp),
+                                ) {
+                                    Checkbox(
+                                        checked = usePhotoPicker,
+                                        onCheckedChange = {
+                                            togglePhotoPicker()
+                                        },
+                                    )
+                                    Text(
+                                        text = stringResource(id = R.string.use_photo_picker),
+                                        fontSize = 16.sp,
+                                    )
+                                }
+                            },
+                            onClick = togglePhotoPicker,
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = colorResource(id = R.color.colorPrimary),
@@ -75,7 +138,7 @@ fun MainScreen(mainActivity: MainActivity) {
                 ) {
                     Button(
                         onClick = {
-                            if (PickVisualMedia.isPhotoPickerAvailable(mainActivity)) {
+                            if (usePhotoPicker) {
                                 mainActivity.getResultsFromFile.launch(
                                     PickVisualMediaRequest(ImageOnly)
                                 )
