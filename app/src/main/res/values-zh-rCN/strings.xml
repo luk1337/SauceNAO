@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="use_photo_picker">使用照片选择器</string>
     <string name="select_image">选择图片</string>
     <string name="search_by_image_url">按图片链接搜索</string>
     <string name="search_by_image_url_error">请输入有效地链接</string>
