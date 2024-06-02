@@ -1,10 +1,14 @@
 package com.luk.saucenao.ui.screen
 
+import android.os.Build
 import android.webkit.URLUtil
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +43,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draganddrop.DragAndDropEvent
+import androidx.compose.ui.draganddrop.DragAndDropTarget
+import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -51,10 +58,11 @@ import androidx.compose.ui.unit.sp
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.MainActivity
 import com.luk.saucenao.R
+import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ext.usePhotoPicker
 import com.luk.saucenao.ui.component.ProgressDialog
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(mainActivity: MainActivity) {
     val context = LocalContext.current
@@ -127,6 +135,28 @@ fun MainScreen(mainActivity: MainActivity) {
         content = {
             Column(
                 modifier = Modifier
+                    .dragAndDropTarget(
+                        shouldStartDragAndDrop = { true },
+                        target = object : DragAndDropTarget {
+                            @RequiresApi(Build.VERSION_CODES.N)
+                            override fun onDrop(event: DragAndDropEvent): Boolean {
+                                val dragEvent = event.toAndroidDragEvent()
+                                val clipItem = dragEvent.clipData.getItemAt(0)
+
+                                when {
+                                    clipItem.text != null ->
+                                        mainActivity.waitForResults(clipItem.text.toString())
+                                    clipItem.uri != null -> runCatching {
+                                        mainActivity.requestDragAndDropPermissions(dragEvent)
+                                        mainActivity.waitForResults(
+                                            clipItem.uri.pngDataStream(context)
+                                        )
+                                    }
+                                }
+
+                                return true
+                            }
+                        })
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .padding(it),

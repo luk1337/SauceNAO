@@ -142,7 +142,9 @@ class MainActivity : ComponentActivity() {
                     connection.data("dbs[]", databasesValues[it].toString())
                 }
 
-                if (data is Uri) {
+                if (data is ByteArrayInputStream) {
+                    connection.data("file", "image.png", data)
+                } else if (data is Uri) {
                     try {
                         connection.data("file", "image.png", data.pngDataStream(this@MainActivity))
                     } catch (e: IOException) {
