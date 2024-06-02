@@ -57,8 +57,9 @@ import com.luk.saucenao.ui.component.ProgressDialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(mainActivity: MainActivity) {
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mainActivity)
-    val isPhotoPickerAvailable = PickVisualMedia.isPhotoPickerAvailable(mainActivity)
+    val context = LocalContext.current
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    val isPhotoPickerAvailable = PickVisualMedia.isPhotoPickerAvailable(context)
 
     var showMenu by remember { mutableStateOf(false) }
     var usePhotoPicker by remember {
