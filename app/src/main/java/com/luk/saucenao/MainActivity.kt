@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.util.Pair
+import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ui.screen.MainScreen
 import com.luk.saucenao.ui.screen.Screen
 import org.jsoup.Connection
@@ -142,22 +143,12 @@ class MainActivity : ComponentActivity() {
                 }
 
                 if (data is Uri) {
-                    val stream = ByteArrayOutputStream()
                     try {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            ImageDecoder.decodeBitmap(
-                                ImageDecoder.createSource(contentResolver, data)
-                            ).compress(Bitmap.CompressFormat.PNG, 100, stream)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            MediaStore.Images.Media.getBitmap(contentResolver, data)
-                                .compress(Bitmap.CompressFormat.PNG, 100, stream)
-                        }
+                        connection.data("file", "image.png", data.pngDataStream(this@MainActivity))
                     } catch (e: IOException) {
                         Log.e(LOG_TAG, "Unable to read image bitmap", e)
                         return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
                     }
-                    connection.data("file", "image.png", ByteArrayInputStream(stream.toByteArray()))
                 } else if (data is String) {
                     connection.data("url", data)
                 }
