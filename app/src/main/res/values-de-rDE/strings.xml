@@ -2,7 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Bild auswählen</string>
     <string name="search_by_image_url">Mit Bild-URL suchen</string>
-    <string name="search_by_image_url_error">Bitte geben Sie eine gültige URL ein</string>
     <string name="all_databases">Alle Datenbanken</string>
     <string name="select_databases">Datenbank auswählen</string>
     <plurals name="selected_databases">

@@ -2,7 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Выберите изображение</string>
     <string name="search_by_image_url">Поиск изображения по ссылке</string>
-    <string name="search_by_image_url_error">Пожалуйста, введите правильную ссылку</string>
     <string name="all_databases">Все базы данных</string>
     <string name="select_databases">Выбор базы данных</string>
     <plurals name="selected_databases">
