@@ -2,7 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="select_image">Sélectionner une image</string>
     <string name="search_by_image_url">Rechercher par URL de l\'image</string>
-    <string name="search_by_image_url_error">Veuillez saisir une URL valide</string>
     <string name="all_databases">Toutes les bases de données</string>
     <string name="select_databases">Sélectionner les bases de données</string>
     <string name="results">Résultats</string>
@@ -13,5 +12,6 @@
     <string name="error_too_many_requests">Trop de demandes !</string>
     <string name="copy_to_clipboard_item">Copier dans le presse-papier</string>
     <string name="share_item">Partager</string>
+    <string name="share_with">Partager avec</string>
     <string name="title_copied_to_clipboard">Titre copié dans le presse-papiers !</string>
 </resources>
