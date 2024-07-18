@@ -83,6 +83,6 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Other
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("org.jsoup:jsoup:1.18.1")
 }
