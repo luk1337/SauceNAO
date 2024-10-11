@@ -71,7 +71,7 @@ android {
 
 dependencies {
     // Kotlin
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.0.20"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.0.21"))
 
     // AndroidX
     implementation("androidx.activity:activity-compose:1.9.2")
