@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install dependencies
-      run: pip3 install lxml
+      run: sudo apt update && sudo apt -y install python3-lxml
     - name: Generate databases
       run: ./scripts/generate_databases.py
     - name: Commit changes
