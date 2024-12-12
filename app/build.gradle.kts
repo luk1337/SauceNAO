@@ -75,10 +75,10 @@ dependencies {
 
     // AndroidX
     implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.compose.foundation:foundation-layout:1.7.5")
-    implementation("androidx.compose.ui:ui:1.7.5")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.7.5")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.7.5")
+    implementation("androidx.compose.foundation:foundation-layout:1.7.6")
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.7.6")
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
 
