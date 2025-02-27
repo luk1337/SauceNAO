@@ -74,7 +74,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.10"))
 
     // AndroidX
-    implementation("androidx.activity:activity-compose:1.10.0")
+    implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.compose.foundation:foundation-layout:1.7.8")
     implementation("androidx.compose.ui:ui:1.7.8")
     implementation("androidx.compose.ui:ui-tooling-preview:1.7.8")
