@@ -137,6 +137,7 @@ class MainActivity : ComponentActivity() {
             try {
                 val connection = Jsoup.connect("https://saucenao.com/search.php")
                     .method(Connection.Method.POST)
+                    .ignoreHttpErrors(true)
                     .data("hide", BuildConfig.SAUCENAO_HIDE)
                 selectedDatabases.forEach {
                     connection.data("dbs[]", databasesValues[it].toString())
