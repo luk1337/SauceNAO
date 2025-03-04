@@ -1,10 +1,9 @@
 package com.luk.saucenao.ui.screen
 
+import android.app.Application
 import android.os.Build
 import android.webkit.URLUtil
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -35,12 +34,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draganddrop.DragAndDropEvent
@@ -58,14 +57,19 @@ import androidx.compose.ui.unit.sp
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.MainActivity
 import com.luk.saucenao.R
+import com.luk.saucenao.SauceNaoViewModel
 import com.luk.saucenao.ext.apiKey
-import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ext.usePhotoPicker
 import com.luk.saucenao.ui.component.ProgressDialog
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainActivity: MainActivity) {
+fun MainScreen(
+    mainActivity: MainActivity,
+    viewModel: SauceNaoViewModel,
+    onImagePickerClick: () -> Unit,
+    onLegacyPickerClick: () -> Unit,
+) {
     val context = LocalContext.current
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val isPhotoPickerAvailable = PickVisualMedia.isPhotoPickerAvailable(context)
@@ -79,6 +83,9 @@ fun MainScreen(mainActivity: MainActivity) {
         usePhotoPicker = !usePhotoPicker
         sharedPreferences.usePhotoPicker = usePhotoPicker
     }
+
+    val apiKeyDialogState by viewModel.apiKeyDialogState.collectAsState()
+    val progressState by viewModel.progressState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -114,7 +121,7 @@ fun MainScreen(mainActivity: MainActivity) {
                                 )
                             },
                             onClick = {
-                                mainActivity.showApiKeyDialog.value = true
+                                viewModel.toggleApiKeyDialog(true)
                                 showMenu = false
                             },
                         )
@@ -158,12 +165,18 @@ fun MainScreen(mainActivity: MainActivity) {
                                 val clipItem = dragEvent.clipData.getItemAt(0)
 
                                 when {
-                                    clipItem.text != null ->
-                                        mainActivity.waitForResults(clipItem.text.toString())
+                                    clipItem.text != null -> {
+                                        viewModel.fetchResults(
+                                            data = clipItem.text.toString(),
+                                            apiKey = sharedPreferences.apiKey,
+                                        )
+                                    }
+
                                     clipItem.uri != null -> runCatching {
                                         mainActivity.requestDragAndDropPermissions(dragEvent)
-                                        mainActivity.waitForResults(
-                                            clipItem.uri.pngDataStream(context)
+                                        viewModel.fetchResults(
+                                            data = clipItem.uri,
+                                            apiKey = sharedPreferences.apiKey,
                                         )
                                     }
                                 }
@@ -184,45 +197,51 @@ fun MainScreen(mainActivity: MainActivity) {
                     Button(
                         onClick = {
                             if (usePhotoPicker) {
-                                mainActivity.getResultsFromFile.launch(
-                                    PickVisualMediaRequest(ImageOnly)
-                                )
+                                onImagePickerClick()
                             } else {
-                                mainActivity.getResultsFromFileLegacy.launch(arrayOf("image/*"))
+                                onLegacyPickerClick()
                             }
                         },
                     ) {
                         Text(text = stringResource(R.string.select_image))
                     }
                     SearchByUrl(
-                        waitForResults = {
-                            mainActivity.waitForResults(it)
+                        waitForResults = { data ->
+                            viewModel.fetchResults(
+                                data = data,
+                                apiKey = sharedPreferences.apiKey,
+                            )
                         },
                     )
                 }
 
-                DatabaseSpinner(mainActivity.selectedDatabases)
+                DatabaseSpinner(viewModel)
             }
         }
     )
 
-    if (mainActivity.showApiKeyDialog.value) {
-        ApiKeyDialog(mainActivity)
+
+
+    if (apiKeyDialogState) {
+        ApiKeyDialog(
+            onDismiss = { viewModel.toggleApiKeyDialog(false) },
+        )
     }
 
-    if (mainActivity.progressDialogFuture.value != null) {
+    if (progressState is SauceNaoViewModel.ProgressState.Loading) {
         ProgressDialog(
             title = stringResource(id = R.string.loading_results),
             onDismissRequest = {
-                mainActivity.progressDialogFuture.value?.cancel(true)
-                mainActivity.progressDialogFuture.value = null
+                viewModel.cancel()
             },
         )
     }
 }
 
 @Composable
-private fun ApiKeyDialog(mainActivity: MainActivity) {
+private fun ApiKeyDialog(
+    onDismiss: () -> Unit,
+) {
     val context = LocalContext.current
     val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -232,7 +251,7 @@ private fun ApiKeyDialog(mainActivity: MainActivity) {
 
     AlertDialog(
         onDismissRequest = {
-            mainActivity.showApiKeyDialog.value = false
+            onDismiss()
         },
         text = {
             Column(
@@ -255,8 +274,8 @@ private fun ApiKeyDialog(mainActivity: MainActivity) {
         confirmButton = {
             Button(
                 onClick = {
-                    mainActivity.showApiKeyDialog.value = false
                     sharedPreferences.apiKey = apiKey.value
+                    onDismiss()
                 },
             ) {
                 Text(text = stringResource(android.R.string.ok))
@@ -266,9 +285,13 @@ private fun ApiKeyDialog(mainActivity: MainActivity) {
 }
 
 @Composable
-private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
+private fun DatabaseSpinner(
+    viewModel: SauceNaoViewModel
+) {
     val context = LocalContext.current
     val resources = context.resources
+
+    val selectedDatabases by viewModel.selectedDatabases.collectAsState()
 
     val databaseSelectText = remember {
         derivedStateOf {
@@ -332,9 +355,13 @@ private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
                             }
                             val toggle = {
                                 if (state.value) {
-                                    selectedDatabases.remove(index)
+                                    viewModel.updateSelectedDatabases(
+                                        selectedDatabases.filterNot { it == index }
+                                    )
                                 } else {
-                                    selectedDatabases.add(index)
+                                    viewModel.updateSelectedDatabases(
+                                        selectedDatabases + index
+                                    )
                                 }
                                 state.value = !state.value
                             }
@@ -378,7 +405,6 @@ private fun DatabaseSpinner(selectedDatabases: SnapshotStateList<Int>) {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun SearchByUrl(waitForResults: (Any) -> Unit) {
     val clipboardManager = LocalClipboardManager.current
 
@@ -439,7 +465,16 @@ private fun SearchByUrl(waitForResults: (Any) -> Unit) {
 @Preview
 @Composable
 fun PreviewMainScreen() {
+    val mockViewModel = SauceNaoViewModel(
+        application = LocalContext.current.applicationContext as Application,
+    )
+
     Screen {
-        MainScreen(mainActivity = MainActivity())
+        MainScreen(
+            mainActivity = MainActivity(),
+            viewModel = mockViewModel,
+            onImagePickerClick = {},
+            onLegacyPickerClick = {},
+        )
     }
 }

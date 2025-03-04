@@ -4,54 +4,27 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.core.util.Pair
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.ext.apiKey
-import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ui.screen.MainScreen
 import com.luk.saucenao.ui.screen.Screen
-import org.jsoup.Connection
-import org.jsoup.Jsoup
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.InterruptedIOException
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
-import androidx.core.net.toUri
 
 class MainActivity : ComponentActivity() {
-    private val executorService = Executors.newSingleThreadExecutor()
-
-    private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
-
-    private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
-
-    internal val progressDialogFuture = mutableStateOf<Future<Void?>?>(null)
-
-    internal val showApiKeyDialog = mutableStateOf(false)
-
-    internal var selectedDatabases = mutableStateListOf<Int>()
-
-    internal val getResultsFromFileLegacy =
-        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-            uri?.let { waitForResults(it) }
-        }
-
-    internal val getResultsFromFile =
-        registerForActivityResult(PickVisualMedia()) { uri: Uri? ->
-            uri?.let { waitForResults(it) }
-        }
+    private val sharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,156 +32,98 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            Screen {
-                MainScreen(mainActivity = this)
+            val viewModel: SauceNaoViewModel = viewModel()
+            val progressState by viewModel.progressState.collectAsState()
+
+            val imagePickerLauncher = rememberLauncherForActivityResult(
+                contract = PickVisualMedia(),
+                onResult = { uri ->
+                    uri?.let { handleImageSelection(it, viewModel) }
+                }
+            )
+
+            val legacyDocumentPickerLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.OpenDocument(),
+                onResult = { uri ->
+                    uri?.let { handleImageSelection(it, viewModel) }
+                }
+            )
+
+            LaunchedEffect(intent) {
+                handleIntent(intent, viewModel)
+
+                addOnNewIntentListener {
+                    handleIntent(it, viewModel)
+                }
             }
-        }
 
-        handleIntent(intent)
-
-        addOnNewIntentListener {
-            handleIntent(it)
-        }
-    }
-
-    private fun handleIntent(intent: Intent) {
-        if (Intent.ACTION_SEND == intent.action) {
-            if (intent.hasExtra(Intent.EXTRA_STREAM)) {
-                waitForResults(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)!!
-                    } else {
-                        @Suppress("Deprecation")
-                        intent.getParcelableExtra(Intent.EXTRA_STREAM)!!
+            Screen {
+                MainScreen(
+                    mainActivity = this,
+                    viewModel = viewModel,
+                    onImagePickerClick = {
+                        imagePickerLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+                    },
+                    onLegacyPickerClick = {
+                        legacyDocumentPickerLauncher.launch(arrayOf("image/*"))
                     }
                 )
-            } else if (intent.hasExtra(Intent.EXTRA_TEXT)) {
-                waitForResults(intent.getStringExtra(Intent.EXTRA_TEXT)!!)
+            }
+
+            LaunchedEffect(progressState) {
+                when (val state = progressState) {
+                    is SauceNaoViewModel.ProgressState.Success -> {
+                        val intent = Intent(this@MainActivity, ResultsActivity::class.java).apply {
+                            putExtra(ResultsActivity.EXTRA_RESULTS, state.results)
+                        }
+                        startActivity(intent)
+                    }
+
+                    is SauceNaoViewModel.ProgressState.Error -> {
+                        Toast.makeText(
+                            this@MainActivity,
+                            state.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    else -> {} // Idle state, do nothing
+                }
             }
         }
     }
 
-    internal fun waitForResults(data: Any) {
-        progressDialogFuture.value = executorService.submit(GetResultsTask(data))
+    private fun handleImageSelection(uri: Uri, viewModel: SauceNaoViewModel) {
+        viewModel.fetchResults(
+            data = uri,
+            apiKey = sharedPreferences.apiKey,
+        )
     }
 
-    inner class GetResultsTask(private val data: Any?) : Callable<Void?> {
-        override fun call(): Void? {
-            if (isFinishing) {
-                return null
-            }
-
-            val result = fetchResult()
-
-            val handler = Handler(mainLooper)
-            handler.post { progressDialogFuture.value = null }
-
-            when (result.first) {
-                REQUEST_RESULT_OK -> {
-                    val bundle = Bundle()
-                    bundle.putString(ResultsActivity.EXTRA_RESULTS, result.second)
-
-                    val intent = Intent(this@MainActivity, ResultsActivity::class.java)
-                    intent.putExtras(bundle)
-
-                    handler.post { startActivity(intent) }
-                }
-                REQUEST_RESULT_GENERIC_ERROR -> {
-                    handler.post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            R.string.error_cannot_load_results,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                REQUEST_RESULT_TOO_MANY_REQUESTS -> {
-                    handler.post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            R.string.error_too_many_requests,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                REQUEST_RESULT_CLOUDFLARE_CHALLENGE -> {
-                    handler.post {
-                        Toast.makeText(
-                            this@MainActivity,
-                            R.string.error_cloudflare_challenge,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-
-            return null
-        }
-
-        private fun fetchResult(): Pair<Int, String?> {
-            try {
-                val url = "https://saucenao.com/search.php".toUri()
-                    .buildUpon()
-                    .appendQueryParameter("api_key", sharedPreferences.apiKey)
-                    .appendQueryParameter("output_type", "0")
-                    .build()
-                val connection = Jsoup.connect(url.toString())
-                    .method(Connection.Method.POST)
-                    .ignoreHttpErrors(true)
-                    .data("hide", BuildConfig.SAUCENAO_HIDE)
-                selectedDatabases.forEach {
-                    connection.data("dbs[]", databasesValues[it].toString())
-                }
-
-                if (data is ByteArrayInputStream) {
-                    connection.data("file", "image.png", data)
-                } else if (data is Uri) {
-                    try {
-                        connection.data("file", "image.png", data.pngDataStream(this@MainActivity))
-                    } catch (e: IOException) {
-                        Log.e(LOG_TAG, "Unable to read image bitmap", e)
-                        return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
-                    }
-                } else if (data is String) {
-                    connection.data("url", data)
-                }
-
-                val response = connection.execute()
-                if (response.statusCode() != 200) {
-                    Log.e(LOG_TAG, "HTTP request returned code: ${response.statusCode()}")
-                    return when (response.statusCode()) {
-                        403 -> Pair(if (response.headers()["cf-mitigated"] == "challenge") {
-                            REQUEST_RESULT_CLOUDFLARE_CHALLENGE
+    private fun handleIntent(intent: Intent, viewModel: SauceNaoViewModel) {
+        when (intent.action) {
+            Intent.ACTION_SEND -> {
+                when {
+                    intent.hasExtra(Intent.EXTRA_STREAM) -> {
+                        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
                         } else {
-                            REQUEST_RESULT_GENERIC_ERROR
-                        }, null)
-                        429 -> Pair(REQUEST_RESULT_TOO_MANY_REQUESTS, null)
-                        else -> Pair(REQUEST_RESULT_GENERIC_ERROR, null)
+                            @Suppress("DEPRECATION")
+                            intent.getParcelableExtra(Intent.EXTRA_STREAM)
+                        }
+                        uri?.let { handleImageSelection(it, viewModel) }
+                    }
+
+                    intent.hasExtra(Intent.EXTRA_TEXT) -> {
+                        intent.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
+                            viewModel.fetchResults(
+                                data = url,
+                                apiKey = sharedPreferences.apiKey,
+                            )
+                        }
                     }
                 }
-
-                val body = response.body()
-                if (body.isEmpty()) {
-                    return Pair(REQUEST_RESULT_INTERRUPTED, null)
-                }
-
-                return Pair(REQUEST_RESULT_OK, body)
-            } catch (e: InterruptedIOException) {
-                return Pair(REQUEST_RESULT_INTERRUPTED, null)
-            } catch (e: IOException) {
-                Log.e(LOG_TAG, "Unable to send HTTP request", e)
-                return Pair(REQUEST_RESULT_GENERIC_ERROR, null)
             }
         }
-    }
-
-    companion object {
-        private val LOG_TAG = MainActivity::class.java.simpleName
-
-        private const val REQUEST_RESULT_OK = 0
-        private const val REQUEST_RESULT_INTERRUPTED = 1
-        private const val REQUEST_RESULT_GENERIC_ERROR = 2
-        private const val REQUEST_RESULT_TOO_MANY_REQUESTS = 3
-        private const val REQUEST_RESULT_CLOUDFLARE_CHALLENGE = 4
     }
 }
