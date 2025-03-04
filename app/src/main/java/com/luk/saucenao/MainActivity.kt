@@ -1,13 +1,10 @@
 package com.luk.saucenao
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -24,7 +21,6 @@ import com.luk.saucenao.ui.screen.Screen
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.util.concurrent.Callable
