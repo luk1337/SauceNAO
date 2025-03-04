@@ -1,0 +1,3 @@
+* Added API key setting
+* Added Cloudflare challenge detection
+* Updated build dependencies
