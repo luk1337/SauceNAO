@@ -220,8 +220,6 @@ fun MainScreen(
         }
     )
 
-
-
     if (apiKeyDialogState) {
         ApiKeyDialog(
             onDismiss = { viewModel.toggleApiKeyDialog(false) },
