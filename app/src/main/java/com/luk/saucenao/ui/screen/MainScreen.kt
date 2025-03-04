@@ -109,17 +109,18 @@ fun MainScreen(mainActivity: MainActivity) {
                             text = {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(end = 8.dp),
+                                    modifier = Modifier.padding(end = 12.dp),
                                 ) {
+                                    Text(
+                                        text = stringResource(id = R.string.use_photo_picker),
+                                        fontSize = 16.sp,
+                                        modifier = Modifier.fillMaxWidth(),
+                                    )
                                     Checkbox(
                                         checked = usePhotoPicker,
                                         onCheckedChange = {
                                             togglePhotoPicker()
                                         },
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.use_photo_picker),
-                                        fontSize = 16.sp,
                                     )
                                 }
                             },
