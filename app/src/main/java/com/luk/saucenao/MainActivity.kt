@@ -124,6 +124,15 @@ class MainActivity : ComponentActivity() {
                         ).show()
                     }
                 }
+                REQUEST_RESULT_CLOUDFLARE_CHALLENGE -> {
+                    handler.post {
+                        Toast.makeText(
+                            this@MainActivity,
+                            R.string.error_cloudflare_challenge,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
 
             return null
@@ -156,6 +165,11 @@ class MainActivity : ComponentActivity() {
                 if (response.statusCode() != 200) {
                     Log.e(LOG_TAG, "HTTP request returned code: ${response.statusCode()}")
                     return when (response.statusCode()) {
+                        403 -> Pair(if (response.headers()["cf-mitigated"] == "challenge") {
+                            REQUEST_RESULT_CLOUDFLARE_CHALLENGE
+                        } else {
+                            REQUEST_RESULT_GENERIC_ERROR
+                        }, null)
                         429 -> Pair(REQUEST_RESULT_TOO_MANY_REQUESTS, null)
                         else -> Pair(REQUEST_RESULT_GENERIC_ERROR, null)
                     }
@@ -183,5 +197,6 @@ class MainActivity : ComponentActivity() {
         private const val REQUEST_RESULT_INTERRUPTED = 1
         private const val REQUEST_RESULT_GENERIC_ERROR = 2
         private const val REQUEST_RESULT_TOO_MANY_REQUESTS = 3
+        private const val REQUEST_RESULT_CLOUDFLARE_CHALLENGE = 4
     }
 }

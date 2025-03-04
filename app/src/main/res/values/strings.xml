@@ -23,6 +23,7 @@
     <string name="please_wait">Please wait…</string>
 
     <string name="error_cannot_load_results">Unable to load results!</string>
+    <string name="error_cloudflare_challenge">Request blocked by Cloudflare!</string>
     <string name="error_too_many_requests">Too many requests!</string>
 
     <string name="copy_to_clipboard_item">Copy to clipboard</string>
