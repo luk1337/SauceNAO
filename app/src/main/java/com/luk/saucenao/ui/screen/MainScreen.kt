@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.MainActivity
 import com.luk.saucenao.R
+import com.luk.saucenao.ext.apiKey
 import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ext.usePhotoPicker
 import com.luk.saucenao.ui.component.ProgressDialog
@@ -105,6 +106,18 @@ fun MainScreen(mainActivity: MainActivity) {
                             showMenu = false
                         },
                     ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(id = R.string.api_key),
+                                    fontSize = 16.sp,
+                                )
+                            },
+                            onClick = {
+                                mainActivity.showApiKeyDialog.value = true
+                                showMenu = false
+                            },
+                        )
                         DropdownMenuItem(
                             text = {
                                 Row(
@@ -193,6 +206,9 @@ fun MainScreen(mainActivity: MainActivity) {
         }
     )
 
+    if (mainActivity.showApiKeyDialog.value) {
+        ApiKeyDialog(mainActivity)
+    }
 
     if (mainActivity.progressDialogFuture.value != null) {
         ProgressDialog(
@@ -203,6 +219,50 @@ fun MainScreen(mainActivity: MainActivity) {
             },
         )
     }
+}
+
+@Composable
+private fun ApiKeyDialog(mainActivity: MainActivity) {
+    val context = LocalContext.current
+    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+    val apiKey = remember {
+        mutableStateOf(sharedPreferences.apiKey)
+    }
+
+    AlertDialog(
+        onDismissRequest = {
+            mainActivity.showApiKeyDialog.value = false
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.api_key_description),
+                )
+                TextField(
+                    value = apiKey.value,
+                    placeholder = {
+                        Text(text = stringResource(R.string.api_key))
+                    },
+                    onValueChange = {
+                        apiKey.value = it
+                    },
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    mainActivity.showApiKeyDialog.value = false
+                    sharedPreferences.apiKey = apiKey.value
+                },
+            ) {
+                Text(text = stringResource(android.R.string.ok))
+            }
+        },
+    )
 }
 
 @Composable

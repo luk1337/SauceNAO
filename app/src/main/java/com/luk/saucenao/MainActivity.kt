@@ -15,6 +15,8 @@ import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.util.Pair
+import androidx.preference.PreferenceManager
+import com.luk.saucenao.ext.apiKey
 import com.luk.saucenao.ext.pngDataStream
 import com.luk.saucenao.ui.screen.MainScreen
 import com.luk.saucenao.ui.screen.Screen
@@ -26,13 +28,18 @@ import java.io.InterruptedIOException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import androidx.core.net.toUri
 
 class MainActivity : ComponentActivity() {
     private val executorService = Executors.newSingleThreadExecutor()
 
+    private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
+
     private val databasesValues by lazy { resources.getIntArray(R.array.databases_values) }
 
     internal val progressDialogFuture = mutableStateOf<Future<Void?>?>(null)
+
+    internal val showApiKeyDialog = mutableStateOf(false)
 
     internal var selectedDatabases = mutableStateListOf<Int>()
 
@@ -140,7 +147,12 @@ class MainActivity : ComponentActivity() {
 
         private fun fetchResult(): Pair<Int, String?> {
             try {
-                val connection = Jsoup.connect("https://saucenao.com/search.php")
+                val url = "https://saucenao.com/search.php".toUri()
+                    .buildUpon()
+                    .appendQueryParameter("api_key", sharedPreferences.apiKey)
+                    .appendQueryParameter("output_type", "0")
+                    .build()
+                val connection = Jsoup.connect(url.toString())
                     .method(Connection.Method.POST)
                     .ignoreHttpErrors(true)
                     .data("hide", BuildConfig.SAUCENAO_HIDE)
