@@ -4,7 +4,6 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,6 @@ import com.luk.saucenao.ui.mock.FakeResult
 import com.luk.saucenao.ui.screen.Screen
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 fun ResultCard(result: Results.Result) {
     val actionsExpanded = remember { mutableStateOf(false) }
     val extLinksExpanded = remember { mutableStateOf(false) }

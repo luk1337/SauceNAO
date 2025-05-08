@@ -5,7 +5,6 @@ import android.os.Build
 import android.webkit.URLUtil
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -62,7 +61,7 @@ import com.luk.saucenao.ext.apiKey
 import com.luk.saucenao.ext.usePhotoPicker
 import com.luk.saucenao.ui.component.ProgressDialog
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     mainActivity: MainActivity,
