@@ -4,7 +4,10 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luk.saucenao.ext.pngDataStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
@@ -115,5 +118,15 @@ class SauceNaoViewModel(private val applicationContext: Context) : ViewModel() {
 
     fun cancel() {
         viewModelScope.coroutineContext.cancelChildren()
+    }
+
+    companion object {
+        val Factory = viewModelFactory {
+            initializer {
+                SauceNaoViewModel(
+                    applicationContext = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]!!
+                )
+            }
+        }
     }
 }

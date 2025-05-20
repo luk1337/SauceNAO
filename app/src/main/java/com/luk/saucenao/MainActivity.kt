@@ -12,10 +12,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.ext.apiKey
 import com.luk.saucenao.ui.screen.MainScreen
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val viewModel: SauceNaoViewModel = viewModel()
+            val viewModel: SauceNaoViewModel by viewModels { SauceNaoViewModel.Factory }
             val progressState by viewModel.progressState.collectAsState()
 
             val imagePickerLauncher = rememberLauncherForActivityResult(
