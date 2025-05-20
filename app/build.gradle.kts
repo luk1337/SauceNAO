@@ -80,7 +80,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.8.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.8.1")
     implementation("androidx.compose.material3:material3:1.3.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Other
