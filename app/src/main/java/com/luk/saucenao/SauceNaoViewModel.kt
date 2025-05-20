@@ -1,9 +1,9 @@
 package com.luk.saucenao
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luk.saucenao.ext.pngDataStream
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +16,7 @@ import org.jsoup.Connection
 import org.jsoup.Jsoup
 import java.io.ByteArrayInputStream
 
-class SauceNaoViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>()
-
+class SauceNaoViewModel(private val applicationContext: Context) : ViewModel() {
     private val _selectedDatabases = MutableStateFlow<List<Int>>(emptyList())
     val selectedDatabases = _selectedDatabases.asStateFlow()
 
@@ -44,7 +42,7 @@ class SauceNaoViewModel(application: Application) : AndroidViewModel(application
     }
 
     private val databasesValues by lazy {
-        context.resources.getIntArray(R.array.databases_values)
+        applicationContext.resources.getIntArray(R.array.databases_values)
     }
 
     fun fetchResults(
@@ -72,7 +70,7 @@ class SauceNaoViewModel(application: Application) : AndroidViewModel(application
 
                 when (data) {
                     is ByteArrayInputStream -> connection.data("file", "image.png", data)
-                    is Uri -> connection.data("file", "image.png", data.pngDataStream(context))
+                    is Uri -> connection.data("file", "image.png", data.pngDataStream(applicationContext))
                     is String -> connection.data("url", data)
                     else -> throw IllegalArgumentException("Unsupported data type")
                 }

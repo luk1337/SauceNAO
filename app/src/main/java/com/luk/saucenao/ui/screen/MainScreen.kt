@@ -1,6 +1,5 @@
 package com.luk.saucenao.ui.screen
 
-import android.app.Application
 import android.os.Build
 import android.webkit.URLUtil
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
@@ -463,7 +462,7 @@ private fun SearchByUrl(waitForResults: (Any) -> Unit) {
 @Composable
 fun PreviewMainScreen() {
     val mockViewModel = SauceNaoViewModel(
-        application = LocalContext.current.applicationContext as Application,
+        applicationContext = LocalContext.current.applicationContext,
     )
 
     Screen {
