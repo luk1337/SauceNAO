@@ -81,7 +81,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.9.5")
     implementation("androidx.compose.material:material-icons-core:1.7.8")
     implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
 
     // Other
