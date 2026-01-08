@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="api_key">API 密钥</string>
+    <string name="api_key_description">您可以使用 saucenao.com 提供的 API 密钥来提高每日搜索次数上限。</string>
     <string name="use_photo_picker">使用照片选择器</string>
     <string name="select_image">选择图片</string>
     <string name="search_by_image_url">按图片链接搜索</string>
@@ -13,6 +15,7 @@
     <string name="loading_results">加载结果中</string>
     <string name="please_wait">请稍后…</string>
     <string name="error_cannot_load_results">无法加载结果！</string>
+    <string name="error_cloudflare_challenge">请求被Cloudflare阻止！</string>
     <string name="error_too_many_requests">服务器请求过多</string>
     <string name="copy_to_clipboard_item">复制到剪贴板</string>
     <string name="share_item">分享</string>
