@@ -19,6 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.preference.PreferenceManager
 import com.luk.saucenao.ext.apiKey
 import com.luk.saucenao.ui.screen.MainScreen
+import com.luk.saucenao.ui.mock.FakeResult
+import com.luk.saucenao.ui.screen.ResultsScreen
 import com.luk.saucenao.ui.screen.Screen
 
 class MainActivity : ComponentActivity() {
@@ -58,15 +60,37 @@ class MainActivity : ComponentActivity() {
             }
 
             Screen {
-                MainScreen(
-                    mainActivity = this,
-                    viewModel = viewModel,
-                    onImagePickerClick = {
-                        imagePickerLauncher.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-                    },
-                    onLegacyPickerClick = {
-                        legacyDocumentPickerLauncher.launch(arrayOf("image/*"))
-                    }
+                ResultsScreen(
+                    results = arrayListOf(
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                        FakeResult(),
+                    ),
+                    serverError = "",
+                    onBackPressed = {},
                 )
             }
 
