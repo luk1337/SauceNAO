@@ -1,0 +1,4 @@
+* Fixed edge-to-edge in results view
+* Fixed navigation/status bar colors
+* Made top app bar use material theme background color
+* Updated build dependencies
