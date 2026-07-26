@@ -2,8 +2,6 @@ package com.luk.saucenao.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -63,13 +61,11 @@ fun ResultsScreen(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .padding(paddingValues)
-                        .padding(horizontal = 10.dp),
+                        .padding(10.dp),
                 ) {
-                    Spacer(modifier = Modifier.height(0.dp))
                     results.forEach {
                         ResultCard(result = it)
                     }
-                    Spacer(modifier = Modifier.height(0.dp))
                 }
             }
         )
