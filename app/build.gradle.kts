@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     namespace = "com.luk.saucenao"
 
     defaultConfig {
         applicationId = "com.luk.saucenao"
         minSdk = 21
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 27
         versionName = "1.25"
     }
