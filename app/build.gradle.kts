@@ -1,35 +1,28 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    compileSdk = 37
     namespace = "com.luk.saucenao"
+
+    compileSdk {
+        version = release(37)
+    }
 
     defaultConfig {
         applicationId = "com.luk.saucenao"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 37
         versionCode = 27
         versionName = "1.25"
     }
 
     buildTypes {
-        named("release") {
-            // Enables code shrinking, obfuscation, and optimization.
-            isMinifyEnabled = true
-
-            // Includes the default ProGuard rules files.
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android.txt"),
-                    "proguard-rules.pro"
-                )
-            )
+        release {
+            optimization {
+                enable = true
+            }
         }
     }
 
@@ -48,15 +41,8 @@ android {
     }
 
     compileOptions {
-        encoding = "UTF-8"
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
     }
 
     androidResources {
@@ -67,28 +53,24 @@ android {
         buildConfig = true
         compose = true
     }
-
-    lint {
-        disable += "GoogleAppIndexingWarning"
-    }
 }
 
 dependencies {
     // Kotlin
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.3.0"))
+    implementation(platform(libs.kotlin.bom))
 
     // AndroidX
-    implementation("androidx.activity:activity-compose:1.11.0")
-    implementation("androidx.compose.foundation:foundation-layout:1.9.5")
-    implementation("androidx.compose.ui:ui:1.9.5")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.9.5")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.9.5")
-    implementation("androidx.compose.material:material-icons-core:1.7.8")
-    implementation("androidx.compose.material3:material3:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
-    implementation("androidx.preference:preference-ktx:1.2.1")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.preference.ktx)
 
     // Other
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("org.jsoup:jsoup:1.21.2")
+    implementation(libs.coil.compose)
+    implementation(libs.jsoup)
 }

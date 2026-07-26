@@ -1,0 +1,30 @@
+[versions]
+androidGradlePlugin = "9.3.1"
+kotlinComposePlugin = "2.4.10"
+kotlinBom = "2.3.0"
+activityCompose = "1.13.0"
+compose = "1.11.4"
+composeMaterialIconsCore = "1.7.8"
+material3 = "1.4.0"
+lifecycleViewmodelCompose = "2.11.0"
+preferenceKtx = "1.2.1"
+coilCompose = "2.7.0"
+jsoup = "1.22.2"
+
+[libraries]
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "compose" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "composeMaterialIconsCore" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinComposePlugin" }
