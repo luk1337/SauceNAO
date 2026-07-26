@@ -1,7 +1,7 @@
 [versions]
 androidGradlePlugin = "9.3.1"
 kotlinComposePlugin = "2.4.10"
-kotlinBom = "2.3.0"
+kotlinBom = "2.4.10"
 activityCompose = "1.13.0"
 compose = "1.11.4"
 composeMaterialIconsCore = "1.7.8"
