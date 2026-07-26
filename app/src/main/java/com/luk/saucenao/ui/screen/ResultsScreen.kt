@@ -62,9 +62,9 @@ fun ResultsScreen(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
+                        .verticalScroll(rememberScrollState())
                         .padding(paddingValues)
-                        .padding(start = 10.dp, end = 10.dp)
-                        .verticalScroll(rememberScrollState()),
+                        .padding(start = 10.dp, end = 10.dp),
                 ) {
                     Spacer(modifier = Modifier.height(0.dp))
                     results.forEach {
