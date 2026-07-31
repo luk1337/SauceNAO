@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="api_key">Mã số API</string>
+    <string name="api_key_description">Với mã số API saucenao.com, bạn có thể tăng giới hạn lượt tìm kiếm trong ngày.</string>
+    <string name="use_photo_picker">Sử dụng ứng dụng chọn ảnh</string>
+    <string name="select_image">Chọn ảnh</string>
+    <string name="search_by_image_url">Tìm kiếm bằng đường liên kết URL</string>
+    <string name="all_databases">Tất cả cơ sở dữ liệu</string>
+    <string name="select_databases">Chọn cơ sở dữ liệu</string>
+    <plurals name="selected_databases">
+        <item quantity="other">%d cơ sở dữ liệu</item>
+    </plurals>
+    <string name="results">Kết quả</string>
+    <string name="no_results">Không có kết quả</string>
+    <string name="loading_results">Đang tải dữ liệu</string>
+    <string name="please_wait">Vui lòng đợi…</string>
+    <string name="error_cannot_load_results">Không thể tải dữ liệu!</string>
+    <string name="error_cloudflare_challenge">Yêu cầu bị từ chối bởi Cloudflare!</string>
+    <string name="error_too_many_requests">Quá nhiều yêu cầu!</string>
+    <string name="copy_to_clipboard_item">Sao chép vào bộ nhớ đệm</string>
+    <string name="share_item">Chia sẻ</string>
+    <string name="share_with">Chia sẻ với</string>
+    <string name="title_copied_to_clipboard">Đã sao chép tiêu đề vào bộ nhớ đệm!</string>
+</resources>
