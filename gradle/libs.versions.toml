@@ -9,7 +9,7 @@ material3 = "1.4.0"
 lifecycleViewmodelCompose = "2.11.0"
 preferenceKtx = "1.2.1"
 coilCompose = "2.7.0"
-jsoup = "1.23.1"
+jsoup = "1.23.2"
 
 [libraries]
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
