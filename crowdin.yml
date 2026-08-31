@@ -3,3 +3,6 @@ files:
     translation: /app/src/main/res/values-%android_code%/%original_file_name%
   - source: /fastlane/metadata/android/en-US/*.txt
     translation: /fastlane/metadata/android/%locale%/%original_file_name%
+
+commit_message: "New translations {fileName} ({languageName})"
+append_commit_message: false
