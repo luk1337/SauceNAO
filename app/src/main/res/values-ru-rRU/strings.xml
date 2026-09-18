@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="api_key">Ключ API</string>
+    <string name="api_key_description">С помощью API-ключа saucenao.com вы можете увеличить свой ежедневный лимит поисковых запросов.</string>
+    <string name="use_photo_picker">Использовать средство выбора фотографий</string>
     <string name="select_image">Выберите изображение</string>
     <string name="search_by_image_url">Поиск изображения по ссылке</string>
     <string name="all_databases">Все базы данных</string>
@@ -15,6 +18,7 @@
     <string name="loading_results">Загружаем результаты</string>
     <string name="please_wait">Пожалуйста, подождите…</string>
     <string name="error_cannot_load_results">Не удалось загрузить результаты!</string>
+    <string name="error_cloudflare_challenge">Запрос заблокирован Cloudflare!</string>
     <string name="error_too_many_requests">Слишком Много Запросов!</string>
     <string name="copy_to_clipboard_item">Копировать в буфер</string>
     <string name="share_item">Поделиться</string>
