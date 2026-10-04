@@ -4,5 +4,5 @@ files:
   - source: /fastlane/metadata/android/en-US/*.txt
     translation: /fastlane/metadata/android/%locale%/%original_file_name%
 
-commit_message: "New translations {fileName} ({languageName})"
+commit_message: "New translations %original_file_name% (%language%)"
 append_commit_message: false
