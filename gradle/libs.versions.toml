@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "9.4.1"
+androidGradlePlugin = "9.5.0"
 kotlinComposePlugin = "2.4.21"
 kotlinBom = "2.4.21"
 activityCompose = "1.13.0"
